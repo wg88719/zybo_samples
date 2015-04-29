@@ -1,0 +1,14 @@
+################################################################
+# Travis CI Configuration file for Zybo Samples
+# Created by Luke Hsiao
+# 29 April 2015
+################################################################
+language: c
+compiler:
+  - gcc
+
+# Run Unit Tests
+script: cd tests && make
+  
+notifications:
+  email: false  
