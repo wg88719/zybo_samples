@@ -39,7 +39,7 @@ int32_t buttons_read() {
   int32_t registerValue = buttons_readGpioRegister(0);
 
   // Zero out all values but the bottom 4
-  registerValue = registerValue & 0xF;
+  registerValue = registerValue & BOTTOM_4_BITS;
 
   return registerValue;
 }
