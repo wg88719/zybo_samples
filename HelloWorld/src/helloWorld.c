@@ -24,10 +24,11 @@ void printHelloWorld() {
 // 4. Triangle outline
 void drawShapes() {
   
-  //size constants
+  // Screen size values
   uint16_t x_max = display_width();
   uint16_t y_max = display_height();
   
+  // Values of screen positions
 	uint16_t x_fourth = x_max/4;
 	uint16_t x_half = x_max/2;
 	uint16_t x_three_fourths = (display_width() * 3) / 4;
@@ -35,6 +36,7 @@ void drawShapes() {
 	uint16_t y_half = y_max/2;
 	uint16_t y_three_fourths = (y_max * 3) / 4;
   
+  // Values for sizing the shapes
   uint16_t radius = x_max / 6;
   uint16_t triangle_dist_from_center = 24;
   
