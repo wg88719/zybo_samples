@@ -43,13 +43,13 @@ void drawShapes() {
                     DISPLAY_GREEN);             
 
   // Draw the filled triangle
-  display_fillTriangle( x0,
-                        y0,
-                        x1,
-                        y1,
-                        x2,
-                        y2,
-                        color);
+  display_fillTriangle( x0, // x0
+                        y0, // y0
+                        x1, // x1
+                        y1, // y1
+                        x2, // x2
+                        y2, // y2
+                        DISPLAY_YELLOW);
   
   // Draw the triangle outline
   display_drawTriangle( x0,
@@ -58,24 +58,24 @@ void drawShapes() {
                         y1,
                         x2,
                         y2,
-                        color);
+                        DISPLAY_YELLOW);
   
   // Draw the filled circle
-  display_fillCircle( x0,
-                      y0,
-                      r,
-                      color);
+  display_fillCircle( x0, // x0
+                      y0, // y0
+                      r,  // radius
+                      DISPLAY_RED);
   
   // Draw the circle outline
   display_drawCircle( x0,
                       y0,
                       r,
-                      color);  
- 
+                      DISPLAY_RED);  
 }
 
 int main() {
   display_init();  // init all of the software and underlying hardware for LCD.
-  printHelloWorld();  // Print "hello world (on the LCD)!"
-
+  //printHelloWorld();  // Print "hello world (on the LCD)!"
+  drawShapes();
+  return 0;
 }
