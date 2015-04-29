@@ -76,6 +76,6 @@ void drawShapes() {
 int main() {
   display_init();  // init all of the software and underlying hardware for LCD.
   //printHelloWorld();  // Print "hello world (on the LCD)!"
-  drawShapes();
+  drawShapes();  // Draw 4 shapes and an X on the screen
   return 0;
 }
