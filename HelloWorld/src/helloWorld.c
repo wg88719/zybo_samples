@@ -24,6 +24,9 @@ void printHelloWorld() {
 // 4. Triangle outline
 void drawShapes() {
 
+  display_setRotation(0);             // Sets origin to bottom left of screen
+  display_fillScreen(DISPLAY_BLACK);  // Blank the screen.
+
   // Screen size values
   uint16_t x_max = display_width();
   uint16_t y_max = display_height();
@@ -40,9 +43,6 @@ void drawShapes() {
   uint16_t radius = x_max / 7;
   uint16_t triangle_dist_from_center = 30;
 
-  display_setRotation(1);             // Sets origin to bottom left of screen
-  display_fillScreen(DISPLAY_BLACK);  // Blank the screen.
-
   // Draw the X that segments the screen
   display_drawLine( 0,  // original x-coordinate
                     0,  // original y-coordinate
@@ -57,32 +57,32 @@ void drawShapes() {
                     DISPLAY_GREEN);
 
   // Draw the filled triangle
-  display_fillTriangle( x_half - triangle_dist_from_center, // x0
-                        y_fourth - triangle_dist_from_center, // y0
-                        x_half + triangle_dist_from_center, // x1
-                        y_fourth - triangle_dist_from_center, // y1
-                        x_half, // x2
-                        y_fourth + triangle_dist_from_center, // y2
+  display_fillTriangle( x_three_fourths + triangle_dist_from_center, // x0
+                        y_half - triangle_dist_from_center, // y0
+                        x_three_fourths + triangle_dist_from_center, // x1
+                        y_half + triangle_dist_from_center, // y1
+                        x_three_fourths - triangle_dist_from_center, // x2
+                        y_half, // y2
                         DISPLAY_YELLOW);
 
   // Draw the triangle outline
-  display_drawTriangle( x_half - triangle_dist_from_center,
-                        y_three_fourths + triangle_dist_from_center,
-                        x_half + triangle_dist_from_center,
-                        y_three_fourths + triangle_dist_from_center,
-                        x_half,
-                        y_three_fourths - triangle_dist_from_center,
+  display_drawTriangle( x_fourth - triangle_dist_from_center, // x0
+                        y_half - triangle_dist_from_center, // y0
+                        x_fourth - triangle_dist_from_center, // x1
+                        y_half + triangle_dist_from_center, // y1
+                        x_fourth + triangle_dist_from_center, // x2
+                        y_half, // y2
                         DISPLAY_YELLOW);
 
   // Draw the filled circle
-  display_fillCircle( x_three_fourths, // x0
-                      y_half, // y0
+  display_fillCircle( x_half, // x0
+                      y_three_fourths, // y0
                       radius,  // radius
                       DISPLAY_RED);
 
   // Draw the circle outline
-  display_drawCircle( x_fourth,
-                      y_half,
+  display_drawCircle( x_half,
+                      y_fourth,
                       radius,
                       DISPLAY_RED);
 }
