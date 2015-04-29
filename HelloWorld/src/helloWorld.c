@@ -31,7 +31,7 @@ void drawShapes() {
   // Values of screen positions
 	uint16_t x_fourth = x_max/4;
 	uint16_t x_half = x_max/2;
-	uint16_t x_three_fourths = (display_width() * 3) / 4;
+	uint16_t x_three_fourths = (x_max * 3) / 4;
 	uint16_t y_fourth = y_max/4;
 	uint16_t y_half = y_max/2;
 	uint16_t y_three_fourths = (y_max * 3) / 4;
