@@ -19,6 +19,7 @@
 #define SW2_MASK 0x4
 #define SW3_MASK 0x8
 #define ALL_SW_ON 0xF
+#define BOTTOM_4_BITS 0xF
 
 // Initializes the SWITCHES driver software and hardware. Returns one of the STATUS values defined above.
 int switches_init();
