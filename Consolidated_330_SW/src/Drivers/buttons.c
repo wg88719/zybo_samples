@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include "buttons.h"
-#include "supportFiles/leds.h"
 #include "xparameters.h"
 #include "supportFiles/display.h"
 
