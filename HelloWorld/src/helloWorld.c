@@ -7,9 +7,6 @@
 #include <stdio.h>
 #include "supportFiles/display.h"
 
-#define X_MAX 23
-#define Y_MAX 15
-
 // Blanks the LCD screen and then prints "hellow world (on the LCD)!" to the LCD
 void printHelloWorld() {
   display_fillScreen(DISPLAY_BLACK);  // Blank the screen.
@@ -26,19 +23,29 @@ void printHelloWorld() {
 // 3. Circle outline
 // 4. Triangle outline
 void drawShapes() {
+  
+  //size constants
+	uint16_t x_fourth = display_width()/4;
+	uint16_t x_half = display_width()/2;
+	uint16_t x_three_fourths = (display_width() * 3) / 4;
+	uint16_t y_fourth = display_height()/4;
+	uint16_t y_half = display_height()/2;
+	uint16_t y_three_fourths = (display_height() * 3) / 4;
+  uint16_t radius = 25;
+  
   display_setRotation(1);             // Sets origin to bottom left of screen
   display_fillScreen(DISPLAY_BLACK);  // Blank the screen.
   
   // Draw the X that segments the screen
   display_drawLine( 0,  // original x-coordinate
                     0,  // original y-coordinate
-                    X_MAX,  // destination x-coordinate
-                    Y_MAX,  // destination y-coordinate
+                    display_width(),  // destination x-coordinate
+                    display_height(),  // destination y-coordinate
                     DISPLAY_GREEN);
   
   display_drawLine( 0,  // original x-coordinate
-                    Y_MAX,  // original y-coordinate
-                    X_MAX,  // destination x-coordinate
+                    display_height(),  // original y-coordinate
+                    display_width(),  // destination x-coordinate
                     0,  // destination y-coordinate      
                     DISPLAY_GREEN);             
 
@@ -61,15 +68,15 @@ void drawShapes() {
                         DISPLAY_YELLOW);
   
   // Draw the filled circle
-  display_fillCircle( x0, // x0
-                      y0, // y0
-                      r,  // radius
+  display_fillCircle( x_half, // x0
+                      y_three_fourths, // y0
+                      radius,  // radius
                       DISPLAY_RED);
   
   // Draw the circle outline
-  display_drawCircle( x0,
-                      y0,
-                      r,
+  display_drawCircle( x_half,
+                      y_fourth,
+                      radius,
                       DISPLAY_RED);  
 }
 
