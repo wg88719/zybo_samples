@@ -18,6 +18,7 @@
 #define BTN2_MASK 0x4
 #define BTN3_MASK 0x8
 #define ALL_BTNS_ON 0xF
+#define BOTTOM_4_BITS 0xF
 
 // Initializes the button driver software and hardware. Returns one of the defined status values (above).
 int buttons_init();
