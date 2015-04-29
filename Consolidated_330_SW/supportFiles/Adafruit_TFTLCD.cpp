@@ -650,7 +650,26 @@ void Adafruit_TFTLCD::drawPixel(int16_t x, int16_t y, uint16_t color) {
     write8(hi); write8(lo);
 
   } else if (driver == ID_9341) {
-    setAddrWindow(x, y, 239, 319);
+  	// This is bug fix suggested by a student that seems to work.
+  	// The bus because the original code did not handle rotation
+  	// for the 9341 controller. This patch fixes that.
+  	//    setAddrWindow(x, y, 239, 319);  // original code.
+  	// This bug-fix was tested against all of the provided test routines and looks
+  	// to generate the correct output on the LCD.
+  	// Start of bug-fix.
+  	switch (rotation) {               // New code. BLH
+  	case 0:                           // New code. BLH
+  	case 2:                           // New code. BLH
+  		// Portrait mode (0: origin lower-left corner, 2: upper right-hand corner.
+   		setAddrWindow(x, y, 239, 319);  // New code. BLH
+  		break;                          // New code. BLH
+  	case 1:                           // New code. BLH
+  	case 3:                           // New code. BLH
+  		// Landscape mode (1: origin in upper-left corner of 330 board, 3: origin lower right corner.
+  		setAddrWindow(x, y, 319, 239);  // New code. BLH
+  		break;                          // New code. BLH
+  	}                                 // New code. BLH
+    // end of bug-fix.
 //    CS_ACTIVE;
 //    CD_COMMAND;
     LCD_setCommandMode();
@@ -745,7 +764,7 @@ void Adafruit_TFTLCD::setRotation(uint8_t x) {
     break;
    case 1:
      t = ILI9341_MADCTL_MX | ILI9341_MADCTL_MY | ILI9341_MADCTL_MV | ILI9341_MADCTL_BGR;
-     break;
+    break;
   }
    writeRegister8(ILI9341_MADCTL, t ); // MADCTL
    // For 9341, init default full-screen address window:
@@ -832,7 +851,6 @@ uint16_t Adafruit_TFTLCD::readPixel(int16_t x, int16_t y) {
 
 // Ditto with the read/write port directions, as above.
 uint16_t Adafruit_TFTLCD::readID(void) {
-
   uint8_t hi, lo;
 
   uint16_t id = readReg(0xD3);

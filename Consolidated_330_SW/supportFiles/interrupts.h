@@ -29,6 +29,8 @@ int interrupts_setTimerInterval(int loadValue);
 int interrupts_startArmPrivateTimer();
 int interrupts_stopArmPrivateTimer();
 u32 interrupts_getPrivateTimerCounterValue(void);
+void interrupts_setPrivateTimerLoadValue(u32 loadValue);
+void interrupts_setPrivateTimerPrescalerValue(u32 prescalerValue);
 
 int interrupts_enableSysMonGlobalInts();
 int interrupt_disableSysMonGlobalInts();
@@ -43,6 +45,6 @@ u32 interrupts_getPrivateTimerTicksPerSecond();
 u32 interrupts_getTotalXadcSampleCount();
 u32 interrupts_getTotalEocCount();
 
-extern int interrupts_isrFlagGlobal;
+extern volatile int interrupts_isrFlagGlobal;
 
 #endif /* INTERRUPTS_H_ */

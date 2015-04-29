@@ -19,17 +19,15 @@
 // The private timer clock is 1/2 the processor frequency, default processor freq.
 // for ZYBO is 650 MHz. The default is set for timer interrupts to occur at 100 kHz rate.
 #define ZYBO_BUS_CLOCK (XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ / 2)
-//#define PRIVATE_TIMER_PRESCALER  249   // Maximum value that can be divided evenly to get exactly 1E5 rate.
-#define PRIVATE_TIMER_PRESCALER 0
-//#define PRIVATE_TIMER_LOAD_VALUE 12    // Provides a 1E5 interrupt rate.
-#define PRIVATE_TIMER_LOAD_VALUE 3249
-#define PRIVATE_TIMER_TICKS_PER_SECOND (ZYBO_BUS_CLOCK /((PRIVATE_TIMER_PRESCALER+1) * (PRIVATE_TIMER_LOAD_VALUE+1)))
+#define PRIVATE_TIMER_PRESCALER_DEFAULT 0
+#define PRIVATE_TIMER_LOAD_VALUE_DEFAULT 3249  // Provides a 10 us interrupt period.
 #define PRIVATE_TIMER_TICKS_PER_HEART_BEAT PRIVATE_TIMER_TICKS_PER_SECOND / 8
 #define PRIVATE_TIMER_TICKS_PER_ADC_SAMPLE 1
 
 // ****************** These #defines enable/disable certain functionality ********************************
 
 #define INTERRUPTS_ENABLE_HEARTBEAT_LED     // Comment out to disable the LED heart beat.
+#define HEARTBEAT_TOGGLES_PER_SECOND 8     // How many times the LED LD4 heartbeat toggle off and on per second.
 #define INTERRUPTS_ENABLE_ADC_DATA_CAPTURE  // Comment out to disable ADC sample capture to queue.
 
 // ****************** end of #define enable/disable section **********************************************
@@ -43,7 +41,7 @@ static XSysMon_Config *xSysMonConfig;// Handle to the SysMon.
 static XSysMon xSysMonInst;          // Instance of the system monitor (to access AXI_XADC registers).
 
 // *********************************** Globals Start ****************************************
-extern int interrupts_isrFlagGlobal = false;
+volatile int interrupts_isrFlagGlobal = 0;
 // *********************************** Globals End   ****************************************
 
 // The sysmon (XADC) runs off the bus-clock when accessed via the AXI_XADC IP (as is done here).
@@ -58,9 +56,35 @@ extern int interrupts_isrFlagGlobal = false;
 
 u32 heartBeatTimer = 0;                                           // Used to blink an LED while the program is running.
 u32 isrInvocationCount = 0;                                       // Keep track of number of times ISR is called.
+
+u32 privateTimerPrescaler = PRIVATE_TIMER_PRESCALER_DEFAULT;      // Keep track of the private-timer prescaler value
+u32 privateTimerLoadValue = PRIVATE_TIMER_LOAD_VALUE_DEFAULT;     // Keep track of the private-timer load value.
+// For convenience, compute the number of ticks per second based upon the above values.
+u32 privateTimerTicksPerSecond = ZYBO_BUS_CLOCK /((privateTimerPrescaler+1) * (privateTimerLoadValue+1));
+// Compute the number of ticks per heart-beat toggle.
+u32 privateTimerTicksPerHeartbeat = ZYBO_BUS_CLOCK /((privateTimerPrescaler+1) * (privateTimerLoadValue+1));
+
+// User can set the load value on the private timer.
+// Also updates ticks per heart beat so that the LD4 heart-beat toggle rate remains constant.
+void interrupts_setPrivateTimerLoadValue(u32 loadValue) {
+  XScuTimer_LoadTimer(&TimerInstance, loadValue);
+  privateTimerLoadValue = loadValue;
+  // Formula derived from the ARM documentation on the private timer (4.1.1)
+  privateTimerTicksPerHeartbeat = (ZYBO_BUS_CLOCK /((privateTimerPrescaler+1) * (privateTimerLoadValue+1))) / HEARTBEAT_TOGGLES_PER_SECOND;
+}
+
+// User can set the prescaler on the private timer.
+// Also updates ticks per heart beat so that the LD4 heart-beat toggle rate remains constant.
+void interrupts_setPrivateTimerPrescalerValue(u32 prescalerValue) {
+  XScuTimer_LoadTimer(&TimerInstance, prescalerValue);
+  privateTimerPrescaler = prescalerValue;
+  // Formula derived from the ARM documentation on the private timer (4.1.1)
+  privateTimerTicksPerHeartbeat = (ZYBO_BUS_CLOCK /((privateTimerPrescaler+1) * (privateTimerLoadValue+1))) / HEARTBEAT_TOGGLES_PER_SECOND;
+}
+
 u32 interrupts_isrInvocationCount() {return isrInvocationCount;}  // Functional accessor for isrInvocationCount.
 // Accessor to retrieve the number of times the ISR was invoked (same as count of timer ticks).
-u32 interrupts_getPrivateTimerTicksPerSecond() {return PRIVATE_TIMER_TICKS_PER_SECOND;}
+u32 interrupts_getPrivateTimerTicksPerSecond() {return ZYBO_BUS_CLOCK /((privateTimerPrescaler+1) * (privateTimerLoadValue+1));}
 u32 totalXadcSampleCount = 0;
 u32 interrupts_getTotalXadcSampleCount() {return totalXadcSampleCount;}
 
@@ -137,7 +161,7 @@ static bool initGicFlag = false;
 // Implements a 1-second pulse on LED3 to see if things are still alive.
 void updateHeartBeatLed() {
   if (!heartBeatTimer) {
-	heartBeatTimer = PRIVATE_TIMER_TICKS_PER_HEART_BEAT;  // Reset the heart beat timer.
+	heartBeatTimer = privateTimerTicksPerHeartbeat;  // Reset the heart beat timer.
 	ledValue = ledValue == 0 ? 1 : 0;             // Toggle the LED on and off.
 	leds_writeLd4(ledValue);
   } else {
@@ -277,8 +301,8 @@ int initTimerInterrupts() {
 //  int prescalar = XScuTimer_GetPrescaler(&TimerInstance);
 //  printf("interrupt.c - load value: %d\n\r", loadValue);
 //  printf("interrupt.c - prescalar value: %d\n\r", prescalar);
-  XScuTimer_SetPrescaler(&TimerInstance, PRIVATE_TIMER_PRESCALER);
-  XScuTimer_LoadTimer(&TimerInstance, PRIVATE_TIMER_LOAD_VALUE);
+  XScuTimer_SetPrescaler(&TimerInstance, PRIVATE_TIMER_PRESCALER_DEFAULT);
+  XScuTimer_LoadTimer(&TimerInstance, PRIVATE_TIMER_LOAD_VALUE_DEFAULT);
 //  prescalar = XScuTimer_GetPrescaler(&TimerInstance);
 //  printf("interrupt.c - prescalar value: %d\n\r", prescalar);
 //  print("setupTimerInterrupts exited successfully.\n\r");
