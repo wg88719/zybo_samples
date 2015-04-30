@@ -10,12 +10,17 @@
 #include "supportFiles/display.h"
 
 int main() {
-	leds_init(1);  // Initialize the LEDs
-	buttons_init();
-	switches_init();
-	display_init();
+  // Initialize all of the used hardware components
+  leds_init(1);  // Initialize the LEDs
+  buttons_init();  // Initialize buttons
+  switches_init();  // Initialize switches
+  display_init();  // Initialize display
 
-	buttons_runTest();
-	switches_runTest();
-	return 0;
+  // Run Button Test
+  buttons_runTest();
+  
+  // Run Switches Test after Button Test completes
+  switches_runTest();
+  
+  return 0;
 }
