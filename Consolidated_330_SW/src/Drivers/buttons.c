@@ -44,48 +44,74 @@ void buttons_write_LCD(int32_t buttons) {
   uint16_t y_half = y_max/2;
   uint16_t y_three_fourths = (y_max * 3) / 4;
 
+  // Flags for tracking of button has already been drawn
+  uint8_t btn0_status = NOT_SET;
+  uint8_t btn1_status = NOT_SET;
+  uint8_t btn2_status = NOT_SET;
+  uint8_t btn3_status = NOT_SET;
+  
   // If BTN 0 is pressed
   if (buttons & BTN0_MASK) {
-    display_fillRect(0, 0, x_fourth, y_fourth, DISPLAY_RED);
-    display_setCursor(x_fourth, y_fourth); // top left corner
-    display_println("  BUTTON 0");
+    // check if btn0 is set so image is only drawn once
+    if (btn0_status == NOT_SET) {
+      display_fillRect(0, 0, x_fourth, y_max, DISPLAY_RED); // draw background
+      display_setCursor(0, y_half); // set cursor to middle of rect
+      display_println("  BTN 0");
+      btn0_status = SET; // mark btn0 as set
+    }   
   }
   else {
     // Blank the used portion of the screen
-    display_fillRect(0, 0, x_half, y_half, DISPLAY_BLACK);
+    display_fillRect(0, 0, x_fourth, y_max, DISPLAY_BLACK);
+    btn0_status = NOT_SET; // mark btn0 as not set
   }
 
   // If BTN 1 is pressed
   if (buttons & BTN1_MASK) {
-    display_fillRect(x_half, 0, x_fourth, y_fourth, DISPLAY_GREEN);
-    display_setCursor(x_three_fourths, y_fourth); // top right corner
-    display_println("  BUTTON 1");
+    // Only draw image once
+    if (btn1_status == NOT_SET) {
+      display_fillRect(x_fourth, 0, x_fourth, y_max, DISPLAY_GREEN);
+      display_setCursor(x_fourth, y_half);
+      display_println("  BTN 1");
+      btn1_status = SET;
+    }
   }
   else {
     // Blank the used portion of the screen
-    display_fillRect(x_half, 0, x_half, y_half, DISPLAY_BLACK);
+    display_fillRect(x_fourth, 0, x_fourth, y_max, DISPLAY_BLACK);
+    btn1_status = NOT_SET;
   }
 
   // If BTN 2 is pressed
   if (buttons & BTN2_MASK) {
-    display_fillRect(0, y_half, x_fourth, y_fourth, DISPLAY_YELLOW);
-    display_setCursor(x_fourth, y_three_fourths); // top right corner
-    display_println("  BUTTON 2");
+    // Only draw image once
+    if (btn2_status == NOT_SET) {
+      display_fillRect(x_half, 0, x_fourth, y_max, DISPLAY_YELLOW);
+      display_setCursor(x_half, y_half);
+      display_println("  BTN 2");
+      btn2_status = SET;
+    }
   }
   else {
     // Blank the used portion of the screen
-    display_fillRect(0, y_half, x_half, y_half, DISPLAY_BLACK);
+    display_fillRect(x_half, 0, x_fourth, y_max, DISPLAY_BLACK);
+    btn2_staus = NOT_SET;
   }
 
   // If BTN 3 is pressed
   if (buttons & BTN3_MASK) {
-    display_fillRect(x_half, y_half, x_fourth, y_fourth, DISPLAY_WHITE);
-    display_setCursor(x_three_fourths, y_three_fourths); // top right corner
-    display_println("  BUTTON 3");
+    // Only draw image once
+    if (btn3_status == NOT_SET) {
+      display_fillRect(x_three_fourths, 0, x_fourth, y_max, DISPLAY_WHITE);
+      display_setCursor(x_three_fourths, y_half);
+      display_println("  BTN 3");
+      btn3_status = SET;
+    }
   }
   else {
     // Blank the used portion of the screen
-    display_fillRect(x_half, y_half, x_half, y_half, DISPLAY_BLACK);
+    display_fillRect(x_three_fourths, 0, x_fourth, y_max, DISPLAY_BLACK);
+    btn3_status = NOT_SET;
   }
 }
 
@@ -111,7 +137,7 @@ int32_t buttons_read() {
 }
 
 void buttons_runTest() {
-  display_setRotation(0); // set rotation to zero
+  display_setRotation(1); // set rotation to zero
   display_fillScreen(DISPLAY_BLACK); // blank the screen
 
   // Do an initial read of button values
