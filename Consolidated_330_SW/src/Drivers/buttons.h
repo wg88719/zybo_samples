@@ -13,6 +13,8 @@
 // Status Values
 #define BUTTONS_INIT_STATUS_OK 1
 #define BUTTONS_INIT_STATUS_FAIL 0
+#define SET 1
+#define NOT_SET 0
 
 // Values for working with GPIO Tristate
 #define VALUE_OFFSET 0
@@ -26,6 +28,7 @@
 #define BTN3_MASK 0x8
 #define ALL_BTNS_ON 0xF
 #define BOTTOM_4_BITS 0xF
+
 
 // Initializes the button driver software and hardware. 
 // Returns one of the defined status values (above).
