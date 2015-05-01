@@ -6,6 +6,9 @@
 #ifndef INTERVALTIMER_H_
 #define INTERVALTIMER_H_
 
+#include <stdint.h>
+#include <stdlib.h>
+
 #define TIMER0 0
 #define TIMER1 1
 #define TIMER2 2
@@ -20,10 +23,10 @@
 #define TCR1_OFFSET 0x18
 
 // Control Bit Indexes
-#define ENABLE_ENT0_MASK 0x0080
-#define CLEAR_ENT0_MASK 0x0F7F
-#define ENABLE_LOAD0_MASK 0x0020
-#define ENABLE_CASC_MASK 0x0800
+#define ENABLE_ENT0_MASK 0x00000080
+#define CLEAR_ENT0_MASK 0xFFFFFF7F
+#define ENABLE_LOAD0_MASK 0x00000020
+#define ENABLE_CASC_MASK 0x00000800
 #define REGISTER_WIDTH 32
 
 // Starts the specified timer
