@@ -218,7 +218,7 @@ uint32_t intervalTimer_init(uint32_t timerNumber) {
 
 uint32_t intervalTimer_initAll() {
   uint32_t status;
-  int i = 0;
+  int i;
   for (i = 0; i <= TIMER2; i++) {
     status = intervalTimer_init(i);
     
@@ -233,7 +233,7 @@ uint32_t intervalTimer_initAll() {
 
 uint32_t intervalTimer_resetAll() {
   uint32_t status;
-  int i = 0;
+  int i;
   for (i = 0; i <= TIMER2; i++) {
     status = intervalTimer_reset(i);
     
@@ -248,7 +248,7 @@ uint32_t intervalTimer_resetAll() {
 
 uint32_t intervalTimer_testAll() {
   uint32_t status;
-  int i = 0;
+  int i;
   for (i = 0; i <= TIMER2; i++) {
     status = intervalTimer_runTest(i);
     
@@ -261,6 +261,8 @@ uint32_t intervalTimer_testAll() {
   return 0; // return 0 on success, TIMER_ERROR on failure
 }
 
+
+
 uint32_t intervalTimer_runTest(uint32_t timerNumber) {
   
   uint32_t status = 0;
@@ -272,7 +274,7 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
     printf("\nERROR: Not a valid timer number.\n\n");
     return TIMER_ERROR;
   }
-  
+
   // reset the timer
   printf("Resetting timer %d\n", (int) timerNumber);
   status = intervalTimer_reset(timerNumber);
@@ -287,28 +289,21 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
   status = intervalTimer_start(timerNumber);
   
   printf("Timer value should be changing:\n\t");
-  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
-  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
-  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
-  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f\n", (int)timerNumber, seconds);
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
+  printf("TCR0:%ld\n", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
   
   // Stop the timer
   printf("Stopping the timer...\n");
   status = intervalTimer_stop(timerNumber);
   
   printf("Timer value should NOT be changing:\n\t");
-  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
-  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
-  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
-  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f\n", (int)timerNumber, seconds);
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
+  printf("TCR0:%ld\n", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
+
   
   if (status != 0) {
     printf("\n>>>> AN ERROR OCCURED <<<<\n\n");
