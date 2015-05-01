@@ -119,10 +119,12 @@ uint32_t intervalTimer_start(uint32_t timerNumber) {
   // Get the current value of control/status register
   csrValue = intervalTimer_readTimerRegister(timerNumber, TCSR0_OFFSET);
   
+  uint32_t enableENT0 = intervalTimer_enableENT0(csrValue);
+
   // Write value back w/ ENT0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
                                     TCSR0_OFFSET, // register offset
-                                    intervalTimer_enableENT0(csrValue));
+                                    enableENT0);
   
   return 0;  // return 0 for success, or TIMER_ERROR
 }
@@ -181,6 +183,8 @@ uint32_t intervalTimer_reset(uint32_t timerNumber) {
                                     TCSR1_OFFSET, // register offset
                                     intervalTimer_enableLOAD0(csrValue));
   
+  intervalTimer_init(timerNumber);
+
   return 0;  // return 0 for success, or TIMER_ERROR
 }
 
@@ -276,7 +280,7 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
   // Check that timer is reset
   printf("Counter value should be ZERO:\n\t");
   status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f.3\n", (int) timerNumber, seconds);
+  printf("Timer %d: Counter Value = %f\n", (int) timerNumber, seconds);
   
   // Start the Timer and show that it is running
   printf("Starting the timer...\n");
@@ -284,13 +288,13 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
   
   printf("Timer value should be changing:\n\t");
   status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f.3\n\t", (int)timerNumber, seconds);
+  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
   status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f.3\n\t", (int)timerNumber, seconds);
+  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
   status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f.3\n\t", (int)timerNumber, seconds);
+  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
   status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f.3\n", (int)timerNumber, seconds);
+  printf("Timer %d: Counter Value = %f\n", (int)timerNumber, seconds);
   
   // Stop the timer
   printf("Stopping the timer...\n");
@@ -298,13 +302,13 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
   
   printf("Timer value should NOT be changing:\n\t");
   status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f.3\n\t", (int)timerNumber, seconds);
+  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
   status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f.3\n\t", (int)timerNumber, seconds);
+  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
   status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f.3\n\t", (int)timerNumber, seconds);
+  printf("Timer %d: Counter Value = %f\n\t", (int)timerNumber, seconds);
   status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
-  printf("Timer %d: Counter Value = %f.3\n", (int)timerNumber, seconds);
+  printf("Timer %d: Counter Value = %f\n", (int)timerNumber, seconds);
   
   if (status != 0) {
     printf("\n>>>> AN ERROR OCCURED <<<<\n\n");
