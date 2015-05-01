@@ -183,6 +183,7 @@ uint32_t intervalTimer_reset(uint32_t timerNumber) {
                                     TCSR1_OFFSET, // register offset
                                     intervalTimer_enableLOAD0(csrValue));
   
+  // Set all CSR bits back to 0 except for CASC
   intervalTimer_init(timerNumber);
 
   return 0;  // return 0 for success, or TIMER_ERROR
