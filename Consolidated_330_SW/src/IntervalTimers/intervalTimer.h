@@ -29,6 +29,9 @@
 #define ENABLE_CASC_MASK 0x00000800
 #define REGISTER_WIDTH 32
 
+// Timer Constants for CASCADE mode
+#define MAX_COUNT = 0xFFFFFFFFFFFFFFFF
+
 // Starts the specified timer
 // @param timerNumber must be {0, 1, 2}, otherwise and error occurs
 // @return 0 on success, or TIMER_ERROR
