@@ -14,7 +14,6 @@
 // @param offset Offset from the base address
 // @return the 32-bit register value or TIMER_ERROR for invalid numbers
 uint32_t intervalTimer_readTimerRegister(uint32_t timerNumber, uint8_t offset) {
-  
   u32 regValue;
   switch (timerNumber) {
     case 0:
@@ -343,7 +342,7 @@ uint32_t intervalTimer_getTotalDurationInSeconds(uint32_t timerNumber, double *s
   
   tempSeconds = upper_bits;
   tempSeconds = tempSeconds << REGISTER_WIDTH;  // shift upper bits up
-  tempSeconds = tempSeconds + lower_bits;  // Add lower bits
+  tempSeconds = tempSeconds + lower_bits;
   
   // Set the seconds value
   *seconds = tempSeconds / intervalTimer_getTimerFrequency(timerNumber);
