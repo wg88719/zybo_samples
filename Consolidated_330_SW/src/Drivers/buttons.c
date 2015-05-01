@@ -95,7 +95,7 @@ void buttons_write_LCD(int32_t buttons) {
   else {
     // Blank the used portion of the screen
     display_fillRect(x_half, 0, x_fourth, y_max, DISPLAY_BLACK);
-    btn2_staus = NOT_SET;
+    btn2_status = NOT_SET;
   }
 
   // If BTN 3 is pressed

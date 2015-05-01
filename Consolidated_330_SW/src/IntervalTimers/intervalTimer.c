@@ -343,7 +343,7 @@ uint32_t intervalTimer_getTotalDurationInSeconds(uint32_t timerNumber, double *s
   
   tempSeconds = upper_bits;
   tempSeconds = tempSeconds << REGISTER_WIDTH;  // shift upper bits up
-  tempSeconds = tempSeconds + lower_bits;
+  tempSeconds = tempSeconds + lower_bits;  // Add lower bits
   
   // Set the seconds value
   *seconds = tempSeconds / intervalTimer_getTimerFrequency(timerNumber);
