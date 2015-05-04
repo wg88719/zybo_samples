@@ -22,13 +22,12 @@
 #define TRISTATE_SET_INPUT 0xF
 
 // Button Mask Values
-#define BTN0_MASK 0x1
-#define BTN1_MASK 0x2
-#define BTN2_MASK 0x4
-#define BTN3_MASK 0x8
-#define ALL_BTNS_ON 0xF
-#define BOTTOM_4_BITS 0xF
-
+#define BTN0_MASK       0x1
+#define BTN1_MASK       0x2
+#define BTN2_MASK       0x4
+#define BTN3_MASK       0x8
+#define ALL_BTNS_ON     0xF
+#define BOTTOM_4_BITS   0xF
 
 // Initializes the button driver software and hardware. 
 // Returns one of the defined status values (above).
