@@ -14,6 +14,13 @@
 #define HALF(X)           ((X)/2) // Divide the given number by 2
 #define THREE_FOURTHS(X)  (((X) * 3)/4) // Multiply by 3, then divide by 4
 
+// Globals to track button statuses
+uint8_t btn0_status = NOT_SET;
+uint8_t btn1_status = NOT_SET;
+uint8_t btn2_status = NOT_SET;
+uint8_t btn3_status = NOT_SET;
+
+
 //************************* Helper Functions **********************************
 
 // Helper function to read GPIO registers.
@@ -48,15 +55,10 @@ void buttons_write_LCD(int32_t buttons) {
   uint16_t y_fourth = FOURTH(y_max);
   uint16_t y_half = HALF(y_max);
   uint16_t y_three_fourths = THREE_FOURTHS(y_max);
-
-  // Flags for tracking of button has already been drawn
-  uint8_t btn0_status = NOT_SET;
-  uint8_t btn1_status = NOT_SET;
-  uint8_t btn2_status = NOT_SET;
-  uint8_t btn3_status = NOT_SET;
   
   // If BTN 0 is pressed
   if (buttons & BTN0_MASK) {
+    printf("Button 0 Status: %d\n", btn0_status);
     // check if btn0 is set so image is only drawn once
     if (btn0_status == NOT_SET) {
       display_fillRect(0, 0, x_fourth, y_max, DISPLAY_RED); // draw background
@@ -142,7 +144,8 @@ int32_t buttons_read() {
 }
 
 void buttons_runTest() {
-  display_setRotation(0); // set rotation to zero
+
+  display_setRotation(1); // set rotation to zero
   display_fillScreen(DISPLAY_BLACK); // blank the screen
 
   // Do an initial read of button values
