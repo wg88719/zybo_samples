@@ -9,28 +9,30 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+// Timer Identifying Constants
 #define TIMER0 0
 #define TIMER1 1
 #define TIMER2 2
-#define TIMER_ERROR 0xDEAD
+
+// Status code to return for ERRORs
+#define TIMER_ERROR 0xFFFFFFFF
 
 // Register Offsets
-#define TCSR0_OFFSET 0x00
-#define TLR0_OFFSET 0x04
-#define TCR0_OFFSET 0x08
-#define TCSR1_OFFSET 0x10
-#define TLR1_OFFSET 0x14
-#define TCR1_OFFSET 0x18
+#define TCSR0_OFFSET  0x00
+#define TLR0_OFFSET   0x04
+#define TCR0_OFFSET   0x08
+#define TCSR1_OFFSET  0x10
+#define TLR1_OFFSET   0x14
+#define TCR1_OFFSET   0x18
 
 // Control Bit Indexes
-#define ENABLE_ENT0_MASK 0x00000080
-#define CLEAR_ENT0_MASK 0xFFFFFF7F
+#define ENABLE_ENT0_MASK  0x00000080
+#define CLEAR_ENT0_MASK   0xFFFFFF7F
 #define ENABLE_LOAD0_MASK 0x00000020
-#define ENABLE_CASC_MASK 0x00000800
-#define REGISTER_WIDTH 32
+#define ENABLE_CASC_MASK  0x00000800
 
-// Timer Constants for CASCADE mode
-#define MAX_COUNT = 0xFFFFFFFFFFFFFFFF
+// Width of each register in the timer
+#define REGISTER_WIDTH 32
 
 // Starts the specified timer
 // @param timerNumber must be {0, 1, 2}, otherwise and error occurs
