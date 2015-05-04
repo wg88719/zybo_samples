@@ -14,25 +14,25 @@
 #define HALF(X)           ((X)/2) // Divide the given number by 2
 #define THREE_FOURTHS(X)  (((X) * 3)/4) // Multiply by 3, then divide by 4
 
-#define TEXT_SIZE 2
+#define TEXT_SIZE 2 // Set text size to 2
 
 // Globals to track button statuses
-uint8_t btn0_status = NOT_SET;
-uint8_t btn1_status = NOT_SET;
-uint8_t btn2_status = NOT_SET;
-uint8_t btn3_status = NOT_SET;
+uint8_t btn0_status = NOT_SET;  // Initialize as NOT_SET
+uint8_t btn1_status = NOT_SET;  // Initialize as NOT_SET
+uint8_t btn2_status = NOT_SET;  // Initialize as NOT_SET
+uint8_t btn3_status = NOT_SET;  // Initialize as NOT_SET
 
 // Global Screen size values
-uint16_t x_max;
-uint16_t y_max;
+uint16_t x_max;   // Store the maximum x-value of the screen
+uint16_t y_max;   // Store the maximum y-value of the screen
 
 // Values of screen positions
-uint16_t x_fourth;
-uint16_t x_half;
-uint16_t x_three_fourths;
-uint16_t y_fourth;
-uint16_t y_half;
-uint16_t y_three_fourths;
+uint16_t x_fourth;  // x-value of the left fourth of the screen
+uint16_t x_half;    // x-value of the middle of the screen
+uint16_t x_three_fourths;   // x-value of right fourth of the screen
+uint16_t y_fourth;  // y-value of the top fourth of the screen
+uint16_t y_half;    // y-value of the middle of the screen
+uint16_t y_three_fourths; // y-value of the bottom fourth of the scren
 
 
 //************************* Helper Functions **********************************
@@ -54,19 +54,24 @@ void buttons_writeGpioRegister(int32_t offset, uint32_t value) {
   *ptr = value;
 }
 
-// Helper function to write data to the LCD based on what button is pressed, 
+// Helper function to write data to the LCD based on what button is pressed,
 // blanks the screen otherwise.
 void buttons_write_LCD(int32_t buttons) {
-  
+
   // If BTN 0 is pressed
   if (buttons & BTN0_MASK) {
     // check if btn0 is set so image is only drawn once
     if (btn0_status == NOT_SET) {
+      // Draw the background colored rectangle
       display_fillRect(x_three_fourths, 0, x_fourth, y_max, DISPLAY_CYAN);
-      display_setCursor(x_three_fourths, y_half);
+
+      // Print BTN text in the middle of the rectangle
+      display_setCursor(x_three_fourths, y_half); // position cursor
       display_println(" BTN 0");
+
+      // Mark the button as SET so that there is no flickering of the image
       btn0_status = SET;
-    }   
+    }
   }
   else {
     // Blank the used portion of the screen
@@ -78,9 +83,14 @@ void buttons_write_LCD(int32_t buttons) {
   if (buttons & BTN1_MASK) {
     // Only draw image once
     if (btn1_status == NOT_SET) {
+      // Draw the background colored rectangle
       display_fillRect(x_half, 0, x_fourth, y_max, DISPLAY_YELLOW);
-      display_setCursor(x_half, y_half);
+
+      // Print BTN text in the middle of the rectangle
+      display_setCursor(x_half, y_half);  // position the cursor
       display_println(" BTN 1");
+
+      // Mark the button as SET to eliminate flickering
       btn1_status = SET;
     }
   }
@@ -94,9 +104,14 @@ void buttons_write_LCD(int32_t buttons) {
   if (buttons & BTN2_MASK) {
     // Only draw image once
     if (btn2_status == NOT_SET) {
+      // Draw the background colored rectangle
       display_fillRect(x_fourth, 0, x_fourth, y_max, DISPLAY_GREEN);
-      display_setCursor(x_fourth, y_half);
+
+      // Print BTN text in the middle of the rectangle
+      display_setCursor(x_fourth, y_half);  // Position the cursor
       display_println(" BTN 2");
+
+      // Mark the button as SET to eliminate flickering
       btn2_status = SET;
     }
   }
@@ -110,9 +125,14 @@ void buttons_write_LCD(int32_t buttons) {
   if (buttons & BTN3_MASK) {
     // Only draw image once
     if (btn3_status == NOT_SET) {
-      display_fillRect(0, 0, x_fourth, y_max, DISPLAY_RED); // draw background
+      // Draw the background colored rectangle
+      display_fillRect(0, 0, x_fourth, y_max, DISPLAY_RED);
+
+      // Print BTN text in the middle of the rectangle
       display_setCursor(0, y_half); // set cursor to middle of rect
       display_println(" BTN 3");
+
+      // Mark the button as SET to eliminate flickering
       btn3_status = SET; // mark btn3 as set
     }
   }
@@ -126,16 +146,18 @@ void buttons_write_LCD(int32_t buttons) {
 //*********************** End Helper Functions ********************************
 
 int buttons_init() {
-  int status = BUTTONS_INIT_STATUS_FAIL;
-  
+  int status = BUTTONS_INIT_STATUS_FAIL;  // Initialize as FAIL
+
   //write 1s to the tri-state driver to set buttons as input
-  buttons_writeGpioRegister(TRISTATE_OFFSET, TRISTATE_SET_INPUT);
-  
-  status = BUTTONS_INIT_STATUS_OK;
+  buttons_writeGpioRegister(TRISTATE_OFFSET, TRISTATE_SET_AS_INPUT);
+
+  status = BUTTONS_INIT_STATUS_OK; // Set status to OK
   return status;
 }
 
 int32_t buttons_read() {
+
+  // Read the value of the buttons
   int32_t registerValue = buttons_readGpioRegister(VALUE_OFFSET);
 
   // Zero out all values but the bottom 4
@@ -147,14 +169,14 @@ int32_t buttons_read() {
 void buttons_runTest() {
   display_init();  // Initialize display, which sets Rotation = 1 by default
   display_fillScreen(DISPLAY_BLACK); // blank the screen
-  display_setTextColor(DISPLAY_BLACK);
+  display_setTextColor(DISPLAY_BLACK);  // Change text color to black
   display_setTextSize(TEXT_SIZE); // Make text larger
 
   // Set the values of the global variables
   x_max = display_width();
   y_max = display_height();
 
-  // Values of screen positions
+  // Set the values of screen positions
   x_fourth = FOURTH(x_max);
   x_half = HALF(x_max);
   x_three_fourths = THREE_FOURTHS(x_max);
@@ -162,15 +184,13 @@ void buttons_runTest() {
   y_half = HALF(y_max);
   y_three_fourths = THREE_FOURTHS(y_max);
 
-  printf("X_MAX: %d\n", x_max);
-  printf("Y_MAX: %d\n", y_max);
-  printf("(3/4) X: %d\n", x_three_fourths);
-  printf("Y/2: %d\n", y_half);
-
   // Do an initial read of button values
   int32_t buttonValues = buttons_read();
 
+  // Until all 4 BTNS are pressed simultaneously, write info to the LCD
   while (buttonValues != ALL_BTNS_ON) {
+
+    // Draw the Rects/Text on the LCD corresponding to current buttons
     buttons_write_LCD(buttonValues);
 
     // Poll new value of buttons

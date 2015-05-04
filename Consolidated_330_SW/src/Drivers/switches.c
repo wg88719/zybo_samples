@@ -11,13 +11,13 @@
 #include "supportFiles/leds.h"
 
 int switches_init() {
-  int status = SWITCHES_INIT_STATUS_FAIL;
+  int status = SWITCHES_INIT_STATUS_FAIL; // Initialize as FAIL
 
   //write 1s to the tri-state driver to set buttons as input
-  Xil_Out32(XPAR_GPIO_SLIDE_SWITCHES_BASEADDR + TRISTATE_OFFSET, // address 
-            TRISTATE_SET_INPUT);  // value to write
+  Xil_Out32(XPAR_GPIO_SLIDE_SWITCHES_BASEADDR + TRISTATE_OFFSET, // address
+            TRISTATE_SET_AS_INPUT);  // value to write
 
-  status = SWITCHES_INIT_STATUS_OK;
+  status = SWITCHES_INIT_STATUS_OK; // Set to OK
   return status;
 }
 
@@ -35,8 +35,8 @@ int32_t switches_read() {
 void switches_runTest() {
   // Do an initial read of switch values
   int32_t sw_value = switches_read();
-  
-  // Run the test while all 4 switches are not on
+
+  // Run the test while all 4 switches are not all on simultaneously
   while (sw_value != ALL_SW_ON) {
     // Write the switch values to their corresponding LEDs
     leds_write(sw_value);
