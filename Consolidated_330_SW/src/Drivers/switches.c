@@ -23,12 +23,12 @@ int switches_init() {
 
 int32_t switches_read() {
   //read the value of the swithces
-  u32 switchValues = Xil_In32(XPAR_GPIO_SLIDE_SWITCHES_BASEADDR + VALUE OFFSET);
+  u32 switchValues = Xil_In32(XPAR_GPIO_SLIDE_SWITCHES_BASEADDR + VALUE_OFFSET);
 
   // Zero out all bits except relevant switch values
   switchValues = switchValues & BOTTOM_4_BITS;
 
-  //cast switches value to an in32_t and return
+  //cast switches value to an int32_t and return
   return (int32_t)switchValues;
 }
 
