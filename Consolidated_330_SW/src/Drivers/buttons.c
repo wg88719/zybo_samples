@@ -167,6 +167,7 @@ int32_t buttons_read() {
 }
 
 void buttons_runTest() {
+  buttons_init();  // Initialize buttons
   display_init();  // Initialize display, which sets Rotation = 1 by default
   display_fillScreen(DISPLAY_BLACK); // blank the screen
   display_setTextColor(DISPLAY_BLACK);  // Change text color to black

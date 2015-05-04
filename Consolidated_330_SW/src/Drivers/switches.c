@@ -33,6 +33,8 @@ int32_t switches_read() {
 }
 
 void switches_runTest() {
+  switches_init();  // Initialize switches
+  leds_init(1);     // Initialize the LEDs
   // Do an initial read of switch values
   int32_t sw_value = switches_read();
 
