@@ -9,6 +9,11 @@
 #include "xparameters.h"
 #include "supportFiles/display.h"
 
+// Screen Position Macros
+#define FOURTH(X)         ((X)/4) // Divide the given number by 4
+#define HALF(X)           ((X)/2) // Divide the given number by 2
+#define THREE_FOURTHS(X)  (((X) * 3)/4) // Multiply by 3, then divide by 4
+
 //************************* Helper Functions **********************************
 
 // Helper function to read GPIO registers.
@@ -37,12 +42,12 @@ void buttons_write_LCD(int32_t buttons) {
   uint16_t y_max = display_height();
 
   // Values of screen positions
-  uint16_t x_fourth = x_max/4;
-  uint16_t x_half = x_max/2;
-  uint16_t x_three_fourths = (x_max * 3) / 4;
-  uint16_t y_fourth = y_max/4;
-  uint16_t y_half = y_max/2;
-  uint16_t y_three_fourths = (y_max * 3) / 4;
+  uint16_t x_fourth = FOURTH(x_max);
+  uint16_t x_half = HALF(x_max);
+  uint16_t x_three_fourths = THREE_FOURTHS(x_max);
+  uint16_t y_fourth = FOURTH(y_max);
+  uint16_t y_half = HALF(y_max);
+  uint16_t y_three_fourths = THREE_FOURTHS(y_max);
 
   // Flags for tracking of button has already been drawn
   uint8_t btn0_status = NOT_SET;
@@ -102,7 +107,7 @@ void buttons_write_LCD(int32_t buttons) {
   if (buttons & BTN3_MASK) {
     // Only draw image once
     if (btn3_status == NOT_SET) {
-      display_fillRect(x_three_fourths, 0, x_fourth, y_max, DISPLAY_WHITE);
+      display_fillRect(x_three_fourths, 0, x_fourth, y_max, DISPLAY_CYAN);
       display_setCursor(x_three_fourths, y_half);
       display_println("  BTN 3");
       btn3_status = SET;
@@ -137,7 +142,7 @@ int32_t buttons_read() {
 }
 
 void buttons_runTest() {
-  display_setRotation(1); // set rotation to zero
+  display_setRotation(0); // set rotation to zero
   display_fillScreen(DISPLAY_BLACK); // blank the screen
 
   // Do an initial read of button values
