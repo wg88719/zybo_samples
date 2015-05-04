@@ -20,11 +20,11 @@
 #define TRISTATE_SET_INPUT 0xF  // value to turn tristate to input
 
 // Mask Values for Switches
-#define SW0_MASK 0x1
-#define SW1_MASK 0x2
-#define SW2_MASK 0x4
-#define SW3_MASK 0x8
-#define ALL_SW_ON 0xF
+#define SW0_MASK      0x1
+#define SW1_MASK      0x2
+#define SW2_MASK      0x4
+#define SW3_MASK      0x8
+#define ALL_SW_ON     0xF
 #define BOTTOM_4_BITS 0xF
 
 // Initializes the SWITCHES driver software and hardware. 
