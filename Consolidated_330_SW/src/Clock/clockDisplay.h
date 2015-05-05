@@ -24,8 +24,8 @@
 //*****************************************************************************
 // User Editable Macros:
 
-// Edit this to change the size of the clock chars
-// Only set this value to 3, 4, 5, or 6.
+// Edit this to change the size of the clock chars. Only set this value to
+// 3, 4, 5, or 6. Otherwise, the clock will NOT display correctly.
 #define CLOCK_TEXT_SIZE 5
 
 // Values to Initialize clock to on startup
@@ -60,8 +60,8 @@
 #define COLUMN_8 CURSOR_START_WIDTH + (TEXT_BLOCK_WIDTH*8)	// 8 columns over
 
 // Unscaled Values based on screen size
-#define BOX_HEIGHT  display_height()/5
-#define BOX_WIDTH   display_width()/6
+#define BOX_HEIGHT  display_height() / 5
+#define BOX_WIDTH   display_width() / 5
 
 // Screen Position Macros
 #define FOURTH(X)         ((X)/4) // Divide the given number by 4
