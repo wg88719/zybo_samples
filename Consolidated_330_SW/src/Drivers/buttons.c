@@ -32,7 +32,7 @@ uint16_t x_half;    // x-value of the middle of the screen
 uint16_t x_three_fourths;   // x-value of right fourth of the screen
 uint16_t y_fourth;  // y-value of the top fourth of the screen
 uint16_t y_half;    // y-value of the middle of the screen
-uint16_t y_three_fourths; // y-value of the bottom fourth of the scren
+uint16_t y_three_fourths; // y-value of the bottom fourth of the screen
 
 
 //************************* Helper Functions **********************************
