@@ -46,48 +46,6 @@ int8_t clockDisplay_getInputRegion(int16_t x, int16_t y) {
 }
 
 /**
- * Decrements the global seconds variable and handles rollover cases
- */
-void clockDisplay_decrementSec() {
-
-}
-
-/**
- * Increments the global seconds variable and handles rollover cases
- */
-void clockDisplay_incrementSec() {
-
-}
-
-/**
- * Decrements the global minutes variable and handles rollover cases
- */
-void clockDisplay_decrementMin() {
-
-}
-
-/**
- * Increments the global minutes variable and handles rollover cases
- */
-void clockDisplay_incrementMin() {
-
-}
-
-/**
- * Decrements the global hours variable and handles rollover cases
- */
-void clockDisplay_decrementHour() {
-
-}
-
-/**
- * Increments the global hours variable and handles rollover cases
- */
-void clockDisplay_incrementHour() {
-
-}
-
-/**
  * Draws the specified character at the specified location on the screen
  * @param index The column index of the clock to draw the character at
  * @param c     The character to draw
@@ -238,6 +196,57 @@ void clockDisplay_init() {
 void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
 
   // TODO update the global variables? Or do I do this somewhere else?
+
+  // If seconds was incremented
+  if (seconds > MAX_SECS) {
+    seconds = 0;  // rollover to 0
+
+    // If minutes should also be updated
+    if (forceUpdateAll) {
+      minutes++;  // increment minutes
+    }
+  }
+
+  // If seconds was decremented
+  if (seconds < 0) {
+    seconds = MAX_SECS; // set the seconds to MAX value
+
+    // If minutes should also be updated
+    if (forceUpdateAll) {
+      minutes--;  // decrement minutes
+    }
+  }
+
+  // If minutes was incremented
+  if (minutes > MAX_MINS) {
+    minutes = 0;  // rollover to zero
+
+    // If hours should also be updated
+    if (forceUpdateAll) {
+      hours++;  // increment hours
+    }
+  }
+
+  // If minutes was decremented
+  if (minutes < 0) {
+    minutes = MAX_MINS; //set the minutes to 59
+
+    // If hours should also be updated
+    if (forceUpdateAll) {
+      hours--;  // decrement hours
+    }
+  }
+
+  // If hours was incremented
+  if (hours > MAX_HRS) {
+    hours = 1;   // rollover hours
+  }
+
+  // If hours was decremented
+  if (hours < 1) // MIN is 1, rather than 0 like mins and secs
+  {
+    hours = MAX_HRS;  // reset to MAX value
+  }
 
   // Update current time
   sprintf(current_time, "%2d:%02d:%02d", hours, minutes, seconds);
