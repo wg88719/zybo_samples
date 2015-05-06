@@ -151,5 +151,5 @@ void clockDisplay_advanceTimeOneSecond() {
 }
 
 void clockDisplay_runTest() {
-
+  clockDisplay_init();  // Initialize the clock display
 }

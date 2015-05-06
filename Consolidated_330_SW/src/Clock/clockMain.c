@@ -35,7 +35,10 @@ void test_clockTick() {
   }
 }
 
-int main() {
+/**
+ * More advanced test that uses timer interrupts
+ */
+void test_Full() {
   // Initialize the GPIO LED driver and print out an error message if it fails (argument = true).
   // You need to init the LEDs so that LED4 can function as a heartbeat.
   leds_init(true);
@@ -69,5 +72,10 @@ int main() {
   interrupts_disableArmInts();
   printf("isr invocation count: %ld\n\r", interrupts_isrInvocationCount());
   printf("internal interrupt count: %ld\n\r", personalInterruptCount);
+
+}
+
+int main() {
+  clockDisplay_runTest();
   return 0;
 }
