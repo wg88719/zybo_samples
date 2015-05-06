@@ -105,7 +105,7 @@
 #define ROW_2 (ORIGIN_Y + (SUB_BOX_HEIGHT*2))       // 2 rows down
 #define ROW_3 (ORIGIN_Y + (SUB_BOX_HEIGHT*3))       // 3 rows down
 
-#define NUM_CHARS 8
+#define NUM_CHARS 9   // 8 chars for HH:MM:SS + 1 for NULL terminator
 
 /**
  * Initializes the clock display. Should only be called once.
@@ -115,7 +115,7 @@ void clockDisplay_init();
 /**
  * Updates the time display with the latest time.
  * @param forceUpdateAll If true, refreshes ALL characters rather than just
- *                       the ones that changed.
+ *                       the ones that are being updated.
  */
 void clockDisplay_updateTimeDisplay(bool forceUpdateAll);
 

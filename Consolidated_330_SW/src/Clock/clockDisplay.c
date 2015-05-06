@@ -10,12 +10,13 @@
 #include "supportFiles/display.h"
 
 // Global variables for tracking time
-uint8_t hours;  // track hours
-uint8_t minutes;  // track minutes
-uint8_t seconds;  // track seconds
+// Used signed ints to utilize negative values as a signal to rollover
+int8_t hours;  // track hours
+int8_t minutes;  // track minutes
+int8_t seconds;  // track seconds
 
 char current_time[NUM_CHARS];  // char array representing the current time
-char previous_time[NUM_CHARS]; // char array representing the previous time
+char old_time[NUM_CHARS]; // char array representing the previous time
 
 
 //*****************************************************************************
@@ -38,11 +39,119 @@ char previous_time[NUM_CHARS]; // char array representing the previous time
  * was pressed by the user.
  * @param  x The x-coordinate of the point pressed by the user
  * @param  y The y-coordinate of the point pressed by the user
- * @return   The number representing the region pressed
+ * @return   The number representing the region pressed or -1 for other
  */
-uint8_t clockDisplay_getInputRegion(int16_t x, int16_t y) {
+int8_t clockDisplay_getInputRegion(int16_t x, int16_t y) {
 
 }
+
+/**
+ * Decrements the global seconds variable and handles rollover cases
+ */
+void clockDisplay_decrementSec() {
+
+}
+
+/**
+ * Increments the global seconds variable and handles rollover cases
+ */
+void clockDisplay_incrementSec() {
+
+}
+
+/**
+ * Decrements the global minutes variable and handles rollover cases
+ */
+void clockDisplay_decrementMin() {
+
+}
+
+/**
+ * Increments the global minutes variable and handles rollover cases
+ */
+void clockDisplay_incrementMin() {
+
+}
+
+/**
+ * Decrements the global hours variable and handles rollover cases
+ */
+void clockDisplay_decrementHour() {
+
+}
+
+/**
+ * Increments the global hours variable and handles rollover cases
+ */
+void clockDisplay_incrementHour() {
+
+}
+
+/**
+ * Draws the specified character at the specified location on the screen
+ * @param index The column index of the clock to draw the character at
+ * @param c     The character to draw
+ */
+void clockDisplay_redrawDigit(uint8_t index, char c) {
+  // Draw the character based on the index
+  switch (index) {
+    case 0:   // Tens-digit for Hours
+      display_drawChar( COLUMN_0,                   // x
+                        ROW_1,                      // y
+                        c,                          // char to draw
+                        DISPLAY_GREEN,              // color of text
+                        DISPLAY_BLACK,              // color of background
+                        CLOCK_TEXT_SIZE);           // size of text
+      break;
+    case 1:   // Ones-digit for Hours
+      display_drawChar( COLUMN_1,                   // x
+                        ROW_1,                      // y
+                        c,                          // char to draw
+                        DISPLAY_GREEN,              // color of text
+                        DISPLAY_BLACK,              // color of background
+                        CLOCK_TEXT_SIZE);           // size of text
+      break;
+    case 2:   // First ':', do nothing
+      break;
+    case 3:   // Tens-digit for Mins
+      display_drawChar( COLUMN_3,                   // x
+                        ROW_1,                      // y
+                        c,                          // char to draw
+                        DISPLAY_GREEN,              // color of text
+                        DISPLAY_BLACK,              // color of background
+                        CLOCK_TEXT_SIZE);           // size of text
+      break;
+    case 4:   // Ones-digit for Mins
+      display_drawChar( COLUMN_4,                   // x
+                        ROW_1,                      // y
+                        c,                          // char to draw
+                        DISPLAY_GREEN,              // color of text
+                        DISPLAY_BLACK,              // color of background
+                        CLOCK_TEXT_SIZE);           // size of text
+      break;
+    case 5:   // 2nd ':', do nothing
+      break;
+    case 6:   // Tens-digit for Secs
+      display_drawChar( COLUMN_6,                   // x
+                        ROW_1,                      // y
+                        c,                          // char to draw
+                        DISPLAY_GREEN,              // color of text
+                        DISPLAY_BLACK,              // color of background
+                        CLOCK_TEXT_SIZE);           // size of text
+      break;
+    case 7:   // Ones-digit for Secs
+      display_drawChar( COLUMN_7,                   // x
+                        ROW_1,                      // y
+                        c,                          // char to draw
+                        DISPLAY_GREEN,              // color of text
+                        DISPLAY_BLACK,              // color of background
+                        CLOCK_TEXT_SIZE);           // size of text
+      break;
+    default:  // Otherwise, do nothing
+      break;
+  }
+}
+
 //********************** End Helper Functions *********************************
 
 
@@ -127,19 +236,24 @@ void clockDisplay_init() {
 }
 
 void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
-  if (forceUpdateAll) { // If forceUpdateAll, redraw all clock characters
-    // Draw the Clock characters (HH:MM:SS)
-    // Draw 1st Hour Digit
-    // Draw 2nd Hour Digit
-    // Draw 1st Minute Digit
-    // Draw 2nd Minute Digit
-    // Draw 1st Second Digit
-    // Draw 2nd Second Digit
-  }
-  else {  // Otherwise, just redraw the ones that have changed
 
+  // TODO update the global variables? Or do I do this somewhere else?
+
+  // Update current time
+  sprintf(current_time, "%2d:%02d:%02d", hours, minutes, seconds);
+
+  // Draw the time digits only if the times have changed
+  uint8_t i;
+  for (i = 0; i < NUM_CHARS; i++) {
+    // If the digit has changed
+    if (current_time[i] != old_time[i]) {
+      // Redraw the digit with the current value
+      clockDisplay_redrawDigit(i, current_time[i]);
+    }
   }
 
+  // Copy current_time into old_time
+  strcpy(old_time, current_time);
 }
 
 void clockDisplay_performIncDec() {
