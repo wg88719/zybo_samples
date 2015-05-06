@@ -118,6 +118,10 @@
 #define TENS_SECS 6
 #define ONES_SECS 7
 
+// Macros for making calls to updateTimeDisplay(bool X) more readable
+#define UPDATE_ALL        true    // force update all
+#define DO_NOT_UPDATE_ALL false   // do not force update all
+
 /**
  * Initializes the clock display. Should only be called once.
  */

@@ -156,6 +156,14 @@ void clockDisplay_init() {
   display_init(); // Initialize the LCD display
   display_fillScreen(DISPLAY_BLACK);  // Blank the screen
 
+  // Initialize the global variables
+  seconds = INITIAL_SECONDS;
+  minutes = INITIAL_MINUTES;
+  hours = INITIAL_HOURS;
+
+  // Initialize the current_time to the initial value
+  sprintf(current_time, "%2d:%02d:%02d", hours, minutes, seconds);
+
   //////////////////////////////////////////////////////////////
   // Draw all components of the display that do not change:
   //////////////////////////////////////////////////////////////
@@ -338,15 +346,15 @@ void clockDisplay_performIncDec() {
   }
 
   // Update the clock display without affecting all digits
-  clockDisplay_updateTimeDisplay(false);
-
+  clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
 }
 
 void clockDisplay_advanceTimeOneSecond() {
   seconds++;  // advance time by 1 second
-  clockDisplay_updateTimeDisplay(true); // update all digits
+  clockDisplay_updateTimeDisplay(UPDATE_ALL); // update all digits
 }
 
 void clockDisplay_runTest() {
   clockDisplay_init();  // Initialize the clock display
+  clockDisplay_updateTimeDisplay(UPDATE_ALL);
 }
