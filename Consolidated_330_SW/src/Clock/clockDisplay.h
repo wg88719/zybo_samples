@@ -43,8 +43,8 @@
 #define REGION_5  5
 
 // Constants for calculating time rollovers
-#define MAX_SECS  60
-#define MAX_MINS  60
+#define MAX_SECS  59
+#define MAX_MINS  59
 #define MAX_HRS   12  // Since we're displaying a 12-hr clock
 
 //*****************************************************************************

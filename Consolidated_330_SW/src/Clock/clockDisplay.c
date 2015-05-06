@@ -5,6 +5,7 @@
 //*****************************************************************************
 
 #include <stdio.h>
+#include <stdbool.h>
 #include "clockDisplay.h"
 #include "xparameters.h"
 #include "supportFiles/display.h"
@@ -270,7 +271,8 @@ void clockDisplay_performIncDec() {
 }
 
 void clockDisplay_advanceTimeOneSecond() {
-
+  seconds++;  // advance time by 1 second
+  clockDisplay_updateTimeDisplay(true); // update all digits
 }
 
 void clockDisplay_runTest() {
