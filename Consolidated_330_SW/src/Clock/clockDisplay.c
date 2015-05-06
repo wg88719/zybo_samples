@@ -12,11 +12,11 @@
 
 // Global variables for tracking time
 // Used signed ints to utilize negative values as a signal to rollover
-int8_t hours;  // track hours
-int8_t minutes;  // track minutes
-int8_t seconds;  // track seconds
+int8_t hours = 0;  // track hours
+int8_t minutes = 0;  // track minutes
+int8_t seconds = 0;  // track seconds
 
-char current_time[NUM_CHARS];  // char array representing the current time
+char current_time[NUM_CHARS];   // char array representing the current time
 char old_time[NUM_CHARS]; // char array representing the previous time
 
 
