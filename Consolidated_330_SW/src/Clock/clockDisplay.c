@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include "clockDisplay.h"
 #include "xparameters.h"
 #include "supportFiles/display.h"
@@ -94,7 +95,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
   switch (index) {
     case TENS_HRS:   // Tens-digit for Hours
       display_drawChar( COLUMN_0,                   // x
-                        ROW_1,                      // y
+                        ROW_1 + BUFFER,             // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
@@ -102,7 +103,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
       break;
     case ONES_HRS:   // Ones-digit for Hours
       display_drawChar( COLUMN_1,                   // x
-                        ROW_1,                      // y
+                        ROW_1 + BUFFER,             // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
@@ -112,7 +113,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
       break;
     case TENS_MINS:   // Tens-digit for Mins
       display_drawChar( COLUMN_3,                   // x
-                        ROW_1,                      // y
+                        ROW_1 + BUFFER,             // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
@@ -120,7 +121,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
       break;
     case ONES_MINS:   // Ones-digit for Mins
       display_drawChar( COLUMN_4,                   // x
-                        ROW_1,                      // y
+                        ROW_1 + BUFFER,             // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
@@ -130,7 +131,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
       break;
     case TENS_SECS:   // Tens-digit for Secs
       display_drawChar( COLUMN_6,                   // x
-                        ROW_1,                      // y
+                        ROW_1 + BUFFER,             // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
@@ -138,7 +139,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
       break;
     case ONES_SECS:   // Ones-digit for Secs
       display_drawChar( COLUMN_7,                   // x
-                        ROW_1,                      // y
+                        ROW_1 + BUFFER,             // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
@@ -147,6 +148,29 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
     default:  // Otherwise, do nothing
       break;
   }
+}
+
+/**
+ * Helper function that draws the lines representing the borders of each of
+ * the sub boxes. Used for Debugging.
+ */
+void clockDisplay_drawLines() {
+  // Draw Vertical Lines
+  display_drawLine(COLUMN_0, ROW_0, COLUMN_0, ROW_3, DISPLAY_RED);
+  display_drawLine(COLUMN_1, ROW_0, COLUMN_1, ROW_3, DISPLAY_RED);
+  display_drawLine(COLUMN_2, ROW_0, COLUMN_2, ROW_3, DISPLAY_RED);
+  display_drawLine(COLUMN_3, ROW_0, COLUMN_3, ROW_3, DISPLAY_RED);
+  display_drawLine(COLUMN_4, ROW_0, COLUMN_4, ROW_3, DISPLAY_RED);
+  display_drawLine(COLUMN_5, ROW_0, COLUMN_5, ROW_3, DISPLAY_RED);
+  display_drawLine(COLUMN_6, ROW_0, COLUMN_6, ROW_3, DISPLAY_RED);
+  display_drawLine(COLUMN_7, ROW_0, COLUMN_7, ROW_3, DISPLAY_RED);
+  display_drawLine(COLUMN_8, ROW_0, COLUMN_8, ROW_3, DISPLAY_RED);
+
+  // Draw Horizontal Lines
+  display_drawLine(COLUMN_0, ROW_0, COLUMN_8, ROW_0, DISPLAY_RED);
+  display_drawLine(COLUMN_0, ROW_1, COLUMN_8, ROW_1, DISPLAY_RED);
+  display_drawLine(COLUMN_0, ROW_2, COLUMN_8, ROW_2, DISPLAY_RED);
+  display_drawLine(COLUMN_0, ROW_3, COLUMN_8, ROW_3, DISPLAY_RED);
 }
 
 //********************** End Helper Functions *********************************
@@ -161,6 +185,10 @@ void clockDisplay_init() {
   minutes = INITIAL_MINUTES;
   hours = INITIAL_HOURS;
 
+  printf("BUFFER: %d\n", BUFFER);
+  printf("ORIGIN_X: %d\n", ORIGIN_X);
+  printf("ORIGIN_Y: %d\n", ORIGIN_Y);
+
   // Initialize the current_time to the initial value
   sprintf(current_time, "%2d:%02d:%02d", hours, minutes, seconds);
 
@@ -172,72 +200,74 @@ void clockDisplay_init() {
 
   // Draw Hour Up Triangle
   display_fillTriangle( COLUMN_0,               // x0
-                        ROW_1 - BUFFER,         // y0
+                        ROW_1,                  // y0
                         COLUMN_2,               // x1
-                        ROW_1 - BUFFER,         // y1
+                        ROW_1,                  // y1
                         COLUMN_1,               // x2
                         ROW_0 + ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Minute Up Triangle
   display_fillTriangle( COLUMN_3,               // x0
-                        ROW_1 - BUFFER,         // y0
+                        ROW_1,                  // y0
                         COLUMN_5,               // x1
-                        ROW_1 - BUFFER,         // y1
+                        ROW_1,                  // y1
                         COLUMN_4,               // x2
                         ROW_0 + ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Second Up Triangle
   display_fillTriangle( COLUMN_6,               // x0
-                        ROW_1 - BUFFER,         // y0
+                        ROW_1,                  // y0
                         COLUMN_8,               // x1
-                        ROW_1 - BUFFER,         // y1
-                        COLUMN_5,               // x2
+                        ROW_1,                  // y1
+                        COLUMN_7,               // x2
                         ROW_0 + ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Hours Down Triangle
   display_fillTriangle( COLUMN_0,               // x0
-                        ROW_2 + BUFFER,         // y0
+                        ROW_2,                  // y0
                         COLUMN_2,               // x1
-                        ROW_2 + BUFFER,         // y1
+                        ROW_2,                  // y1
                         COLUMN_1,               // x2
                         ROW_3 - ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Minute Down Triangle
   display_fillTriangle( COLUMN_3,               // x0
-                        ROW_2 + BUFFER,         // y0
+                        ROW_2,                  // y0
                         COLUMN_5,               // x1
-                        ROW_1 - BUFFER,         // y1
+                        ROW_2,                  // y1
                         COLUMN_4,               // x2
                         ROW_3 - ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Second Down Triangle
   display_fillTriangle( COLUMN_6,               // x0
-                        ROW_2 + BUFFER,         // y0
+                        ROW_2,                  // y0
                         COLUMN_8,               // x1
-                        ROW_2 + BUFFER,         // y1
-                        COLUMN_5,               // x2
+                        ROW_2,                  // y1
+                        COLUMN_7,               // x2
                         ROW_3 - ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw the Clock Character ':' Separators
   display_drawChar( COLUMN_2,                   // x
-                    ROW_1,                      // y
+                    ROW_1 + BUFFER,             // y
                     ':',                        // char to draw
                     DISPLAY_GREEN,              // color of text
                     DISPLAY_BLACK,              // color of background
                     CLOCK_TEXT_SIZE);           // size of text
 
   display_drawChar( COLUMN_5,                   // x
-                    ROW_1,                      // y
+                    ROW_1 + BUFFER,             // y
                     ':',                        // char to draw
                     DISPLAY_GREEN,              // color of text
                     DISPLAY_BLACK,              // color of background
                     CLOCK_TEXT_SIZE);           // size of text
+
+  clockDisplay_drawLines();
 }
 
 void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
@@ -329,7 +359,7 @@ void clockDisplay_performIncDec() {
       minutes++;
       break;
     case REGION_2:  // Seconds UP arrow
-      seconds++
+      seconds++;
       break;
     case REGION_3:  // Hours DOWN arrow
       hours--;
@@ -355,6 +385,7 @@ void clockDisplay_advanceTimeOneSecond() {
 }
 
 void clockDisplay_runTest() {
+  printf("\n\nStarting Clock Display Test...\n");
   clockDisplay_init();  // Initialize the clock display
   clockDisplay_updateTimeDisplay(UPDATE_ALL);
 }
