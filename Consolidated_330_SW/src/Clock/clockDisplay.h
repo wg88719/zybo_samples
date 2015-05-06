@@ -35,12 +35,13 @@
 //***************** End User Editable Macros **********************************
 
 // Region IDs for the touchscreen
-#define REGION_0  0
-#define REGION_1  1
-#define REGION_2  2
-#define REGION_3  3
-#define REGION_4  4
-#define REGION_5  5
+#define REGION_0    0
+#define REGION_1    1
+#define REGION_2    2
+#define REGION_3    3
+#define REGION_4    4
+#define REGION_5    5
+#define REGION_ERR  -1
 
 // Constants for calculating time rollovers
 #define MAX_SECS  59
