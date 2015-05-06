@@ -40,10 +40,48 @@ char old_time[NUM_CHARS]; // char array representing the previous time
  * was pressed by the user.
  * @param  x The x-coordinate of the point pressed by the user
  * @param  y The y-coordinate of the point pressed by the user
- * @return   The number representing the region pressed or -1 for other
+ * @return   The number representing the region pressed or REGION_ERR for other
  */
 int8_t clockDisplay_getInputRegion(int16_t x, int16_t y) {
+  // Error condition for values off the screen
+  if (x < 0 || y < 0 || x > display_width() || y > display_height()) {
+    return REGION_ERR;
+  }
 
+  // Parse through the UP arrows
+  if (y < ROW_1 && y > ROW_0) {
+    // Check Region 0
+    if (x < COLUMN_2 && x > COLUMN_0) {
+      return REGION_0;
+    }
+    // Check Region 1
+    if (x < COLUMN_5 && x > COLUMN_3) {
+      return REGION_1;
+    }
+    // Check Region 2
+    if (x < COLUMN_8 && x > COLUMN_6) {
+      return REGION_2;
+    }
+  }
+
+  // Parse through the DOWN arrows
+  if (y < ROW_3 && y > ROW_2) {
+    // Check Region 3
+    if (x < COLUMN_2 && x > COLUMN_0) {
+      return REGION_3;
+    }
+    // Check Region 4
+    if (x < COLUMN_5 && x > COLUMN_3) {
+      return REGION_4;
+    }
+    // Check Region 5
+    if (x < COLUMN_8 && x > COLUMN_6) {
+      return REGION_5;
+    }
+  }
+
+  // If not in any of these regions, return REGION_ERR
+  return REGION_ERR;
 }
 
 /**
@@ -267,6 +305,40 @@ void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
 }
 
 void clockDisplay_performIncDec() {
+  int16_t x, y;   // x and y coordinate of the touched point
+  uint8_t pressure; // relative touch pressure, variable will be ignored
+  int8_t regionID;  // ID of the touched region
+
+  // Get the data of the touched point
+  display_getTouchedPoint(&x, &y, &pressure);
+  regionID = clockDisplay_getInputRegion(x, y);
+
+  switch(regionID) {
+    case REGION_0:  // Hours UP arrow
+      hours++;
+      break;
+    case REGION_1:  // Minutes UP arrow
+      minutes++;
+      break;
+    case REGION_2:  // Seconds UP arrow
+      seconds++
+      break;
+    case REGION_3:  // Hours DOWN arrow
+      hours--;
+      break;
+    case REGION_4:  // Minutes DOWN arrow
+      minutes--;
+      break;
+    case REGION_5:  // Seconds DOWN arrow
+      seconds--;
+      break;
+    default:
+      printf("Please touch an arrow.\n");
+      break;
+  }
+
+  // Update the clock display without affecting all digits
+  clockDisplay_updateTimeDisplay(false);
 
 }
 
