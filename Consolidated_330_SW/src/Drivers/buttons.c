@@ -200,7 +200,7 @@ void buttons_runTest() {
 
   // After all buttons are pushed simultaneously, finish test.
   display_fillScreen(DISPLAY_BLACK);  // blank screen
-  displat_setTextColor(DISPLAY_CYAN); // change text color
+  display_setTextColor(DISPLAY_CYAN); // change text color
   display_setCursor(0,0);  // reset cursor to origin
   display_println("Button Test Finished!");  // print that the test is complete
 }
