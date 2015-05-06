@@ -10,6 +10,7 @@
 #include "clockDisplay.h"
 #include "xparameters.h"
 #include "supportFiles/display.h"
+#include "supportFiles/utils.h"
 
 // Global variables for tracking time
 // Used signed ints to utilize negative values as a signal to rollover
@@ -267,7 +268,7 @@ void clockDisplay_init() {
                     DISPLAY_BLACK,              // color of background
                     CLOCK_TEXT_SIZE);           // size of text
 
-  clockDisplay_drawLines();
+  //clockDisplay_drawLines();
 }
 
 void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
@@ -388,4 +389,30 @@ void clockDisplay_runTest() {
   printf("\n\nStarting Clock Display Test...\n");
   clockDisplay_init();  // Initialize the clock display
   clockDisplay_updateTimeDisplay(UPDATE_ALL);
+
+  while(!display_isTouched()); // wait for touch to initiate runTest
+  while (display_isTouched()); // wait for user to let go of touchscreen
+  while(!display_isTouched()) // increment until user presses touchscreen again
+  {
+    clockDisplay_advanceTimeOneSecond();
+    utils_msDelay(1000);
+  }
+  while(display_isTouched()); //wait for user to let go of touchscreen
+  while(!display_isTouched()) // increment until screen is touched again
+  {
+    seconds--;
+    hours--;
+    minutes--;
+    clockDisplay_performIncDec();
+    utils_msDelay(1000);
+  }
+  while(display_isTouched()); //wait for user to let go of touchscreen
+  while(!display_isTouched()) // increment until screen is touched again
+  {
+    seconds++;
+    hours++;
+    minutes++;
+    clockDisplay_performIncDec();
+    utils_msDelay(100);
+  }
 }
