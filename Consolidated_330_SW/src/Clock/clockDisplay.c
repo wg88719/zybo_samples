@@ -92,7 +92,7 @@ int8_t clockDisplay_getInputRegion(int16_t x, int16_t y) {
 void clockDisplay_redrawDigit(uint8_t index, char c) {
   // Draw the character based on the index
   switch (index) {
-    case 0:   // Tens-digit for Hours
+    case TENS_HRS:   // Tens-digit for Hours
       display_drawChar( COLUMN_0,                   // x
                         ROW_1,                      // y
                         c,                          // char to draw
@@ -100,7 +100,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
                         DISPLAY_BLACK,              // color of background
                         CLOCK_TEXT_SIZE);           // size of text
       break;
-    case 1:   // Ones-digit for Hours
+    case ONES_HRS:   // Ones-digit for Hours
       display_drawChar( COLUMN_1,                   // x
                         ROW_1,                      // y
                         c,                          // char to draw
@@ -108,9 +108,9 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
                         DISPLAY_BLACK,              // color of background
                         CLOCK_TEXT_SIZE);           // size of text
       break;
-    case 2:   // First ':', do nothing
+    case COLON_1:   // First ':', do nothing
       break;
-    case 3:   // Tens-digit for Mins
+    case TENS_MINS:   // Tens-digit for Mins
       display_drawChar( COLUMN_3,                   // x
                         ROW_1,                      // y
                         c,                          // char to draw
@@ -118,7 +118,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
                         DISPLAY_BLACK,              // color of background
                         CLOCK_TEXT_SIZE);           // size of text
       break;
-    case 4:   // Ones-digit for Mins
+    case ONES_MINS:   // Ones-digit for Mins
       display_drawChar( COLUMN_4,                   // x
                         ROW_1,                      // y
                         c,                          // char to draw
@@ -126,9 +126,9 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
                         DISPLAY_BLACK,              // color of background
                         CLOCK_TEXT_SIZE);           // size of text
       break;
-    case 5:   // 2nd ':', do nothing
+    case COLON_2:   // 2nd ':', do nothing
       break;
-    case 6:   // Tens-digit for Secs
+    case TENS_SECS:   // Tens-digit for Secs
       display_drawChar( COLUMN_6,                   // x
                         ROW_1,                      // y
                         c,                          // char to draw
@@ -136,7 +136,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
                         DISPLAY_BLACK,              // color of background
                         CLOCK_TEXT_SIZE);           // size of text
       break;
-    case 7:   // Ones-digit for Secs
+    case ONES_SECS:   // Ones-digit for Secs
       display_drawChar( COLUMN_7,                   // x
                         ROW_1,                      // y
                         c,                          // char to draw

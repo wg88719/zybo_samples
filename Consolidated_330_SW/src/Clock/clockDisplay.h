@@ -108,6 +108,16 @@
 
 #define NUM_CHARS 9   // 8 chars for HH:MM:SS + 1 for NULL terminator
 
+// Macros for names of the indexes in the char arrays
+#define TENS_HRS  0
+#define ONES_HRS  1
+#define COLON_1   2
+#define TENS_MINS 3
+#define ONES_MINS 4
+#define COLON_2   5
+#define TENS_SECS 6
+#define ONES_SECS 7
+
 /**
  * Initializes the clock display. Should only be called once.
  */
