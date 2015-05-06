@@ -9,11 +9,11 @@
 // +--+---+---+---+---+---+---+---+---+--+
 // |  |   |   |   |   |   |   |   |   |  |
 // +--+===+===+===+===+===+===+===+===+--+
-// |  |   ▲   |   |   ▲   |   |   ▲   |  |
+// |  |   â–²   |   |   â–²   |   |   â–²   |  |
 // +--+---+---+---+---+---+---+---+---+--+
 // |  | H | H | : | M | M | : | S | S |  |
 // +--+---+---+---+---+---+---+---+---+--+
-// |  |   ▼   |   |   ▼   |   |   ▼   |  |
+// |  |   â–¼   |   |   â–¼   |   |   â–¼   |  |
 // +--+===+===+===+===+===+===+===+===+--+
 // |  |   |   |   |   |   |   |   |   |  |
 // +--+---+---+---+---+---+---+---+---+--+
@@ -26,7 +26,7 @@
 
 // Edit this to change the size of the clock chars. Only set this value to
 // 3, 4, 5, or 6. Otherwise, the clock will NOT display correctly.
-#define CLOCK_TEXT_SIZE 5
+#define CLOCK_TEXT_SIZE 3
 
 // Values to Initialize clock to on startup
 #define INITIAL_HOURS   12
@@ -53,7 +53,7 @@
 // CLOCK_TEXT_SIZE, the macros below perform all of the necessary scaling
 // calculations at compile time.
 
-#define CLOCK_TEXT_MAX 6  // The maximum value CLOCK_TEXT_SIZE may take
+#define SCALE_TEXT 7  // Value used to scale the clock text
 
 // Scaled Values based on screen size. In other words, the largest the clock
 // will be drawn is as if the full screen was available.
@@ -63,10 +63,10 @@
 
 // OUTER_BOX_HEIGHT and OUTER_BOX_WIDTH represent the dimensions of the box to
 // draw the clock in.
-#define OUTER_BOX_HEIGHT ((display_height()*CLOCK_TEXT_SIZE)/(CLOCK_TEXT_MAX))
-#define OUTER_BOX_WIDTH  ((display_width()*CLOCK_TEXT_SIZE)/(CLOCK_TEXT_MAX))
+#define OUTER_BOX_HEIGHT ((display_height()*CLOCK_TEXT_SIZE)/(SCALE_TEXT))
+#define OUTER_BOX_WIDTH  ((display_width()*CLOCK_TEXT_SIZE)/(SCALE_TEXT))
 
-// These marginal values represent the dimenion to leave blank on each edge
+// These marginal values represent the dimension to leave blank on each edge
 // when drawing the clock.
 #define HEIGHT_MARGIN ((display_height() - (OUTER_BOX_HEIGHT)) / 2)
 #define WIDTH_MARGIN  ((display_width() - (OUTER_BOX_WIDTH)) / 2)
