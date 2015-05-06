@@ -298,7 +298,7 @@ uint32_t intervalTimer_testAll() {
 uint32_t intervalTimer_runTest(uint32_t timerNumber) {
 
   uint32_t status = 0;
-  double seconds = 0
+  double seconds = 0;
 
   // Check for invalid timer numbers
   if (timerNumber > TIMER2) {
