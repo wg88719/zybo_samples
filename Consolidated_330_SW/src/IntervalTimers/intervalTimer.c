@@ -9,10 +9,12 @@
 #include "xparameters.h"
 #include "intervalTimer.h"
 
-// Helper function for reading timer registers
-// @param timerNumber {0,1,2}
-// @param offset Offset from the base address
-// @return the 32-bit register value or TIMER_ERROR for invalid numbers
+/**
+ * Helper function for reading timer registers
+ * @param  timerNumber ID of the timer (TIMER0, TIMER1 or TIMER2)
+ * @param  offset      Register offset from the base address
+ * @return             32-bit register value or TIMER_ERROR for invalid numbers
+ */
 uint32_t intervalTimer_readTimerRegister(uint32_t timerNumber, uint8_t offset) {
   u32 regValue; // Variable to store register value
 
@@ -37,11 +39,13 @@ uint32_t intervalTimer_readTimerRegister(uint32_t timerNumber, uint8_t offset) {
   return (uint32_t)regValue;
 }
 
-// Helper function for writing timer registers
-// @param timerNumber {0,1,2}
-// @param offset Offset from the base address
-// @param value value to write to the register
-// @return 0 if successful TIMER_ERROR for invalid numbers
+/**
+ * Helper function for writing timer registers
+ * @param  timerNumber ID of the timer (TIMER0, TIMER1 or TIMER2)
+ * @param  offset      Register offset from the base address
+ * @param  value       Value to write to the register
+ * @return             0 if successful or TIMER_ERROR for invalid numbers
+ */
 uint32_t intervalTimer_writeTimerRegister(uint32_t timerNumber,
                                           uint8_t offset,
                                           uint32_t value) {
@@ -68,9 +72,12 @@ uint32_t intervalTimer_writeTimerRegister(uint32_t timerNumber,
   return status;
 }
 
-// Helper function for writing timer registers
-// @param timerNumber {0,1,2}
-// @return frequency if successful or TIMER_ERROR for invalid numbers
+
+/**
+ * Helper function for writing timer registers
+ * @param  timerNumber ID of the timer (TIMER0, TIMER1 or TIMER2)
+ * @return             Frequency if successful or TIMER_ERROR if invalid number
+ */
 uint32_t intervalTimer_getTimerFrequency(uint32_t timerNumber) {
   uint32_t frequency;
   switch (timerNumber) {
@@ -92,25 +99,43 @@ uint32_t intervalTimer_getTimerFrequency(uint32_t timerNumber) {
   return frequency;
 }
 
-// Helper function that enables the ENT0 bit of the passed-in value
+/**
+ * Helper function that sets the ENT0 bit in the passed in value.
+ * @param  original The original value
+ * @return          The original value with ENT0 bit set
+ */
 uint32_t intervalTimer_enableENT0(uint32_t original) {
   return (original | ENABLE_ENT0_MASK); // Set the ENT0 bit to 1
 }
 
-// Helper function that clears the ENT0 bit of the passed-in value
+/**
+ * Helper function that clears the ENT0 bit in the passed in value.
+ * @param  original The original value
+ * @return          The original value with ENT0 cleared
+ */
 uint32_t intervalTimer_clearENT0(uint32_t original) {
   return (original & CLEAR_ENT0_MASK);  // Set the ENT0 bit to 0
 }
 
-// Helper function that enables the CASC bit of the passed-in value
+/**
+ * Helper function that sets the CASC bit in the passed in value
+ * @param  original The original value
+ * @return          The original value with the CASC bit set
+ */
 uint32_t intervalTimer_enableCASC(uint32_t original) {
   return (original | ENABLE_CASC_MASK); // Set the CASC bit to 1
 }
 
-// Helper function that enables the LOAD0 bit of the passed-in value
+
+/**
+ * Helper function that sets the LOAD0 bit in the passed in value
+ * @param  original The original value
+ * @return          The original value with the LOAD0 bit set
+ */
 uint32_t intervalTimer_enableLOAD0(uint32_t original) {
   return (original | ENABLE_LOAD0_MASK);  // Set the LOAD0 bit to 1
 }
+
 
 uint32_t intervalTimer_start(uint32_t timerNumber) {
   uint32_t csrValue;  // variable to store the original CSR value
