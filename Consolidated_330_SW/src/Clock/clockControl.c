@@ -156,7 +156,7 @@ void clockControl_tick() {
     case ad_timer_running_st:
       // if the display is only tapped, inc/dec once
       if (!display_isTouched() && adTimer >= ADC_WAIT) {
-        currentState = ad_timer_running_st;
+        currentState = waiting_for_touch_st;
         clockDisplay_performIncDec(); // just inc/dec once based on touch
       }
       // if they are still holding it after the ADC settles, move to auto_timer
