@@ -13,7 +13,7 @@
 enum clockControl_st {
   init_st,                // Start here, stay in this state for just one tick.
   never_touched_st,       // Wait for first touch - clock is disabled until set.
-  waiting_for_touch_st    // waiting for touch, clock is enabled and running.
+  waiting_for_touch_st,    // waiting for touch, clock is enabled and running.
   ad_timer_running_st,    // waiting for the touch-controller ADC to settle.
   auto_timer_running_st,  // waiting for the auto-update delay to expire
                               // (user is holding down button for auto-inc/dec)
@@ -43,7 +43,7 @@ void clockControl_debugStatePrint() {
   if (previousState != currentState || firstPass) {
     firstPass = false;     // previousState will be defined, firstPass is false.
     previousState = currentState; // keep track of the last state you were in.
-    printf("msCounter:%d\n\r", msCounter);
+    printf("msCounter:%d\n\r", (int)msCounter);
     switch(currentState) {  // prints info based on the state that you're in.
       case init_st:
         printf("init_st\n\r");
@@ -78,7 +78,7 @@ void clockControl_debugStatePrint() {
 
 void clockControl_tick() {
   // Print out state changes for reference
-  clockControl_debugStatePrint();
+  //clockControl_debugStatePrint();
 
   /////////////////////////////////
   // Perform state action first. //
@@ -99,7 +99,7 @@ void clockControl_tick() {
       msCounter = 0;  // reset the second advancement counter
       break;
     case auto_timer_running_st: //increment autoTimer
-      autoTimer++
+      autoTimer++;
       msCounter = 0;  // reset the second advancement counter
       break;
     case rate_timer_running_st: // increment rateTimer
@@ -109,6 +109,11 @@ void clockControl_tick() {
     case rate_timer_expired_st: // set rateTimer to 0
       rateTimer = 0;
       msCounter = 0;  // reset the second advancement counter
+      break;
+    case add_second_to_clock_st:
+      msCounter = 0;  // reset the msCounter
+      // Add one second
+      clockDisplay_advanceTimeOneSecond();
       break;
      default:
       printf("clockControl_tick state action: hit default\n\r");
@@ -125,7 +130,7 @@ void clockControl_tick() {
     case never_touched_st:
       // If the display gets touched, leave this state
       if (display_isTouched()) {
-        currentState = waiting_for_touch; // move to waiting_for_touch_st
+        currentState = waiting_for_touch_st; // move to waiting_for_touch_st
         display_clearOldTouchData();  // clear old touch data for fresh start
       }
       else {  // otherwise, keep waiting here. Clock will NOT change.
@@ -145,17 +150,17 @@ void clockControl_tick() {
       }
       // Otherwise, keep waiting here
       else {
-        currentState = waiting_for_touch;
+        currentState = waiting_for_touch_st;
       }
       break;
     case ad_timer_running_st:
       // if the display is only tapped, inc/dec once
-      if (!display_isTouched() && adTimer == ADC_WAIT) {
-        currentState = ad_timer_running_st;
+      if (!display_isTouched() && adTimer >= ADC_WAIT) {
+        currentState = waiting_for_touch_st;
         clockDisplay_performIncDec(); // just inc/dec once based on touch
       }
       // if they are still holding it after the ADC settles, move to auto_timer
-      else if (display_isTouched() && adTimer == ADC_WAIT) {
+      else if (display_isTouched() && adTimer >= ADC_WAIT) {
         currentState = auto_timer_running_st;
       }
       // Otherwise, stay in this state
@@ -171,7 +176,7 @@ void clockControl_tick() {
       }
       // If they continue to hold the arrow for 0.5 seconds, move on to
       // auto increment/decrement
-      else if (display_isTouched() && autoTimer == HALF_SECOND_WAIT) {
+      else if (display_isTouched() && autoTimer >= HALF_SECOND_WAIT) {
         currentState = rate_timer_running_st;
         clockDisplay_performIncDec();
       }
@@ -186,7 +191,7 @@ void clockControl_tick() {
         currentState = waiting_for_touch_st;
       }
       // If they keep holding the display, increment at 10 inc/dec per sec
-      else if (display_isTouched() && rateTimer == TENTH_SECOND_WAIT) {
+      else if (display_isTouched() && rateTimer >= TENTH_SECOND_WAIT) {
         currentState = rate_timer_expired_st;
       }
       // Otherwise, wait here
@@ -202,12 +207,10 @@ void clockControl_tick() {
       // Otherwise, keep incrementing
       else {
         clockDisplay_performIncDec();
-        curentState = rate_timer_running_st;
+        currentState = rate_timer_running_st;
       }
       break;
     case add_second_to_clock_st:
-      // Add one second
-      clockDisplay_advanceTimeOneSecond();
       // Go back to waiting
       currentState = waiting_for_touch_st;
       break;

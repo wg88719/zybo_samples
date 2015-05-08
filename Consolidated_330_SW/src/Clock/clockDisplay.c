@@ -81,7 +81,6 @@ int8_t clockDisplay_getInputRegion(int16_t x, int16_t y) {
       return REGION_5;
     }
   }
-
   // If not in any of these regions, return REGION_ERR
   return REGION_ERR;
 }
@@ -263,6 +262,8 @@ void clockDisplay_init() {
                     DISPLAY_GREEN,              // color of text
                     DISPLAY_BLACK,              // color of background
                     CLOCK_TEXT_SIZE);           // size of text
+
+  clockDisplay_updateTimeDisplay(UPDATE_ALL);  // draw all other digits
 }
 
 void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
@@ -345,7 +346,6 @@ void clockDisplay_performIncDec() {
   // Get the data of the touched point
   display_getTouchedPoint(&x, &y, &pressure);
   regionID = clockDisplay_getInputRegion(x, y);
-
   switch(regionID) {
     case REGION_0:  // Hours UP arrow
       hours++;

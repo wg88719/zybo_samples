@@ -8,6 +8,7 @@
 #include "supportFiles/leds.h"
 #include "supportFiles/globalTimer.h"
 #include "supportFiles/interrupts.h"
+#include "supportFiles/utils.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include "clockControl.h"
@@ -21,7 +22,7 @@
 // in the Cortex-A9 MPCore Technical Reference Manual 4-2.
 // Assuming that the prescaler = 0, the formula for computing the load value based upon the desired period is:
 // load-value = (period * timer-clock) - 1
-#define TIMER_PERIOD 10.0E-3
+#define TIMER_PERIOD .02
 #define TIMER_CLOCK_FREQUENCY ((XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ) / 2)
 #define TIMER_LOAD_VALUE (((TIMER_PERIOD) * (TIMER_CLOCK_FREQUENCY)) - 1.0)
 
@@ -29,9 +30,10 @@
  * Simple function that can be used to test the clockControl_tick() function
  */
 void test_clockTick() {
+  clockDisplay_init();  // Initialize the clock display
   while (1) {
     clockControl_tick();
-    utils_msDelay(1);
+    utils_msDelay(20);
   }
 }
 
@@ -76,6 +78,8 @@ void test_Full() {
 }
 
 int main() {
-  clockDisplay_runTest();
+  //clockDisplay_runTest();
+  //test_clockTick();
+  test_Full();
   return 0;
 }

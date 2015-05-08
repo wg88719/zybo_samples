@@ -26,7 +26,7 @@
 
 // Edit this to change the size of the clock chars. Only set this value to
 // 3, 4, 5, or 6. Otherwise, the clock will NOT display correctly.
-#define CLOCK_TEXT_SIZE 3
+#define CLOCK_TEXT_SIZE 6
 
 // Values to Initialize clock to on startup
 #define INITIAL_HOURS   12
