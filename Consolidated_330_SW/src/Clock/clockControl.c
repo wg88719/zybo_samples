@@ -227,8 +227,8 @@ void clockControl_tick() {
   double duration;
   intervalTimer_getTotalDurationInSeconds(TIMER0, &duration);
   if (duration_max < duration) {
-	  duration_max = duration;
-	  printf("Duration:%lf\n", duration);
+    duration_max = duration;
+    printf("Duration:%lf\n", duration);
   }
   intervalTimer_resetAll();
 
