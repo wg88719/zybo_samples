@@ -118,7 +118,7 @@ void clockControl_tick() {
         currentState = waiting_for_touch; // move to waiting_for_touch_st
         display_clearOldTouchData();  // clear old touch data for fresh start
       }
-      else {  // otherwise, keep waiting here
+      else {  // otherwise, keep waiting here. Clock will NOT change.
         currentState = never_touched_st;
       }
       break;
