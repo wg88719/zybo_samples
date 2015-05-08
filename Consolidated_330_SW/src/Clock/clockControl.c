@@ -144,7 +144,7 @@ void clockControl_tick() {
         display_clearOldTouchData();  // clear old touch data for fresh start
       }
       // Otherwise, if a second of time has passed, increment a second
-      else if (msCounter >= MS_COUNTER_WAIT){
+      else if (msCounter >= SECOND_WAIT){
         currentState = add_second_to_clock_st;
         display_clearOldTouchData();  // clear old touch data for fresh start
       }
