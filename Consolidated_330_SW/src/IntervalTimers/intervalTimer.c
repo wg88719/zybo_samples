@@ -72,7 +72,6 @@ uint32_t intervalTimer_writeTimerRegister(uint32_t timerNumber,
   return status;
 }
 
-
 /**
  * Helper function for writing timer registers
  * @param  timerNumber ID of the timer (TIMER0, TIMER1 or TIMER2)
@@ -86,8 +85,7 @@ uint32_t intervalTimer_getTimerFrequency(uint32_t timerNumber) {
     case TIMER1:  // Get TIMER 1 frequency
       return XPAR_AXI_TIMER_1_CLOCK_FREQ_HZ;
     case TIMER2:  // Get TIMER 2 frequency
-      frequency = XPAR_AXI_TIMER_2_CLOCK_FREQ_HZ;
-      break;
+      return XPAR_AXI_TIMER_2_CLOCK_FREQ_HZ;
     default:  // invalid timer number
       printf("\nERROR: Not a valid timer number.\n\n");
       return TIMER_ERROR;  // Flag the transaction as unsuccessful
@@ -120,7 +118,6 @@ uint32_t intervalTimer_clearENT0(uint32_t original) {
 uint32_t intervalTimer_enableCASC(uint32_t original) {
   return (original | ENABLE_CASC_MASK); // Set the CASC bit to 1
 }
-
 
 /**
  * Helper function that sets the LOAD0 bit in the passed in value
@@ -175,7 +172,6 @@ uint32_t intervalTimer_start(uint32_t timerNumber) {
 
   // Get the current value of control/status register
   csrValue = intervalTimer_readTimerRegister(timerNumber, TCSR0_OFFSET);
-
   // Write value back w/ ENT0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
                                     TCSR0_OFFSET, // register offset
@@ -236,6 +232,8 @@ uint32_t intervalTimer_reset(uint32_t timerNumber) {
   intervalTimer_writeTimerRegister( timerNumber, // timer number
                                     TCSR1_OFFSET, // register offset
                                     intervalTimer_enableLOAD0(csrValue));
+
+  intervalTimer_init(timerNumber);
 
   return 0;  // return 0 for success, or TIMER_ERROR
 }
@@ -318,8 +316,6 @@ uint32_t intervalTimer_testAll() {
 
   return 0; // return 0 on success, TIMER_ERROR on failure
 }
-
-
 
 uint32_t intervalTimer_runTest(uint32_t timerNumber) {
 

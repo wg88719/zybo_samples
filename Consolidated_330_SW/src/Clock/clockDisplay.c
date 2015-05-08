@@ -11,6 +11,7 @@
 #include "xparameters.h"
 #include "supportFiles/display.h"
 #include "supportFiles/utils.h"
+#include "intervalTimer.h"
 
 // Global variables for tracking time
 // Used signed ints to utilize negative values as a signal to rollover
@@ -91,6 +92,7 @@ int8_t clockDisplay_getInputRegion(int16_t x, int16_t y) {
  * @param c     The character to draw
  */
 void clockDisplay_redrawDigit(uint8_t index, char c) {
+
   // Draw the character based on the index
   switch (index) {
     case TENS_HRS:   // Tens-digit for Hours
@@ -148,6 +150,8 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
     default:  // Otherwise, do nothing
       break;
   }
+
+
 }
 
 /**
@@ -268,8 +272,6 @@ void clockDisplay_init() {
 
 void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
 
-  // TODO update the global variables? Or do I do this somewhere else?
-
   // If seconds was incremented
   if (seconds > MAX_SECS) {
     seconds = 0;  // rollover to 0
@@ -323,7 +325,6 @@ void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
 
   // Update current time
   sprintf(current_time, "%2d:%02d:%02d", hours, minutes, seconds);
-
   // Draw the time digits only if the times have changed
   uint8_t i;
   for (i = 0; i < NUM_CHARS; i++) {

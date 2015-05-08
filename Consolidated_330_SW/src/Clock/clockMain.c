@@ -14,6 +14,7 @@
 #include "clockControl.h"
 #include "clockDisplay.h"
 #include "supportFiles/display.h"
+#include "intervalTimer.h"
 
 #include "xparameters.h"
 
@@ -78,6 +79,8 @@ void test_Full() {
 }
 
 int main() {
+  intervalTimer_initAll();
+  intervalTimer_resetAll();
   //clockDisplay_runTest();
   //test_clockTick();
   test_Full();

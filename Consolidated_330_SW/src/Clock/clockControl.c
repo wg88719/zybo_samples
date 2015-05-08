@@ -8,6 +8,7 @@
 #include "clockControl.h"
 #include "clockDisplay.h"
 #include "supportFiles/display.h"
+#include "intervalTimer.h"
 
 // States for the controller state machine.
 enum clockControl_st {
@@ -28,6 +29,8 @@ uint32_t adTimer = 0;   // Time to wait for touch-controller ADC to settle.
 uint32_t autoTimer = 0; // Time before auto-updating when user holds button
 uint32_t rateTimer = 0; // Time between auto inc/dec calls
 uint32_t msCounter = 0; // Time between normal second updates
+
+double duration_max = 0.0;
 
 /**
  * This is a debug state print routine. It will print names of the states each
@@ -77,6 +80,7 @@ void clockControl_debugStatePrint() {
 }
 
 void clockControl_tick() {
+  intervalTimer_start(TIMER0);
   // Print out state changes for reference
   //clockControl_debugStatePrint();
 
@@ -89,29 +93,29 @@ void clockControl_tick() {
     case never_touched_st:
       break;  // Do nothing in never_touched_st
     case waiting_for_touch_st:  // reset all of the timers
-      adTimer = 0;
-      autoTimer = 0;
-      rateTimer = 0;
+      adTimer = 1;
+      autoTimer = 1;
+      rateTimer = 1;
       msCounter++;  // increment msCounter while waiting
       break;
     case ad_timer_running_st: // increment adTimer
       adTimer++;
-      msCounter = 0;  // reset the second advancement counter
+      msCounter = 1;  // reset the second advancement counter
       break;
     case auto_timer_running_st: //increment autoTimer
       autoTimer++;
-      msCounter = 0;  // reset the second advancement counter
+      msCounter = 1;  // reset the second advancement counter
       break;
     case rate_timer_running_st: // increment rateTimer
       rateTimer++;
-      msCounter = 0;  // reset the second advancement counter
+      msCounter = 1;  // reset the second advancement counter
       break;
     case rate_timer_expired_st: // set rateTimer to 0
-      rateTimer = 0;
-      msCounter = 0;  // reset the second advancement counter
+      rateTimer = 1;
+      msCounter = 1;  // reset the second advancement counter
       break;
     case add_second_to_clock_st:
-      msCounter = 0;  // reset the msCounter
+      msCounter = 1;  // reset the msCounter
       // Add one second
       clockDisplay_advanceTimeOneSecond();
       break;
@@ -218,4 +222,14 @@ void clockControl_tick() {
       printf("clockControl_tick state update: hit default\n\r");
       break;
   }
+
+  intervalTimer_stop(TIMER0);
+  double duration;
+  intervalTimer_getTotalDurationInSeconds(TIMER0, &duration);
+  if (duration_max < duration) {
+	  duration_max = duration;
+	  printf("Duration:%lf\n", duration);
+  }
+  intervalTimer_resetAll();
+
 }
