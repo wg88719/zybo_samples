@@ -79,24 +79,19 @@ uint32_t intervalTimer_writeTimerRegister(uint32_t timerNumber,
  * @return             Frequency if successful or TIMER_ERROR if invalid number
  */
 uint32_t intervalTimer_getTimerFrequency(uint32_t timerNumber) {
-  uint32_t frequency;
   switch (timerNumber) {
     case TIMER0:  // Get TIMER 0 frequency
-      frequency = XPAR_AXI_TIMER_0_CLOCK_FREQ_HZ;
+      return XPAR_AXI_TIMER_0_CLOCK_FREQ_HZ;
       break;
     case TIMER1:  // Get TIMER 1 frequency
-      frequency = XPAR_AXI_TIMER_1_CLOCK_FREQ_HZ;
-      break;
+      return XPAR_AXI_TIMER_1_CLOCK_FREQ_HZ;
     case TIMER2:  // Get TIMER 2 frequency
       frequency = XPAR_AXI_TIMER_2_CLOCK_FREQ_HZ;
       break;
     default:  // invalid timer number
       printf("\nERROR: Not a valid timer number.\n\n");
-      frequency = TIMER_ERROR;  // Flag the transaction as unsuccessful
-      break;
+      return TIMER_ERROR;  // Flag the transaction as unsuccessful
   }
-  // return frequency value if successful, TIMER_ERROR for invalid timer number
-  return frequency;
 }
 
 /**
@@ -136,6 +131,37 @@ uint32_t intervalTimer_enableLOAD0(uint32_t original) {
   return (original | ENABLE_LOAD0_MASK);  // Set the LOAD0 bit to 1
 }
 
+/**
+ * Helper function for reading the 64-bit counter value
+ * @param  timerNumber Number of the timer to read
+ * @return             64-bit value in the counter
+ */
+uint64_t intervalTimer_read64bitCounter(uint32_t timerNumber) {
+
+    // variables for reading the 32-bit upper and lower registers
+    uint32_t lower_bits, upper_bits, upper_bits_check;
+
+    // Read upper 32-bits of counter
+    upper_bits = intervalTimer_readTimerRegister(timerNumber, TCR1_OFFSET);
+    // Read lower 32-bits of counter
+    lower_bits = intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET);
+
+    // Read upper bits again
+    upper_bits_check = intervalTimer_readTimerRegister(timerNumber, TCR1_OFFSET);
+
+    // if they differ, read lower bits again
+    if (upper_bits_check != upper_bits) {
+      lower_bits = intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET);
+      upper_bits = upper_bits_check;
+    }
+
+    // Form the 64-bit cascaded value
+    uint64_t counterValue = upper_bits; // store 32-bits in the upper register
+    counterValue <<= REGISTER_WIDTH;
+    counterValue |= lower_bits; // add on the lower 32-bits
+
+    return counterValue;
+}
 
 uint32_t intervalTimer_start(uint32_t timerNumber) {
   uint32_t csrValue;  // variable to store the original CSR value
@@ -348,38 +374,11 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
 }
 
 uint32_t intervalTimer_getTotalDurationInSeconds(uint32_t timerNumber, double *seconds) {
-  uint64_t tempSeconds;   // variable used to form 64-bit value from 32-bit regs
-
-  // variables for reading the 32-bit upper and lower registers
-  uint32_t lower_bits, upper_bits, upper_bits_check;
-
-  // Check for invalid timer numbers
-  if (timerNumber > TIMER2) {
-    // Invalid timerNumber was passed in!
-    printf("\nERROR: Not a valid timer number.\n\n");
-    return TIMER_ERROR;
-  }
-
-  // Read upper 32-bits of counter
-  upper_bits = intervalTimer_readTimerRegister(timerNumber, TCR1_OFFSET);
-  // Read lower 32-bits of counter
-  lower_bits = intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET);
-
-  // Read upper bits again
-  upper_bits_check = intervalTimer_readTimerRegister(timerNumber, TCR1_OFFSET);
-
-  // if they differ, read lower bits again
-  if (upper_bits_check != upper_bits) {
-    lower_bits = intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET);
-  }
-
-  // Form the 64-bit cascaded value
-  tempSeconds = upper_bits; // store 32-bits in the upper register
-  tempSeconds = tempSeconds << REGISTER_WIDTH;  // shift upper bits up
-  tempSeconds = tempSeconds + lower_bits; // add on the lower 32-bits
+  double clockCycles = intervalTimer_read64bitCounter(timerNumber);
+  double frequency = intervalTimer_getTimerFrequency(timerNumber);
 
   // Convert from clock cycles to seconds and store value
-  *seconds = tempSeconds / intervalTimer_getTimerFrequency(timerNumber);
+  *seconds = clockCycles / frequency;
 
-  return 0; // return 0 on success or TIMER_ERROR if an error occured
+  return 0;
 }
