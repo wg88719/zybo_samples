@@ -11,7 +11,6 @@
 
 /**
  * This tick function controls the state transitions and state actions
- * of the clock control state machine. Note that timer interrupts should
- * come every 10 milliseconds
+ * of the clock control state machine.
  */
 void clockControl_tick();

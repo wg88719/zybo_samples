@@ -66,6 +66,12 @@ void clockControl_debugStatePrint() {
       case rate_timer_expired_st:
         printf("rate_timer_expired_st\n\r");
         break;
+      case add_second_to_clock_st:
+        printf("add_second_to_clock_st\n\r");
+        break;
+      default:
+        printf("Shouldn't have hit this default case\n");
+        break;
      }
   }
 }
@@ -74,7 +80,9 @@ void clockControl_tick() {
   // Print out state changes for reference
   clockControl_debugStatePrint();
 
-  // Perform state action first.
+  /////////////////////////////////
+  // Perform state action first. //
+  /////////////////////////////////
   switch(currentState) {
     case init_st:
       break;  // Do nothing in init_st
@@ -107,7 +115,9 @@ void clockControl_tick() {
       break;
   }
 
-  // Perform state update next.
+  ////////////////////////////////
+  // Perform state update next. //
+  ////////////////////////////////
   switch(currentState) {
     case init_st:
       currentState = never_touched_st;  // moved to never_touched state
@@ -201,7 +211,7 @@ void clockControl_tick() {
       // Go back to waiting
       currentState = waiting_for_touch_st;
       break;
-    default:
+    default:  // Shouldn't ever hit this state
       printf("clockControl_tick state update: hit default\n\r");
       break;
   }

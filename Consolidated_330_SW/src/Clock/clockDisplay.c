@@ -156,7 +156,7 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
  * the sub boxes. Used for Debugging.
  */
 void clockDisplay_drawLines() {
-  // Draw Vertical Lines
+  // Draw Vertical Lines of each column in the drawing grid
   display_drawLine(COLUMN_0, ROW_0, COLUMN_0, ROW_3, DISPLAY_RED);
   display_drawLine(COLUMN_1, ROW_0, COLUMN_1, ROW_3, DISPLAY_RED);
   display_drawLine(COLUMN_2, ROW_0, COLUMN_2, ROW_3, DISPLAY_RED);
@@ -167,7 +167,7 @@ void clockDisplay_drawLines() {
   display_drawLine(COLUMN_7, ROW_0, COLUMN_7, ROW_3, DISPLAY_RED);
   display_drawLine(COLUMN_8, ROW_0, COLUMN_8, ROW_3, DISPLAY_RED);
 
-  // Draw Horizontal Lines
+  // Draw Horizontal Lines of each row in the drawing grid
   display_drawLine(COLUMN_0, ROW_0, COLUMN_8, ROW_0, DISPLAY_RED);
   display_drawLine(COLUMN_0, ROW_1, COLUMN_8, ROW_1, DISPLAY_RED);
   display_drawLine(COLUMN_0, ROW_2, COLUMN_8, ROW_2, DISPLAY_RED);
@@ -185,10 +185,6 @@ void clockDisplay_init() {
   seconds = INITIAL_SECONDS;
   minutes = INITIAL_MINUTES;
   hours = INITIAL_HOURS;
-
-  printf("BUFFER: %d\n", BUFFER);
-  printf("ORIGIN_X: %d\n", ORIGIN_X);
-  printf("ORIGIN_Y: %d\n", ORIGIN_Y);
 
   // Initialize the current_time to the initial value
   sprintf(current_time, "%2d:%02d:%02d", hours, minutes, seconds);
@@ -267,8 +263,6 @@ void clockDisplay_init() {
                     DISPLAY_GREEN,              // color of text
                     DISPLAY_BLACK,              // color of background
                     CLOCK_TEXT_SIZE);           // size of text
-
-  //clockDisplay_drawLines();
 }
 
 void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {

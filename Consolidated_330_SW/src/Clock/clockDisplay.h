@@ -122,10 +122,10 @@
 #define UPDATE_ALL        true    // force update all
 #define DO_NOT_UPDATE_ALL false   // do not force update all
 
-// Time macros used in runTest()
+// Time macros used in runTest() in units of milliseconds
 #define TENTH_SECOND            100
 #define HALF_SECOND             500
-#define TENTHS_IN_TEN_SECONDS   100
+#define TENTHS_IN_TEN_SECONDS   100 // # 10ms intervals in 10 seconds
 
 /**
  * Initializes the clock display. Should only be called once.
