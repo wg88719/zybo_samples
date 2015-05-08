@@ -32,7 +32,7 @@ uint16_t x_half;    // x-value of the middle of the screen
 uint16_t x_three_fourths;   // x-value of right fourth of the screen
 uint16_t y_fourth;  // y-value of the top fourth of the screen
 uint16_t y_half;    // y-value of the middle of the screen
-uint16_t y_three_fourths; // y-value of the bottom fourth of the scren
+uint16_t y_three_fourths; // y-value of the bottom fourth of the screen
 
 
 //************************* Helper Functions **********************************
@@ -200,7 +200,7 @@ void buttons_runTest() {
 
   // After all buttons are pushed simultaneously, finish test.
   display_fillScreen(DISPLAY_BLACK);  // blank screen
-  displat_setTextColor(DISPLAY_CYAN); // change text color
+  display_setTextColor(DISPLAY_CYAN); // change text color
   display_setCursor(0,0);  // reset cursor to origin
   display_println("Button Test Finished!");  // print that the test is complete
 }
