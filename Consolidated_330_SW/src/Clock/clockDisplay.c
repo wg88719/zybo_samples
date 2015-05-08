@@ -390,29 +390,66 @@ void clockDisplay_runTest() {
   clockDisplay_init();  // Initialize the clock display
   clockDisplay_updateTimeDisplay(UPDATE_ALL);
 
+  // Increment Hours
   while(!display_isTouched()); // wait for touch to initiate runTest
   while (display_isTouched()); // wait for user to let go of touchscreen
   while(!display_isTouched()) // increment until user presses touchscreen again
   {
-    clockDisplay_advanceTimeOneSecond();
-    utils_msDelay(1000);
+    hours++;
+    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
+    utils_msDelay(500);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
-  while(!display_isTouched()) // increment until screen is touched again
+
+  // Decrement Hours
+  while(!display_isTouched()) // decrement until screen is touched again
   {
-    seconds--;
     hours--;
-    minutes--;
-    clockDisplay_performIncDec();
-    utils_msDelay(1000);
+    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
+    utils_msDelay(500);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
-  while(!display_isTouched()) // increment until screen is touched again
+
+  // Increment Minutes
+  while(!display_isTouched()) // increment until user presses touchscreen again
+  {
+    minutes++;
+    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
+    utils_msDelay(500);
+  }
+  while(display_isTouched()); //wait for user to let go of touchscreen
+
+  // Decrement Minutes
+  while(!display_isTouched()) // decrement until screen is touched again
+  {
+    minutes--;
+    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
+    utils_msDelay(500);
+  }
+  while(display_isTouched()); //wait for user to let go of touchscreen
+
+  // Increment Seconds
+  while(!display_isTouched()) // increment until user presses touchscreen again
   {
     seconds++;
-    hours++;
-    minutes++;
-    clockDisplay_performIncDec();
+    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
+    utils_msDelay(500);
+  }
+  while(display_isTouched()); //wait for user to let go of touchscreen
+
+  // Decrement Seconds
+  while(!display_isTouched()) // decrement until screen is touched again
+  {
+    seconds--;
+    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
+    utils_msDelay(500);
+  }
+  while(display_isTouched()); //wait for user to let go of touchscreen
+
+  // Run clock at 10x normal speed for 10 seconds
+  int i;
+  for (i = 0; i < TENTHS_IN_TEN_SECONDS; i++) {
+    clockDisplay_advanceTimeOneSecond();
     utils_msDelay(100);
   }
 }
