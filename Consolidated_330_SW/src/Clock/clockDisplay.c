@@ -397,7 +397,7 @@ void clockDisplay_runTest() {
   {
     hours++;
     clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(500);
+    utils_msDelay(HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -406,7 +406,7 @@ void clockDisplay_runTest() {
   {
     hours--;
     clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(500);
+    utils_msDelay(HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -415,7 +415,7 @@ void clockDisplay_runTest() {
   {
     minutes++;
     clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(500);
+    utils_msDelay(HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -424,7 +424,7 @@ void clockDisplay_runTest() {
   {
     minutes--;
     clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(500);
+    utils_msDelay(HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -433,7 +433,7 @@ void clockDisplay_runTest() {
   {
     seconds++;
     clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(500);
+    utils_msDelay(HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -442,7 +442,7 @@ void clockDisplay_runTest() {
   {
     seconds--;
     clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(500);
+    utils_msDelay(HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -450,6 +450,7 @@ void clockDisplay_runTest() {
   int i;
   for (i = 0; i < TENTHS_IN_TEN_SECONDS; i++) {
     clockDisplay_advanceTimeOneSecond();
-    utils_msDelay(100);
+    utils_msDelay(TENTH_SECOND);
   }
+  printf("\n\nClock Display Test FINISHED!!!\n");
 }
