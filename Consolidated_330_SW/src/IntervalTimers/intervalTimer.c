@@ -172,6 +172,7 @@ uint32_t intervalTimer_start(uint32_t timerNumber) {
 
   // Get the current value of control/status register
   csrValue = intervalTimer_readTimerRegister(timerNumber, TCSR0_OFFSET);
+
   // Write value back w/ ENT0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
                                     TCSR0_OFFSET, // register offset
