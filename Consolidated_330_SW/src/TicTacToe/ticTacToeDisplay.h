@@ -8,10 +8,14 @@
 #define ROW_0 0
 #define ROW_1 1
 #define ROW_2 2
+
 #define COL_0 0
 #define COL_1 1
 #define COL_2 2
 
+// Screen Position Macros
+#define ONE_THIRD(X)      ((X)/3) // Divide the given number by 4
+#define TWO_THIRDS(X)     ((X * 2)/3) // Divide the given number by 2
 
 /**
  * Inits the tic-tac-toe display, draws the lines that form the board.
@@ -41,10 +45,6 @@ void ticTacToeDisplay_drawO(uint8_t row, uint8_t column);
  */
 void ticTacToeDisplay_touchScreenComputeBoardRowColumn(uint8_t* row, uint8_t* column);
 
-// Runs a test of the display. Does the following.
-// Draws the board. Each time you touch one of the screen areas, the screen will paint
-// an X or an O, depending on whether switch 0 (SW0) is slid up (O) or down (X).
-// When BTN0 is pushed, the screen is cleared. The test terminates when BTN1 is pushed.
 /**
  * Runs a test of the display by doing the following:
  * 	1. Draws the board
