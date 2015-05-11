@@ -14,8 +14,9 @@
 #define COL_2 2
 
 // Screen Position Macros
-#define ONE_THIRD(X)      ((X)/3) // Divide the given number by 4
-#define TWO_THIRDS(X)     ((X * 2)/3) // Divide the given number by 2
+#define ONE_THIRD(X)    ((X)/3)       // Divide the given number by 4
+#define TWO_THIRD(X)    ((X * 2)/3)   // Divide the given number by 2
+
 
 /**
  * Inits the tic-tac-toe display, draws the lines that form the board.
