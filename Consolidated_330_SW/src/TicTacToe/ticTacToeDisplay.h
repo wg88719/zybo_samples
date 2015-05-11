@@ -4,19 +4,28 @@
 // Interface for drawing Tic Tac Toe
 //*****************************************************************************
 
-// Contants for specifying row/column values
-#define ROW_0 0
-#define ROW_1 1
-#define ROW_2 2
+#include <stdint.h>
+#include <stdlib.h>
 
-#define COL_0 0
-#define COL_1 1
-#define COL_2 2
+// Constants for specifying row/column values
+#define TICTACTOEDISPLAY_ROW_0 0
+#define TICTACTOEDISPLAY_ROW_1 1
+#define TICTACTOEDISPLAY_ROW_2 2
+
+#define TICTACTOEDISPLAY_COL_0 0
+#define TICTACTOEDISPLAY_COL_1 1
+#define TICTACTOEDISPLAY_COL_2 2
 
 // Screen Position Macros
-#define ONE_THIRD(X)    ((X)/3)       // Divide the given number by 4
-#define TWO_THIRD(X)    ((X * 2)/3)   // Divide the given number by 2
+#define TICTACTOEDISPLAY_ONE_THIRD(X)   ((X) / 3)  // Divide the given number by 4
+#define TICTACTOEDISPLAY_TWO_THIRD(X)   ((X * 2) / 3) // Multiply by 2, then divide by 3 to reduce rounding err.
+#define TICTACTOEDISPLAY_ONE_SIXTH(X)  	((X) / 6)    // Divide the given number by 6
+#define TICTACTOEDISPLAY_ONE_HALF(X)   	((X) / 2)    // Divide the given number by 2
+#define TICTACTOEDISPLAY_FIVE_SIXTH(X)  ((X * 5) / 6) // Multiply by 5 then divide by 6 to reduce rounding err.
 
+
+#define TICTACTOEDISPLAY_SYMBOL_SIZE 25  // Used as the radius of 'O' and the distance from
+            // a side to the center of 'X'
 
 /**
  * Inits the tic-tac-toe display, draws the lines that form the board.
@@ -48,11 +57,11 @@ void ticTacToeDisplay_touchScreenComputeBoardRowColumn(uint8_t* row, uint8_t* co
 
 /**
  * Runs a test of the display by doing the following:
- * 	1. Draws the board
- * 	2. Each time a screen area is touched, the screen will draw an 'X' or an 'O'
- * 		 depending on whether switch 0 is slid up ('O') or down ('X').
- * 	3. When BTN0 is pushed, the screen is cleared.
- * 	4. The test is terminated by pressing BTN1.
+ *   1. Draws the board
+ *   2. Each time a screen area is touched, the screen will draw an 'X' or an 'O'
+ *      depending on whether switch 0 is slid up ('O') or down ('X').
+ *   3. When BTN0 is pushed, the screen is cleared.
+ *   4. The test is terminated by pressing BTN1.
  */
 void ticTacToeDisplay_runTest();
 
