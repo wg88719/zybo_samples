@@ -174,11 +174,12 @@ uint32_t intervalTimer_start(uint32_t timerNumber) {
   }
 
   // Get the current value of control/status register
-  csrValue = intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCSR0_OFFSET);
+  csrValue = intervalTimer_readTimerRegister( timerNumber,
+                                              INTERVALTIMER_TCSR0_OFFSET);
 
   // Write value back w/ ENT0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    INTERVALTIMER_TCSR0_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR0_OFFSET, // reg offset
                                     intervalTimer_enableENT0(csrValue));
 
   return 0;  // return 0 for success, or TIMER_ERROR
@@ -195,7 +196,8 @@ uint32_t intervalTimer_stop(uint32_t timerNumber) {
   }
 
   // Get the current value of control/status register
-  csrValue = intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCSR0_OFFSET);
+  csrValue = intervalTimer_readTimerRegister( timerNumber,
+                                              INTERVALTIMER_TCSR0_OFFSET);
 
   // Write value back w/ ENT0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
@@ -216,25 +218,27 @@ uint32_t intervalTimer_reset(uint32_t timerNumber) {
   }
 
   // Store 0 in TLR0
-  intervalTimer_writeTimerRegister(timerNumber, INTERVALTIMER_TLR0_OFFSET, 0x0000);
+  intervalTimer_writeTimerRegister(timerNumber, INTERVALTIMER_TLR0_OFFSET, 0);
 
   // Get the current value of control/status register
-  csrValue = intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCSR0_OFFSET);
+  csrValue = intervalTimer_readTimerRegister( timerNumber,
+                                              INTERVALTIMER_TCSR0_OFFSET);
 
   // Write value back w/ LOAD0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    INTERVALTIMER_TCSR0_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR0_OFFSET, // reg offset
                                     intervalTimer_enableLOAD0(csrValue));
 
   // Store 0 in TLR1
-  intervalTimer_writeTimerRegister(timerNumber, INTERVALTIMER_TLR1_OFFSET, 0x0000);
+  intervalTimer_writeTimerRegister(timerNumber, INTERVALTIMER_TLR1_OFFSET, 0);
 
   // Get the current value of control/status register
-  csrValue = intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCSR1_OFFSET);
+  csrValue = intervalTimer_readTimerRegister( timerNumber,
+                                              INTERVALTIMER_TCSR1_OFFSET);
 
   // Write value back w/ LOAD0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    INTERVALTIMER_TCSR1_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR1_OFFSET, // reg offset
                                     intervalTimer_enableLOAD0(csrValue));
 
   intervalTimer_init(timerNumber);
@@ -264,7 +268,7 @@ uint32_t intervalTimer_init(uint32_t timerNumber) {
   // Set cascade bit. Note that since TCSR was set to zero, timer counts up
   intervalTimer_writeTimerRegister( timerNumber, // timer number
                                     INTERVALTIMER_TCSR0_OFFSET, // reg offset
-                                    intervalTimer_enableCASC(0x0000));
+                                    intervalTimer_enableCASC(0));
 
 
   return 0;  // return 0 for success, or TIMER_ERROR
@@ -375,7 +379,8 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
   return status;  // return 0 for success, or TIMER_ERROR
 }
 
-uint32_t intervalTimer_getTotalDurationInSeconds(uint32_t timerNumber, double *seconds) {
+uint32_t intervalTimer_getTotalDurationInSeconds( uint32_t timerNumber,
+                                                  double *seconds) {
   double clockCycles = intervalTimer_read64bitCounter(timerNumber);
   double frequency = intervalTimer_getTimerFrequency(timerNumber);
 

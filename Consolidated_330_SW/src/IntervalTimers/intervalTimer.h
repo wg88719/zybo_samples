@@ -34,50 +34,81 @@
 // Width of each register in the timer
 #define INTERVALTIMER_REGISTER_WIDTH 32
 
-// Starts the specified timer
-// @param timerNumber must be {0, 1, 2}, otherwise and error occurs
-// @return 0 on success, or TIMER_ERROR
+/**
+ * Starts the specified timer.
+ * @param  timerNumber Number of the timer to start. Valid values are
+ *                     INTERVALTIMER_TIMER0, INTERVALTIMER_TIMER1, and
+ *                     INTERVALTIMER_TIMER2
+ * @return             0 on success or INTERVALTIMER_TIMER_ERROR on error.
+ */
 uint32_t intervalTimer_start(uint32_t timerNumber);
 
-// Stops the specified timer
-// @param timerNumber must be {0, 1, 2}, otherwise and error occurs
-// @return 0 on success, or TIMER_ERROR
+/**
+ * Stops the specified timer.
+ * @param  timerNumber Number of the timer to start. Valid values are
+ *                     INTERVALTIMER_TIMER0, INTERVALTIMER_TIMER1, and
+ *                     INTERVALTIMER_TIMER2
+ * @return             0 on success or INTERVALTIMER_TIMER_ERROR on error.
+ */
 uint32_t intervalTimer_stop(uint32_t timerNumber);
 
-// Sets the value of the cascaded counter to 0 and initializes the timer
-// @param timerNumber must be {0, 1, 2}, otherwise and error occurs
+/**
+ * Sets the value of the cascaded counter to 0 and initializes the timer.
+ * @param  timerNumber Number of the timer to start. Valid values are
+ *                     INTERVALTIMER_TIMER0, INTERVALTIMER_TIMER1, and
+ *                     INTERVALTIMER_TIMER2
+ * @return             0 on success or INTERVALTIMER_TIMER_ERROR on error.
+ */
 uint32_t intervalTimer_reset(uint32_t timerNumber);
 
-// Clears all control bits, sets timer to cascade and count up.
-// @param timerNumber must be {0, 1, 2}, otherwise and error occurs
+/**
+ * Clears all control bits and then sets timer to cascade mode and count up.
+ * @param  timerNumber Number of the timer to start. Valid values are
+ *                     INTERVALTIMER_TIMER0, INTERVALTIMER_TIMER1, and
+ *                     INTERVALTIMER_TIMER2
+ * @return             0 on success or INTERVALTIMER_TIMER_ERROR on error.
+ */
 uint32_t intervalTimer_init(uint32_t timerNumber);
 
-// Initializes all three hardware timers by calling intervalTimer_init() on each
+/**
+ * Initializes all three hardware timers by calling intervalTimer_init() on each
+ * @return 0 on success or INTERVALTIMER_TIMER_ERROR on error.
+ */
 uint32_t intervalTimer_initAll();
 
-// Resets all three hardware timers by calling intervalTimer_reset() on eeach
+/**
+ * Resets all three hardware timers by calling intervalTimer_reset() on eeach
+ * @return 0 on success or INTERVALTIMER_TIMER_ERROR on error.
+ */
 uint32_t intervalTimer_resetAll();
 
-// Tests all three hardware timers by calling intervalTimer_runTest() on each
+/**
+ * Tests all three hardware timers by calling intervalTimer_runTest() on each
+ * @return 0 on success or INTERVALTIMER_TIMER_ERROR on error.
+ */
 uint32_t intervalTimer_testAll();
 
-
-// Tests the specified timer by:
-//  1. Reseting the counter and verifying it was reset.
-//  2. Starting the counter and verifying that values change.
-//  3. Stopping the counter and varifying that values do NOT change.
-//
-// @param timerNumber must be {0, 1, 2}, otherwise and error occurs
+/**
+ * Tests the specified timer be:
+ * 	1. Reseting the counter and verifying it was reset.
+ * 	2. Starting the counter and verifying that values change.
+ * 	3. Stopping the counter and verifying that values do NOT change.
+ * @param  timerNumber Number of the timer to start. Valid values are
+ *                     INTERVALTIMER_TIMER0, INTERVALTIMER_TIMER1, and
+ *                     INTERVALTIMER_TIMER2
+ * @return             0 on success or INTERVALTIMER_TIMER_ERROR on error.
+ */
 uint32_t intervalTimer_runTest(uint32_t timerNumber);
 
-
-// Returns the number of seconds that have transpired since the counter was
-// last reset and started.
-//
-// @param timerNumber must be {0, 1, 2}, otherwise and error occurs
-// @param seconds Memory location pointed to by seconds will be modified to
-//        return the number of seconds that have transpired since the counter
-//        was last reset and started.
+/**
+ * Calculates the time that has transpired since the counter was last reset
+ * and started.
+ * @param  timerNumber Number of the timer to start. Valid values are
+ *                     INTERVALTIMER_TIMER0, INTERVALTIMER_TIMER1, and
+ *                     INTERVALTIMER_TIMER2
+ * @param  seconds     Address of the double variable for storing elapsed time.
+ * @return             Always returns 0
+ */
 uint32_t intervalTimer_getTotalDurationInSeconds(uint32_t timerNumber, double *seconds);
 
 
