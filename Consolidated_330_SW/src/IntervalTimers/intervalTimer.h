@@ -10,29 +10,29 @@
 #include <stdlib.h>
 
 // Timer Identifying Constants
-#define TIMER0 0
-#define TIMER1 1
-#define TIMER2 2
+#define INTERVALTIMER_TIMER0 0
+#define INTERVALTIMER_TIMER1 1
+#define INTERVALTIMER_TIMER2 2
 
 // Status code to return for ERRORs
-#define TIMER_ERROR 0xFFFFFFFF
+#define INTERVALTIMER_TIMER_ERROR 0xFFFFFFFF
 
 // Register Offsets
-#define TCSR0_OFFSET  0x00
-#define TLR0_OFFSET   0x04
-#define TCR0_OFFSET   0x08
-#define TCSR1_OFFSET  0x10
-#define TLR1_OFFSET   0x14
-#define TCR1_OFFSET   0x18
+#define INTERVALTIMER_TCSR0_OFFSET  0x00
+#define INTERVALTIMER_TLR0_OFFSET   0x04
+#define INTERVALTIMER_TCR0_OFFSET   0x08
+#define INTERVALTIMER_TCSR1_OFFSET  0x10
+#define INTERVALTIMER_TLR1_OFFSET   0x14
+#define INTERVALTIMER_TCR1_OFFSET   0x18
 
 // Control Bit Indexes
-#define ENABLE_ENT0_MASK  0x00000080
-#define CLEAR_ENT0_MASK   0xFFFFFF7F
-#define ENABLE_LOAD0_MASK 0x00000020
-#define ENABLE_CASC_MASK  0x00000800
+#define INTERVALTIMER_ENABLE_ENT0_MASK  0x00000080
+#define INTERVALTIMER_CLEAR_ENT0_MASK   0xFFFFFF7F
+#define INTERVALTIMER_ENABLE_LOAD0_MASK 0x00000020
+#define INTERVALTIMER_ENABLE_CASC_MASK  0x00000800
 
 // Width of each register in the timer
-#define REGISTER_WIDTH 32
+#define INTERVALTIMER_REGISTER_WIDTH 32
 
 // Starts the specified timer
 // @param timerNumber must be {0, 1, 2}, otherwise and error occurs
