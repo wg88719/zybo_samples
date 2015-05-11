@@ -7,14 +7,14 @@
 #include "ticTacToeDisplay.h"
 
 // Global Screen size values
-uint16_t x_max;   // Store the maximum x-value of the screen
-uint16_t y_max;   // Store the maximum y-value of the screen
+uint16_t x_max = 0;   // Store the maximum x-value of the screen
+uint16_t y_max = 0;   // Store the maximum y-value of the screen
 
 // Values of screen positions
-uint16_t x_one_third;  // x-value of the left fourth of the screen
-uint16_t x_two_third;  // x-value of the middle of the screen
-uint16_t y_one_third;  // y-value of right fourth of the screen
-uint16_t y_two_third;  // y-value of the top fourth of the screen
+uint16_t x_one_third = 0;  // x-value of the left fourth of the screen
+uint16_t x_two_third = 0;  // x-value of the middle of the screen
+uint16_t y_one_third = 0;  // y-value of right fourth of the screen
+uint16_t y_two_third = 0;  // y-value of the top fourth of the screen
 
 void ticTacToeDisplay_init() {
   display_init();  // Initialize display, which sets Rotation = 1 by default
