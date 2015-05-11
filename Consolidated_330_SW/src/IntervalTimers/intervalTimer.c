@@ -201,7 +201,7 @@ uint32_t intervalTimer_stop(uint32_t timerNumber) {
 
   // Write value back w/ ENT0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    INTERVALTIMER_TCSR0_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR0_OFFSET, // reg offset
                                     intervalTimer_clearENT0(csrValue));
 
   return 0;  // return 0 for success, or TIMER_ERROR
