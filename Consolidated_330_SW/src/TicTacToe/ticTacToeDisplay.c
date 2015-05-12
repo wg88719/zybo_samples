@@ -40,17 +40,17 @@ static uint16_t row_2_y = 0;  // Y-coordinate of the center of row 2
 void ticTacToeDisplay_drawXAtPoint(uint16_t center_x, uint16_t center_y) {
   // Draw the '\' line of the 'X'
   display_drawLine (center_x - TICTACTOEDISPLAY_SYMBOL_SIZE,    // x0
-          center_y - TICTACTOEDISPLAY_SYMBOL_SIZE,    // y0
-          center_x + TICTACTOEDISPLAY_SYMBOL_SIZE,    // x1
-          center_y + TICTACTOEDISPLAY_SYMBOL_SIZE,    // y1
-          DISPLAY_GREEN); // color
+                    center_y - TICTACTOEDISPLAY_SYMBOL_SIZE,    // y0
+                    center_x + TICTACTOEDISPLAY_SYMBOL_SIZE,    // x1
+                    center_y + TICTACTOEDISPLAY_SYMBOL_SIZE,    // y1
+                    DISPLAY_GREEN); // color
 
   // Draw the '/' lines of the 'X'
   display_drawLine (center_x + TICTACTOEDISPLAY_SYMBOL_SIZE,    // x0
-          center_y - TICTACTOEDISPLAY_SYMBOL_SIZE,    // y0
-          center_x - TICTACTOEDISPLAY_SYMBOL_SIZE,    // x1
-          center_y + TICTACTOEDISPLAY_SYMBOL_SIZE,    // y1
-          DISPLAY_GREEN); // color
+                    center_y - TICTACTOEDISPLAY_SYMBOL_SIZE,    // y0
+                    center_x - TICTACTOEDISPLAY_SYMBOL_SIZE,    // x1
+                    center_y + TICTACTOEDISPLAY_SYMBOL_SIZE,    // y1
+                    DISPLAY_GREEN); // color
 }
 
 /**
@@ -59,17 +59,18 @@ void ticTacToeDisplay_drawXAtPoint(uint16_t center_x, uint16_t center_y) {
  * @param center_y  The y coordinate to center the 'O' on.
  */
 void ticTacToeDisplay_drawOAtPoint(uint16_t center_x, uint16_t center_y) {
-  // Draw the '\' line of the 'X'
-  display_drawCircle(center_x,    // x0
-           center_y,    // y0
-           TICTACTOEDISPLAY_SYMBOL_SIZE, // radius
-           DISPLAY_GREEN); // color
+  // Draw the 'O'
+  display_drawCircle(center_x,                      // x0
+                     center_y,                      // y0
+                     TICTACTOEDISPLAY_SYMBOL_SIZE,  // radius
+                     DISPLAY_GREEN);                // color
 }
 
 /**
  * Helper function that returns the center y-coordinate of the given row.
- * @param row (0, 1, or 2)
- * @return  The value of the y-coordinate of the center of the row.
+ * @param  row The row to query for it's center y-coordinate. Valid inputs are
+ *             TICTACTOEDISPLAY_ROW_0, TICTACTOEDISPLAY_ROW_1, TICTACTOEDISPLAY_ROW_2
+ * @return     The y-coordinate of the center of the row.
  */
 uint16_t ticTacToeDisplay_findCenterOfRow(uint8_t row) {
   // Return the pre-calculated value of the center y-coordinate of the row
@@ -88,8 +89,9 @@ uint16_t ticTacToeDisplay_findCenterOfRow(uint8_t row) {
 
 /**
  * Helper function that returns the center x-coordinate of the given column.
- * @param column (0, 1, or 2)
- * @return  The value of the x-coordinate of the center of the column.
+ * @param  column The column to query for it's center x-coordinate. Valid inputs are
+ *                TICTACTOEDISPLAY_COL_0, TICTACTOEDISPLAY_COL_1, TICTACTOEDISPLAY_COL_2.
+ * @return        The x-coordinate of the center of the row.
  */
 uint16_t ticTacToeDisplay_findCenterOfColumn(uint8_t column) {
   // Return the pre-calculated value of the center y-coordinate of the row
@@ -110,6 +112,7 @@ uint16_t ticTacToeDisplay_findCenterOfColumn(uint8_t column) {
  * Helper function that clears all the Xs and Os from the board.
  */
 void ticTacToeDisplay_clearScreen() {
+  // TODO May need to iterate and just draw black 'X' and 'O' rather than blanking the screen.
   display_fillScreen(DISPLAY_BLACK);  // blank the screen
   ticTacToeDisplay_drawBoardLines();  // redraw the lines
 }
@@ -136,45 +139,45 @@ void ticTacToeDisplay_getInputRegion(int16_t x, int16_t y, uint8_t* row, uint8_t
       *column = TICTACTOEDISPLAY_COL_0;
     }
     // Check column 1
-    else if (x < (TICTACTOEDISPLAY_COL_2 * box_width) && x > (TICTACTOEDISPLAY_COL_1 * box_width)) {
+    else if (x < (TICTACTOEDISPLAY_COL_2 * box_width)) {
       *column = TICTACTOEDISPLAY_COL_1;
     }
     // Check column 2
-    else if (x < x_max && x > (TICTACTOEDISPLAY_COL_2 * box_width)) {
+    else if (x < x_max) {
       *column = TICTACTOEDISPLAY_COL_2;
     }
   }
 
   // Parse through row 1
-  if (y < (TICTACTOEDISPLAY_ROW_2*box_height) && y > (TICTACTOEDISPLAY_ROW_1*box_height)) {
+  else if (y < (TICTACTOEDISPLAY_ROW_2*box_height)) {
   *row = TICTACTOEDISPLAY_ROW_1;
     // Check column 0
-    if (x < (TICTACTOEDISPLAY_COL_1 * box_width) && x > TICTACTOEDISPLAY_COL_0) {
+    if (x < (TICTACTOEDISPLAY_COL_1 * box_width)) {
       *column = TICTACTOEDISPLAY_COL_0;
     }
     // Check column 1
-    else if (x < (TICTACTOEDISPLAY_COL_2 * box_width) && x > (TICTACTOEDISPLAY_COL_1 * box_width)) {
+    else if (x < (TICTACTOEDISPLAY_COL_2 * box_width)) {
       *column = TICTACTOEDISPLAY_COL_1;
     }
     // Check column 2
-    else if (x < x_max && x > (TICTACTOEDISPLAY_COL_2 * box_width)) {
+    else if (x < x_max) {
       *column = TICTACTOEDISPLAY_COL_2;
     }
   }
 
   // Parse through row 2
-  if (y < y_max && y > (TICTACTOEDISPLAY_ROW_2*box_height)) {
+  else if (y < y_max) {
   *row = TICTACTOEDISPLAY_ROW_2;
     // Check column 0
     if (x < (TICTACTOEDISPLAY_COL_1 * box_width) && x > TICTACTOEDISPLAY_COL_0) {
       *column = TICTACTOEDISPLAY_COL_0;
     }
     // Check column 1
-    else if (x < (TICTACTOEDISPLAY_COL_2 * box_width) && x > (TICTACTOEDISPLAY_COL_1 * box_width)) {
+    else if (x < (TICTACTOEDISPLAY_COL_2 * box_width)) {
       *column = TICTACTOEDISPLAY_COL_1;
     }
     // Check column 2
-    else if (x < x_max && x > (TICTACTOEDISPLAY_COL_2 * box_width)) {
+    else if (x < x_max) {
       *column = TICTACTOEDISPLAY_COL_2;
     }
   }
@@ -200,11 +203,11 @@ void ticTacToeDisplay_init() {
 
   // Set values of the center coordinates of the rows/columns
   col_0_x = TICTACTOEDISPLAY_ONE_SIXTH(x_max);  // X-coordinate of the center of column 0
-  col_1_x = TICTACTOEDISPLAY_ONE_HALF(x_max);  // X-coordinate of the center of column 1
-  col_2_x = TICTACTOEDISPLAY_FIVE_SIXTH(x_max);  // X-coordinate of the center of column 2
+  col_1_x = TICTACTOEDISPLAY_ONE_HALF(x_max);   // X-coordinate of the center of column 1
+  col_2_x = TICTACTOEDISPLAY_FIVE_SIXTH(x_max); // X-coordinate of the center of column 2
   row_0_y = TICTACTOEDISPLAY_ONE_SIXTH(y_max);  // Y-coordinate of the center of row 0
-  row_1_y = TICTACTOEDISPLAY_ONE_HALF(y_max);  // Y-coordinate of the center of row 1
-  row_2_y = TICTACTOEDISPLAY_FIVE_SIXTH(y_max);  // Y-coordinate of the center of row 2
+  row_1_y = TICTACTOEDISPLAY_ONE_HALF(y_max);   // Y-coordinate of the center of row 1
+  row_2_y = TICTACTOEDISPLAY_FIVE_SIXTH(y_max); // Y-coordinate of the center of row 2
 
   ticTacToeDisplay_drawBoardLines();
 }
@@ -252,31 +255,40 @@ void ticTacToeDisplay_runTest() {
   int32_t switchValue;
   printf("\n\nStarting Tic Tac Toe Display Test...\n");
 
+  // Perform all initializations
   buttons_init();
   switches_init();
   ticTacToeDisplay_init();
 
-  buttonValue = buttons_read();
+  buttonValue = buttons_read(); // Do an initial read of button values
+
+  // While BTN 1 isn't pressed, poll buttons, touchscreen, and switches
   while(!(buttonValue & BTN1_MASK)) {  // While button 1 isn't pressed
     buttonValue = buttons_read();
+
+    // If BTN0 is pressed, clear the screen
     if (buttonValue & BTN0_MASK) {
       ticTacToeDisplay_clearScreen();
     }
-    if (display_isTouched()) {
-      while(!display_isTouched()); // wait for touch to initiate runTest
-    while(display_isTouched()); // wait for user to let go of touchscreen
-    ticTacToeDisplay_touchScreenComputeBoardRowColumn(&row, &column);
 
+    // If user pressed the touchscreen display
+    if (display_isTouched()) {
+      while(display_isTouched()); // wait for user to let go of touchscreen
+
+      // Compute which row/column was touched
+      ticTacToeDisplay_touchScreenComputeBoardRowColumn(&row, &column);
+
+      // Read switches to determine whether to draw 'O' or 'X'
       switchValue = switches_read();
-      if (switchValue & SW0_MASK) {
-      ticTacToeDisplay_drawO(row, column);
+      if (switchValue & SW0_MASK) { // If SW0 is HIGH, draw 'O'
+        ticTacToeDisplay_drawO(row, column);
       }
-      else {
-      ticTacToeDisplay_drawX(row, column);
+      else {  // If SW0 is LOW, draw 'X'
+        ticTacToeDisplay_drawX(row, column);
       }
     }
   }
-
+  // Give the user indication that the test is completed.
   printf("\n\Ending Tic Tac Toe Display Test...\n");
   display_fillScreen(DISPLAY_WHITE);
 }
