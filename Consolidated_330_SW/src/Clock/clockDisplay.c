@@ -15,12 +15,12 @@
 
 // Global variables for tracking time
 // Used signed ints to utilize negative values as a signal to rollover
-int8_t hours = 0;  // track hours
-int8_t minutes = 0;  // track minutes
-int8_t seconds = 0;  // track seconds
+static int8_t hours = 0;  // track hours
+static int8_t minutes = 0;  // track minutes
+static int8_t seconds = 0;  // track seconds
 
-char current_time[NUM_CHARS];   // char array representing the current time
-char old_time[NUM_CHARS]; // char array representing the previous time
+static char current_time[NUM_CHARS]; // char array representing the current time
+static char old_time[NUM_CHARS]; // char array representing the previous time
 
 
 //*****************************************************************************
@@ -48,42 +48,42 @@ char old_time[NUM_CHARS]; // char array representing the previous time
 int8_t clockDisplay_getInputRegion(int16_t x, int16_t y) {
   // Error condition for values off the screen
   if (x < 0 || y < 0 || x > display_width() || y > display_height()) {
-    return REGION_ERR;
+    return CLOCKDISPLAY_REGION_ERR;
   }
 
   // Parse through the UP arrows
-  if (y < ROW_1 && y > ROW_0) {
+  if (y < CLOCKDISPLAY_ROW_1 && y > CLOCKDISPLAY_ROW_0) {
     // Check Region 0
-    if (x < COLUMN_2 && x > COLUMN_0) {
-      return REGION_0;
+    if (x < CLOCKDISPLAY_COLUMN_2 && x > CLOCKDISPLAY_COLUMN_0) {
+      return CLOCKDISPLAY_REGION_0;
     }
     // Check Region 1
-    if (x < COLUMN_5 && x > COLUMN_3) {
-      return REGION_1;
+    if (x < CLOCKDISPLAY_COLUMN_5 && x > CLOCKDISPLAY_COLUMN_3) {
+      return CLOCKDISPLAY_REGION_1;
     }
     // Check Region 2
-    if (x < COLUMN_8 && x > COLUMN_6) {
-      return REGION_2;
+    if (x < CLOCKDISPLAY_COLUMN_8 && x > CLOCKDISPLAY_COLUMN_6) {
+      return CLOCKDISPLAY_REGION_2;
     }
   }
 
   // Parse through the DOWN arrows
-  if (y < ROW_3 && y > ROW_2) {
+  if (y < CLOCKDISPLAY_ROW_3 && y > CLOCKDISPLAY_ROW_2) {
     // Check Region 3
-    if (x < COLUMN_2 && x > COLUMN_0) {
-      return REGION_3;
+    if (x < CLOCKDISPLAY_COLUMN_2 && x > CLOCKDISPLAY_COLUMN_0) {
+      return CLOCKDISPLAY_REGION_3;
     }
     // Check Region 4
-    if (x < COLUMN_5 && x > COLUMN_3) {
-      return REGION_4;
+    if (x < CLOCKDISPLAY_COLUMN_5 && x > CLOCKDISPLAY_COLUMN_3) {
+      return CLOCKDISPLAY_REGION_4;
     }
     // Check Region 5
-    if (x < COLUMN_8 && x > COLUMN_6) {
-      return REGION_5;
+    if (x < CLOCKDISPLAY_COLUMN_8 && x > CLOCKDISPLAY_COLUMN_6) {
+      return CLOCKDISPLAY_REGION_5;
     }
   }
   // If not in any of these regions, return REGION_ERR
-  return REGION_ERR;
+  return CLOCKDISPLAY_REGION_ERR;
 }
 
 /**
@@ -95,57 +95,57 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
 
   // Draw the character based on the index
   switch (index) {
-    case TENS_HRS:   // Tens-digit for Hours
-      display_drawChar( COLUMN_0,                   // x
-                        ROW_1 + BUFFER,             // y
+    case CLOCKDISPLAY_TENS_HRS:   // Tens-digit for Hours
+      display_drawChar( CLOCKDISPLAY_COLUMN_0,                      // x
+                        CLOCKDISPLAY_ROW_1 + CLOCKDISPLAY_BUFFER,   // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
-                        CLOCK_TEXT_SIZE);           // size of text
+                        CLOCKDISPLAY_CLOCK_TEXT_SIZE);     // size of text
       break;
-    case ONES_HRS:   // Ones-digit for Hours
-      display_drawChar( COLUMN_1,                   // x
-                        ROW_1 + BUFFER,             // y
+    case CLOCKDISPLAY_ONES_HRS:   // Ones-digit for Hours
+      display_drawChar( CLOCKDISPLAY_COLUMN_1,                     // x
+                        CLOCKDISPLAY_ROW_1 + CLOCKDISPLAY_BUFFER,  // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
-                        CLOCK_TEXT_SIZE);           // size of text
+                        CLOCKDISPLAY_CLOCK_TEXT_SIZE);     // size of text
       break;
-    case COLON_1:   // First ':', do nothing
+    case CLOCKDISPLAY_COLON_1:   // First ':', do nothing
       break;
-    case TENS_MINS:   // Tens-digit for Mins
-      display_drawChar( COLUMN_3,                   // x
-                        ROW_1 + BUFFER,             // y
+    case CLOCKDISPLAY_TENS_MINS:   // Tens-digit for Mins
+      display_drawChar( CLOCKDISPLAY_COLUMN_3,                      // x
+                        CLOCKDISPLAY_ROW_1 + CLOCKDISPLAY_BUFFER,   // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
-                        CLOCK_TEXT_SIZE);           // size of text
+                        CLOCKDISPLAY_CLOCK_TEXT_SIZE);     // size of text
       break;
-    case ONES_MINS:   // Ones-digit for Mins
-      display_drawChar( COLUMN_4,                   // x
-                        ROW_1 + BUFFER,             // y
+    case CLOCKDISPLAY_ONES_MINS:   // Ones-digit for Mins
+      display_drawChar( CLOCKDISPLAY_COLUMN_4,                      // x
+                        CLOCKDISPLAY_ROW_1 + CLOCKDISPLAY_BUFFER,   // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
-                        CLOCK_TEXT_SIZE);           // size of text
+                        CLOCKDISPLAY_CLOCK_TEXT_SIZE);     // size of text
       break;
-    case COLON_2:   // 2nd ':', do nothing
+    case CLOCKDISPLAY_COLON_2:   // 2nd ':', do nothing
       break;
-    case TENS_SECS:   // Tens-digit for Secs
-      display_drawChar( COLUMN_6,                   // x
-                        ROW_1 + BUFFER,             // y
+    case CLOCKDISPLAY_TENS_SECS:   // Tens-digit for Secs
+      display_drawChar( CLOCKDISPLAY_COLUMN_6,                      // x
+                        CLOCKDISPLAY_ROW_1 + CLOCKDISPLAY_BUFFER,   // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
-                        CLOCK_TEXT_SIZE);           // size of text
+                        CLOCKDISPLAY_CLOCK_TEXT_SIZE);     // size of text
       break;
-    case ONES_SECS:   // Ones-digit for Secs
-      display_drawChar( COLUMN_7,                   // x
-                        ROW_1 + BUFFER,             // y
+    case CLOCKDISPLAY_ONES_SECS:   // Ones-digit for Secs
+      display_drawChar( CLOCKDISPLAY_COLUMN_7,                      // x
+                        CLOCKDISPLAY_ROW_1 + CLOCKDISPLAY_BUFFER,   // y
                         c,                          // char to draw
                         DISPLAY_GREEN,              // color of text
                         DISPLAY_BLACK,              // color of background
-                        CLOCK_TEXT_SIZE);           // size of text
+                        CLOCKDISPLAY_CLOCK_TEXT_SIZE);     // size of text
       break;
     default:  // Otherwise, do nothing
       break;
@@ -156,25 +156,77 @@ void clockDisplay_redrawDigit(uint8_t index, char c) {
 
 /**
  * Helper function that draws the lines representing the borders of each of
- * the sub boxes. Used for Debugging.
+ * the sub boxes. Used for visually verifying the macro calculations.
  */
 void clockDisplay_drawLines() {
   // Draw Vertical Lines of each column in the drawing grid
-  display_drawLine(COLUMN_0, ROW_0, COLUMN_0, ROW_3, DISPLAY_RED);
-  display_drawLine(COLUMN_1, ROW_0, COLUMN_1, ROW_3, DISPLAY_RED);
-  display_drawLine(COLUMN_2, ROW_0, COLUMN_2, ROW_3, DISPLAY_RED);
-  display_drawLine(COLUMN_3, ROW_0, COLUMN_3, ROW_3, DISPLAY_RED);
-  display_drawLine(COLUMN_4, ROW_0, COLUMN_4, ROW_3, DISPLAY_RED);
-  display_drawLine(COLUMN_5, ROW_0, COLUMN_5, ROW_3, DISPLAY_RED);
-  display_drawLine(COLUMN_6, ROW_0, COLUMN_6, ROW_3, DISPLAY_RED);
-  display_drawLine(COLUMN_7, ROW_0, COLUMN_7, ROW_3, DISPLAY_RED);
-  display_drawLine(COLUMN_8, ROW_0, COLUMN_8, ROW_3, DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_0,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_0,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_1,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_1,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_2,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_2,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_3,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_3,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_4,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_4,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_5,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_5,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_6,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_6,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_7,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_7,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_8,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_8,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
 
   // Draw Horizontal Lines of each row in the drawing grid
-  display_drawLine(COLUMN_0, ROW_0, COLUMN_8, ROW_0, DISPLAY_RED);
-  display_drawLine(COLUMN_0, ROW_1, COLUMN_8, ROW_1, DISPLAY_RED);
-  display_drawLine(COLUMN_0, ROW_2, COLUMN_8, ROW_2, DISPLAY_RED);
-  display_drawLine(COLUMN_0, ROW_3, COLUMN_8, ROW_3, DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_0,  // x0
+                    CLOCKDISPLAY_ROW_0,     // y0
+                    CLOCKDISPLAY_COLUMN_8,  // x1
+                    CLOCKDISPLAY_ROW_0,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_0,  // x0
+                    CLOCKDISPLAY_ROW_1,     // y0
+                    CLOCKDISPLAY_COLUMN_8,  // x1
+                    CLOCKDISPLAY_ROW_1,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_0,  // x0
+                    CLOCKDISPLAY_ROW_2,     // y0
+                    CLOCKDISPLAY_COLUMN_8,  // x1
+                    CLOCKDISPLAY_ROW_2,     // y1
+                    DISPLAY_RED);
+  display_drawLine( CLOCKDISPLAY_COLUMN_0,  // x0
+                    CLOCKDISPLAY_ROW_3,     // y0
+                    CLOCKDISPLAY_COLUMN_8,  // x1
+                    CLOCKDISPLAY_ROW_3,     // y1
+                    DISPLAY_RED);
 }
 
 //********************** End Helper Functions *********************************
@@ -185,9 +237,9 @@ void clockDisplay_init() {
   display_fillScreen(DISPLAY_BLACK);  // Blank the screen
 
   // Initialize the global variables
-  seconds = INITIAL_SECONDS;
-  minutes = INITIAL_MINUTES;
-  hours = INITIAL_HOURS;
+  seconds = CLOCKDISPLAY_INITIAL_SECONDS;
+  minutes = CLOCKDISPLAY_INITIAL_MINUTES;
+  hours = CLOCKDISPLAY_INITIAL_HOURS;
 
   // Initialize the current_time to the initial value
   sprintf(current_time, "%2d:%02d:%02d", hours, minutes, seconds);
@@ -199,81 +251,82 @@ void clockDisplay_init() {
   // Draw all of the user-input triangles:
 
   // Draw Hour Up Triangle
-  display_fillTriangle( COLUMN_0,               // x0
-                        ROW_1,                  // y0
-                        COLUMN_2,               // x1
-                        ROW_1,                  // y1
-                        COLUMN_1,               // x2
-                        ROW_0 + ARROW_HEIGHT,   // y2
+  display_fillTriangle( CLOCKDISPLAY_COLUMN_0,                            // x0
+                        CLOCKDISPLAY_ROW_1,                               // y0
+                        CLOCKDISPLAY_COLUMN_2,                            // x1
+                        CLOCKDISPLAY_ROW_1,                               // y1
+                        CLOCKDISPLAY_COLUMN_1,                            // x2
+                        CLOCKDISPLAY_ROW_0 + CLOCKDISPLAY_ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Minute Up Triangle
-  display_fillTriangle( COLUMN_3,               // x0
-                        ROW_1,                  // y0
-                        COLUMN_5,               // x1
-                        ROW_1,                  // y1
-                        COLUMN_4,               // x2
-                        ROW_0 + ARROW_HEIGHT,   // y2
+display_fillTriangle( CLOCKDISPLAY_COLUMN_3,                              // x0
+                        CLOCKDISPLAY_ROW_1,                               // y0
+                        CLOCKDISPLAY_COLUMN_5,                            // x1
+                        CLOCKDISPLAY_ROW_1,                               // y1
+                        CLOCKDISPLAY_COLUMN_4,                            // x2
+                        CLOCKDISPLAY_ROW_0 + CLOCKDISPLAY_ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Second Up Triangle
-  display_fillTriangle( COLUMN_6,               // x0
-                        ROW_1,                  // y0
-                        COLUMN_8,               // x1
-                        ROW_1,                  // y1
-                        COLUMN_7,               // x2
-                        ROW_0 + ARROW_HEIGHT,   // y2
+  display_fillTriangle( CLOCKDISPLAY_COLUMN_6,                            // x0
+                        CLOCKDISPLAY_ROW_1,                               // y0
+                        CLOCKDISPLAY_COLUMN_8,                            // x1
+                        CLOCKDISPLAY_ROW_1,                               // y1
+                        CLOCKDISPLAY_COLUMN_7,                            // x2
+                        CLOCKDISPLAY_ROW_0 + CLOCKDISPLAY_ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Hours Down Triangle
-  display_fillTriangle( COLUMN_0,               // x0
-                        ROW_2,                  // y0
-                        COLUMN_2,               // x1
-                        ROW_2,                  // y1
-                        COLUMN_1,               // x2
-                        ROW_3 - ARROW_HEIGHT,   // y2
+  display_fillTriangle( CLOCKDISPLAY_COLUMN_0,                            // x0
+                        CLOCKDISPLAY_ROW_2,                               // y0
+                        CLOCKDISPLAY_COLUMN_2,                            // x1
+                        CLOCKDISPLAY_ROW_2,                               // y1
+                        CLOCKDISPLAY_COLUMN_1,                            // x2
+                        CLOCKDISPLAY_ROW_3 - CLOCKDISPLAY_ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Minute Down Triangle
-  display_fillTriangle( COLUMN_3,               // x0
-                        ROW_2,                  // y0
-                        COLUMN_5,               // x1
-                        ROW_2,                  // y1
-                        COLUMN_4,               // x2
-                        ROW_3 - ARROW_HEIGHT,   // y2
+  display_fillTriangle( CLOCKDISPLAY_COLUMN_3,                            // x0
+                        CLOCKDISPLAY_ROW_2,                               // y0
+                        CLOCKDISPLAY_COLUMN_5,                            // x1
+                        CLOCKDISPLAY_ROW_2,                               // y1
+                        CLOCKDISPLAY_COLUMN_4,                            // x2
+                        CLOCKDISPLAY_ROW_3 - CLOCKDISPLAY_ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw Second Down Triangle
-  display_fillTriangle( COLUMN_6,               // x0
-                        ROW_2,                  // y0
-                        COLUMN_8,               // x1
-                        ROW_2,                  // y1
-                        COLUMN_7,               // x2
-                        ROW_3 - ARROW_HEIGHT,   // y2
+  display_fillTriangle( CLOCKDISPLAY_COLUMN_6,                            // x0
+                        CLOCKDISPLAY_ROW_2,                               // y0
+                        CLOCKDISPLAY_COLUMN_8,                            // x1
+                        CLOCKDISPLAY_ROW_2,                               // y1
+                        CLOCKDISPLAY_COLUMN_7,                            // x2
+                        CLOCKDISPLAY_ROW_3 - CLOCKDISPLAY_ARROW_HEIGHT,   // y2
                         DISPLAY_GREEN);         // color
 
   // Draw the Clock Character ':' Separators
-  display_drawChar( COLUMN_2,                   // x
-                    ROW_1 + BUFFER,             // y
+  display_drawChar( CLOCKDISPLAY_COLUMN_2,                      // x
+                    CLOCKDISPLAY_ROW_1 + CLOCKDISPLAY_BUFFER,   // y
                     ':',                        // char to draw
                     DISPLAY_GREEN,              // color of text
                     DISPLAY_BLACK,              // color of background
-                    CLOCK_TEXT_SIZE);           // size of text
+                    CLOCKDISPLAY_CLOCK_TEXT_SIZE);           // size of text
 
-  display_drawChar( COLUMN_5,                   // x
-                    ROW_1 + BUFFER,             // y
+  display_drawChar( CLOCKDISPLAY_COLUMN_5,                      // x
+                    CLOCKDISPLAY_ROW_1 + CLOCKDISPLAY_BUFFER,   // y
                     ':',                        // char to draw
                     DISPLAY_GREEN,              // color of text
                     DISPLAY_BLACK,              // color of background
-                    CLOCK_TEXT_SIZE);           // size of text
+                    CLOCKDISPLAY_CLOCK_TEXT_SIZE);           // size of text
 
-  clockDisplay_updateTimeDisplay(UPDATE_ALL);  // draw all other digits
+  // Draw the rest of the normal digits
+  clockDisplay_updateTimeDisplay(UPDATE_ALL);
 }
 
 void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
 
   // If seconds was incremented
-  if (seconds > MAX_SECS) {
+  if (seconds > CLOCKDISPLAY_MAX_SECS) {
     seconds = 0;  // rollover to 0
 
     // If minutes should also be updated
@@ -284,7 +337,7 @@ void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
 
   // If seconds was decremented
   if (seconds < 0) {
-    seconds = MAX_SECS; // set the seconds to MAX value
+    seconds = CLOCKDISPLAY_MAX_SECS; // set the seconds to MAX value
 
     // If minutes should also be updated
     if (forceUpdateAll) {
@@ -293,7 +346,7 @@ void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
   }
 
   // If minutes was incremented
-  if (minutes > MAX_MINS) {
+  if (minutes > CLOCKDISPLAY_MAX_MINS) {
     minutes = 0;  // rollover to zero
 
     // If hours should also be updated
@@ -304,7 +357,7 @@ void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
 
   // If minutes was decremented
   if (minutes < 0) {
-    minutes = MAX_MINS; //set the minutes to 59
+    minutes = CLOCKDISPLAY_MAX_MINS; //set the minutes to 59
 
     // If hours should also be updated
     if (forceUpdateAll) {
@@ -313,21 +366,21 @@ void clockDisplay_updateTimeDisplay(bool forceUpdateAll) {
   }
 
   // If hours was incremented
-  if (hours > MAX_HRS) {
+  if (hours > CLOCKDISPLAY_MAX_HRS) {
     hours = 1;   // rollover hours
   }
 
   // If hours was decremented
   if (hours < 1) // MIN is 1, rather than 0 like mins and secs
   {
-    hours = MAX_HRS;  // reset to MAX value
+    hours = CLOCKDISPLAY_MAX_HRS;  // reset to MAX value
   }
 
   // Update current time
   sprintf(current_time, "%2d:%02d:%02d", hours, minutes, seconds);
   // Draw the time digits only if the times have changed
   uint8_t i;
-  for (i = 0; i < NUM_CHARS; i++) {
+  for (i = 0; i < CLOCKDISPLAY_NUM_CHARS; i++) {
     // If the digit has changed
     if (current_time[i] != old_time[i]) {
       // Redraw the digit with the current value
@@ -348,22 +401,22 @@ void clockDisplay_performIncDec() {
   display_getTouchedPoint(&x, &y, &pressure);
   regionID = clockDisplay_getInputRegion(x, y);
   switch(regionID) {
-    case REGION_0:  // Hours UP arrow
+    case CLOCKDISPLAY_REGION_0:  // Hours UP arrow
       hours++;
       break;
-    case REGION_1:  // Minutes UP arrow
+    case CLOCKDISPLAY_REGION_1:  // Minutes UP arrow
       minutes++;
       break;
-    case REGION_2:  // Seconds UP arrow
+    case CLOCKDISPLAY_REGION_2:  // Seconds UP arrow
       seconds++;
       break;
-    case REGION_3:  // Hours DOWN arrow
+    case CLOCKDISPLAY_REGION_3:  // Hours DOWN arrow
       hours--;
       break;
-    case REGION_4:  // Minutes DOWN arrow
+    case CLOCKDISPLAY_REGION_4:  // Minutes DOWN arrow
       minutes--;
       break;
-    case REGION_5:  // Seconds DOWN arrow
+    case CLOCKDISPLAY_REGION_5:  // Seconds DOWN arrow
       seconds--;
       break;
     default:
@@ -372,18 +425,18 @@ void clockDisplay_performIncDec() {
   }
 
   // Update the clock display without affecting all digits
-  clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
+  clockDisplay_updateTimeDisplay(CLOCKDISPLAY_DO_NOT_UPDATE_ALL);
 }
 
 void clockDisplay_advanceTimeOneSecond() {
   seconds++;  // advance time by 1 second
-  clockDisplay_updateTimeDisplay(UPDATE_ALL); // update all digits
+  clockDisplay_updateTimeDisplay(CLOCKDISPLAY_UPDATE_ALL); // update all digits
 }
 
 void clockDisplay_runTest() {
   printf("\n\nStarting Clock Display Test...\n");
   clockDisplay_init();  // Initialize the clock display
-  clockDisplay_updateTimeDisplay(UPDATE_ALL);
+  clockDisplay_updateTimeDisplay(CLOCKDISPLAY_UPDATE_ALL);
 
   // Increment Hours
   while(!display_isTouched()); // wait for touch to initiate runTest
@@ -391,8 +444,8 @@ void clockDisplay_runTest() {
   while(!display_isTouched()) // increment until user presses touchscreen again
   {
     hours++;
-    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(HALF_SECOND);
+    clockDisplay_updateTimeDisplay(CLOCKDISPLAY_DO_NOT_UPDATE_ALL);
+    utils_msDelay(CLOCKDISPLAY_HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -400,8 +453,8 @@ void clockDisplay_runTest() {
   while(!display_isTouched()) // decrement until screen is touched again
   {
     hours--;
-    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(HALF_SECOND);
+    clockDisplay_updateTimeDisplay(CLOCKDISPLAY_DO_NOT_UPDATE_ALL);
+    utils_msDelay(CLOCKDISPLAY_HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -409,8 +462,8 @@ void clockDisplay_runTest() {
   while(!display_isTouched()) // increment until user presses touchscreen again
   {
     minutes++;
-    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(HALF_SECOND);
+    clockDisplay_updateTimeDisplay(CLOCKDISPLAY_DO_NOT_UPDATE_ALL);
+    utils_msDelay(CLOCKDISPLAY_HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -418,8 +471,8 @@ void clockDisplay_runTest() {
   while(!display_isTouched()) // decrement until screen is touched again
   {
     minutes--;
-    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(HALF_SECOND);
+    clockDisplay_updateTimeDisplay(CLOCKDISPLAY_DO_NOT_UPDATE_ALL);
+    utils_msDelay(CLOCKDISPLAY_HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -427,8 +480,8 @@ void clockDisplay_runTest() {
   while(!display_isTouched()) // increment until user presses touchscreen again
   {
     seconds++;
-    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(HALF_SECOND);
+    clockDisplay_updateTimeDisplay(CLOCKDISPLAY_DO_NOT_UPDATE_ALL);
+    utils_msDelay(CLOCKDISPLAY_HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
@@ -436,16 +489,16 @@ void clockDisplay_runTest() {
   while(!display_isTouched()) // decrement until screen is touched again
   {
     seconds--;
-    clockDisplay_updateTimeDisplay(DO_NOT_UPDATE_ALL);
-    utils_msDelay(HALF_SECOND);
+    clockDisplay_updateTimeDisplay(CLOCKDISPLAY_DO_NOT_UPDATE_ALL);
+    utils_msDelay(CLOCKDISPLAY_HALF_SECOND);
   }
   while(display_isTouched()); //wait for user to let go of touchscreen
 
   // Run clock at 10x normal speed for 10 seconds
   int i;
-  for (i = 0; i < TENTHS_IN_TEN_SECONDS; i++) {
+  for (i = 0; i < CLOCKDISPLAY_TENTHS_IN_TEN_SECONDS; i++) {
     clockDisplay_advanceTimeOneSecond();
-    utils_msDelay(TENTH_SECOND);
+    utils_msDelay(CLOCKDISPLAY_TENTH_SECOND);
   }
   printf("\n\nClock Display Test FINISHED!!!\n");
 }

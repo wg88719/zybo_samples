@@ -4,10 +4,11 @@
 // Interface for controlling with the clock
 //*****************************************************************************
 
-#define SECOND_WAIT       20  // wait for 20 50ms intervals
-#define HALF_SECOND_WAIT  10  // wait for 10 50ms intervals
-#define TENTH_SECOND_WAIT 2   // wait for 2 50ms intervals
-#define ADC_WAIT          1   // wait for 50ms for ADC to settle
+// Constants for controlling how long actions wait
+#define CLOCKCONTROL_SECOND_WAIT       20  // wait for 20 50ms intervals
+#define CLOCKCONTROL_HALF_SECOND_WAIT  10  // wait for 10 50ms intervals
+#define CLOCKCONTROL_TENTH_SECOND_WAIT 2   // wait for 2 50ms intervals
+#define CLOCKCONTROL_ADC_WAIT          1   // wait for 50ms for ADC to settle
 
 /**
  * This tick function controls the state transitions and state actions

@@ -25,12 +25,12 @@ enum clockControl_st {
 } currentState = init_st; // Initialize to init_st
 
 // Global variables representing the timers that will be used
-uint32_t adTimer = 0;   // Time to wait for touch-controller ADC to settle.
-uint32_t autoTimer = 0; // Time before auto-updating when user holds button
-uint32_t rateTimer = 0; // Time between auto inc/dec calls
-uint32_t msCounter = 0; // Time between normal second updates
+static uint32_t adTimer = 0;   // Time to wait for touch-controller ADC to settle.
+static uint32_t autoTimer = 0; // Time before auto-updating when user holds button
+static uint32_t rateTimer = 0; // Time between auto inc/dec calls
+static uint32_t msCounter = 0; // Time between normal second updates
 
-double duration_max = 0.0;
+static double duration_max = 0.0;
 
 /**
  * This is a debug state print routine. It will print names of the states each
@@ -80,7 +80,6 @@ void clockControl_debugStatePrint() {
 }
 
 void clockControl_tick() {
-  intervalTimer_start(TIMER0);
   // Print out state changes for reference
   //clockControl_debugStatePrint();
 
@@ -148,7 +147,7 @@ void clockControl_tick() {
         display_clearOldTouchData();  // clear old touch data for fresh start
       }
       // Otherwise, if a second of time has passed, increment a second
-      else if (msCounter >= SECOND_WAIT){
+      else if (msCounter >= CLOCKCONTROL_SECOND_WAIT){
         currentState = add_second_to_clock_st;
         display_clearOldTouchData();  // clear old touch data for fresh start
       }
@@ -159,12 +158,12 @@ void clockControl_tick() {
       break;
     case ad_timer_running_st:
       // if the display is only tapped, inc/dec once
-      if (!display_isTouched() && adTimer >= ADC_WAIT) {
+      if (!display_isTouched() && adTimer >= CLOCKCONTROL_ADC_WAIT) {
         currentState = waiting_for_touch_st;
         clockDisplay_performIncDec(); // just inc/dec once based on touch
       }
       // if they are still holding it after the ADC settles, move to auto_timer
-      else if (display_isTouched() && adTimer >= ADC_WAIT) {
+      else if (display_isTouched() && adTimer >= CLOCKCONTROL_ADC_WAIT) {
         currentState = auto_timer_running_st;
       }
       // Otherwise, stay in this state
@@ -180,7 +179,7 @@ void clockControl_tick() {
       }
       // If they continue to hold the arrow for 0.5 seconds, move on to
       // auto increment/decrement
-      else if (display_isTouched() && autoTimer >= HALF_SECOND_WAIT) {
+      else if (display_isTouched() && autoTimer >= CLOCKCONTROL_HALF_SECOND_WAIT) {
         currentState = rate_timer_running_st;
         clockDisplay_performIncDec();
       }
@@ -195,7 +194,7 @@ void clockControl_tick() {
         currentState = waiting_for_touch_st;
       }
       // If they keep holding the display, increment at 10 inc/dec per sec
-      else if (display_isTouched() && rateTimer >= TENTH_SECOND_WAIT) {
+      else if (display_isTouched() && rateTimer >= CLOCKCONTROL_TENTH_SECOND_WAIT) {
         currentState = rate_timer_expired_st;
       }
       // Otherwise, wait here
@@ -223,13 +222,8 @@ void clockControl_tick() {
       break;
   }
 
-  intervalTimer_stop(TIMER0);
-  double duration;
-  intervalTimer_getTotalDurationInSeconds(TIMER0, &duration);
-  if (duration_max < duration) {
-    duration_max = duration;
-    printf("Duration:%lf\n", duration);
-  }
-  intervalTimer_resetAll();
+  // Note that the transition for 12:59:59 took the longest time when
+  // measured with the intervalTimer, totalling 27ms to complete this tick
+  // function due to having to redraw all 6 characters.
 
 }
