@@ -57,50 +57,50 @@
 
 // OUTER_BOX_HEIGHT and OUTER_BOX_WIDTH represent the dimensions of the box to
 // draw the clock in.
-#define CLOCKDISPLAY_OUTER_BOX_HEIGHT ((display_height()*CLOCK_TEXT_SIZE)/(SCALE_TEXT))
-#define CLOCKDISPLAY_OUTER_BOX_WIDTH  ((display_width()*CLOCK_TEXT_SIZE)/(SCALE_TEXT))
+#define CLOCKDISPLAY_OUTER_BOX_HEIGHT ((display_height()*CLOCKDISPLAY_CLOCK_TEXT_SIZE)/(CLOCKDISPLAY_SCALE_TEXT))
+#define CLOCKDISPLAY_OUTER_BOX_WIDTH  ((display_width()*CLOCKDISPLAY_CLOCK_TEXT_SIZE)/(CLOCKDISPLAY_SCALE_TEXT))
 
 // These marginal values represent the dimension to leave blank on each edge
 // when drawing the clock.
-#define CLOCKDISPLAY_HEIGHT_MARGIN ((display_height() - (OUTER_BOX_HEIGHT)) / 2)
-#define CLOCKDISPLAY_WIDTH_MARGIN  ((display_width() - (OUTER_BOX_WIDTH)) / 2)
+#define CLOCKDISPLAY_HEIGHT_MARGIN ((display_height() - (CLOCKDISPLAY_OUTER_BOX_HEIGHT)) / 2)
+#define CLOCKDISPLAY_WIDTH_MARGIN  ((display_width() - (CLOCKDISPLAY_OUTER_BOX_WIDTH)) / 2)
 
 // BUFFER represents the spacing between the drawn characters and the
 // edges of their designated boxes.
-#define CLOCKDISPLAY_BUFFER  (CLOCK_TEXT_SIZE * 2)
+#define CLOCKDISPLAY_BUFFER  (CLOCKDISPLAY_CLOCK_TEXT_SIZE * 2)
 
 // ORIGIN values represent the top-left corner of the scaled box. Arrows and
 // clock characters will be drawn with respect to this origin.
-#define CLOCKDISPLAY_ORIGIN_X  (WIDTH_MARGIN)
-#define CLOCKDISPLAY_ORIGIN_Y  (HEIGHT_MARGIN)
+#define CLOCKDISPLAY_ORIGIN_X  (CLOCKDISPLAY_WIDTH_MARGIN)
+#define CLOCKDISPLAY_ORIGIN_Y  (CLOCKDISPLAY_HEIGHT_MARGIN)
 
 // These macros define the dimension of the sub-boxes in which arrows and
 // characters will be drawn. The OUTER_BOX will be segmented 3x3 into rectangles
-#define CLOCKDISPLAY_SUB_BOX_HEIGHT  ((OUTER_BOX_HEIGHT) / 3)
-#define CLOCKDISPLAY_SUB_BOX_WIDTH   ((OUTER_BOX_WIDTH) / 8)
-#define CLOCKDISPLAY_ARROW_HEIGHT    ((SUB_BOX_HEIGHT) / 2)
+#define CLOCKDISPLAY_SUB_BOX_HEIGHT  ((CLOCKDISPLAY_OUTER_BOX_HEIGHT) / 3)
+#define CLOCKDISPLAY_SUB_BOX_WIDTH   ((CLOCKDISPLAY_OUTER_BOX_WIDTH) / 8)
+#define CLOCKDISPLAY_ARROW_HEIGHT    ((CLOCKDISPLAY_SUB_BOX_HEIGHT) / 2)
 
 
 //*************** End Scaling Calculation Macros ******************************
 
 // These macros specify the position of the 8 clock characters (HH:MM:SS)
-#define CLOCKDISPLAY_COLUMN_0 (ORIGIN_X)                     // Left edge
-#define CLOCKDISPLAY_COLUMN_1 (ORIGIN_X + (SUB_BOX_WIDTH))   // 1 column over
-#define CLOCKDISPLAY_COLUMN_2 (ORIGIN_X + (SUB_BOX_WIDTH*2))	// 2 columns over
-#define CLOCKDISPLAY_COLUMN_3 (ORIGIN_X + (SUB_BOX_WIDTH*3))	// 3 columns over
-#define CLOCKDISPLAY_COLUMN_4 (ORIGIN_X + (SUB_BOX_WIDTH*4))	// 4 columns over
-#define CLOCKDISPLAY_COLUMN_5 (ORIGIN_X + (SUB_BOX_WIDTH*5))	// 5 columns over
-#define CLOCKDISPLAY_COLUMN_6 (ORIGIN_X + (SUB_BOX_WIDTH*6))	// 6 columns over
-#define CLOCKDISPLAY_COLUMN_7 (ORIGIN_X + (SUB_BOX_WIDTH*7))	// 7 columns over
-#define CLOCKDISPLAY_COLUMN_8 (ORIGIN_X + (SUB_BOX_WIDTH*8))	// 8 columns over
+#define CLOCKDISPLAY_COLUMN_0 (CLOCKDISPLAY_ORIGIN_X)                      // Left edge
+#define CLOCKDISPLAY_COLUMN_1 (CLOCKDISPLAY_ORIGIN_X + (CLOCKDISPLAY_SUB_BOX_WIDTH))    // 1 column over
+#define CLOCKDISPLAY_COLUMN_2 (CLOCKDISPLAY_ORIGIN_X + (CLOCKDISPLAY_SUB_BOX_WIDTH*2))	// 2 columns over
+#define CLOCKDISPLAY_COLUMN_3 (CLOCKDISPLAY_ORIGIN_X + (CLOCKDISPLAY_SUB_BOX_WIDTH*3))	// 3 columns over
+#define CLOCKDISPLAY_COLUMN_4 (CLOCKDISPLAY_ORIGIN_X + (CLOCKDISPLAY_SUB_BOX_WIDTH*4))	// 4 columns over
+#define CLOCKDISPLAY_COLUMN_5 (CLOCKDISPLAY_ORIGIN_X + (CLOCKDISPLAY_SUB_BOX_WIDTH*5))	// 5 columns over
+#define CLOCKDISPLAY_COLUMN_6 (CLOCKDISPLAY_ORIGIN_X + (CLOCKDISPLAY_SUB_BOX_WIDTH*6))	// 6 columns over
+#define CLOCKDISPLAY_COLUMN_7 (CLOCKDISPLAY_ORIGIN_X + (CLOCKDISPLAY_SUB_BOX_WIDTH*7))	// 7 columns over
+#define CLOCKDISPLAY_COLUMN_8 (CLOCKDISPLAY_ORIGIN_X + (CLOCKDISPLAY_SUB_BOX_WIDTH*8))	// 8 columns over
 
 // These macros specify the starting position of each row's y-value
-#define CLOCKDISPLAY_ROW_0 (ORIGIN_Y)                            // Top of the outer box
-#define CLOCKDISPLAY_ROW_1 (ORIGIN_Y + SUB_BOX_HEIGHT)           // 1 row down
-#define CLOCKDISPLAY_ROW_2 (ORIGIN_Y + (SUB_BOX_HEIGHT*2))       // 2 rows down
-#define CLOCKDISPLAY_ROW_3 (ORIGIN_Y + (SUB_BOX_HEIGHT*3))       // 3 rows down
+#define CLOCKDISPLAY_ROW_0 (CLOCKDISPLAY_ORIGIN_Y)                       // Top of outer box
+#define CLOCKDISPLAY_ROW_1 (CLOCKDISPLAY_ORIGIN_Y + CLOCKDISPLAY_SUB_BOX_HEIGHT)      // 1 row down
+#define CLOCKDISPLAY_ROW_2 (CLOCKDISPLAY_ORIGIN_Y + (CLOCKDISPLAY_SUB_BOX_HEIGHT*2))  // 2 rows down
+#define CLOCKDISPLAY_ROW_3 (CLOCKDISPLAY_ORIGIN_Y + (CLOCKDISPLAY_SUB_BOX_HEIGHT*3))  // 3 rows down
 
-#define CLOCKDISPLAY_NUM_CHARS 9   // 8 chars for "HH:MM:SS" + 1 for NULL terminator
+#define CLOCKDISPLAY_NUM_CHARS 9   // 8 chars for "HH:MM:SS" + 1 for '\0'
 
 // Macros for names of the indexes in the char arrays
 #define CLOCKDISPLAY_TENS_HRS  0
