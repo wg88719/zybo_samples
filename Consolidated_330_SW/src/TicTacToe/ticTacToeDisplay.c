@@ -11,27 +11,6 @@
 #include "supportFiles/display.h"
 #include "supportFiles/utils.h"
 
-// Global Screen size values
-static uint16_t x_max = 0;   // Store the maximum x-value of the screen
-static uint16_t y_max = 0;   // Store the maximum y-value of the screen
-
-// Values of screen positions for drawing lines
-static uint16_t x_one_third = 0;  // x-value of the left fourth of the screen
-static uint16_t x_two_third = 0;  // x-value of the middle of the screen
-static uint16_t y_one_third = 0;  // y-value of right fourth of the screen
-static uint16_t y_two_third = 0;  // y-value of the top fourth of the screen
-
-// Global Values used in drawing X's and O's
-static uint16_t box_width = 0;    // Global storing the width of each square
-static uint16_t box_height = 0;   // Global storing the height of each square
-
-static uint16_t col_0_x = 0;  // X-coordinate of the center of column 0
-static uint16_t col_1_x = 0;  // X-coordinate of the center of column 1
-static uint16_t col_2_x = 0;  // X-coordinate of the center of column 2
-static uint16_t row_0_y = 0;  // Y-coordinate of the center of row 0
-static uint16_t row_1_y = 0;  // Y-coordinate of the center of row 1
-static uint16_t row_2_y = 0;  // Y-coordinate of the center of row 2
-
 /**
  * Helper function that draws an 'X' centered at the given parameters
  * @param center_x  The x coordinate to center the 'X' on.
@@ -73,6 +52,11 @@ void ticTacToeDisplay_drawOAtPoint(uint16_t center_x, uint16_t center_y) {
  * @return     The y-coordinate of the center of the row.
  */
 uint16_t ticTacToeDisplay_findCenterOfRow(uint8_t row) {
+  uint16_t x_max = display_width();
+  uint16_t y_max = display_height();
+  uint16_t row_0_y = TICTACTOEDISPLAY_ONE_SIXTH(y_max);  // Y-coordinate of the center of row 0
+  uint16_t row_1_y = TICTACTOEDISPLAY_ONE_HALF(y_max);   // Y-coordinate of the center of row 1
+  uint16_t row_2_y = TICTACTOEDISPLAY_FIVE_SIXTH(y_max); // Y-coordinate of the center of row 2
   // Return the pre-calculated value of the center y-coordinate of the row
   switch (row) {
     case TICTACTOEDISPLAY_ROW_0:
@@ -94,6 +78,11 @@ uint16_t ticTacToeDisplay_findCenterOfRow(uint8_t row) {
  * @return        The x-coordinate of the center of the row.
  */
 uint16_t ticTacToeDisplay_findCenterOfColumn(uint8_t column) {
+  uint16_t x_max = display_width();
+  uint16_t y_max = display_height();
+  uint16_t col_0_x = TICTACTOEDISPLAY_ONE_SIXTH(x_max);  // X-coordinate of the center of column 0
+  uint16_t col_1_x = TICTACTOEDISPLAY_ONE_HALF(x_max);   // X-coordinate of the center of column 1
+  uint16_t col_2_x = TICTACTOEDISPLAY_FIVE_SIXTH(x_max); // X-coordinate of the center of column 2
   // Return the pre-calculated value of the center y-coordinate of the row
   switch (column) {
     case TICTACTOEDISPLAY_COL_0:
@@ -125,8 +114,14 @@ void ticTacToeDisplay_clearScreen() {
   * @param column Address to the column variable to store computed value in
   */
 void ticTacToeDisplay_getInputRegion(int16_t x, int16_t y, uint8_t* row, uint8_t* column) {
+  // Set the values of the sub box dimensions
+  uint16_t x_max = display_width();
+  uint16_t y_max = display_height();
+  uint16_t box_width = TICTACTOEDISPLAY_ONE_THIRD(x_max);
+  uint16_t box_height = TICTACTOEDISPLAY_ONE_THIRD(y_max);
+
   // Error condition for values off the screen
-  if (x < 0 || y < 0 || x > display_width() || y > display_height()) {
+  if (x < 0 || y < 0 || x > x_max || y > y_max) {
   printf("Error, invalid touch data!!\n\r");
     return;  // Invalid touch data
   }
@@ -186,30 +181,7 @@ void ticTacToeDisplay_getInputRegion(int16_t x, int16_t y, uint8_t* row, uint8_t
 void ticTacToeDisplay_init() {
   display_init();  // Initialize display, which sets Rotation = 1 by default
   display_fillScreen(DISPLAY_BLACK); // blank the screen
-
-  // Set the values of the global variables
-  x_max = display_width();
-  y_max = display_height();
-
-  // Set the values of the screen positions for drawing lines
-  x_one_third = TICTACTOEDISPLAY_ONE_THIRD(x_max);
-  x_two_third = TICTACTOEDISPLAY_TWO_THIRD(x_max);
-  y_one_third = TICTACTOEDISPLAY_ONE_THIRD(y_max);
-  y_two_third = TICTACTOEDISPLAY_TWO_THIRD(y_max);
-
-  // Set the values of the sub box dimensions
-  box_width = x_one_third;
-  box_height = y_one_third;
-
-  // Set values of the center coordinates of the rows/columns
-  col_0_x = TICTACTOEDISPLAY_ONE_SIXTH(x_max);  // X-coordinate of the center of column 0
-  col_1_x = TICTACTOEDISPLAY_ONE_HALF(x_max);   // X-coordinate of the center of column 1
-  col_2_x = TICTACTOEDISPLAY_FIVE_SIXTH(x_max); // X-coordinate of the center of column 2
-  row_0_y = TICTACTOEDISPLAY_ONE_SIXTH(y_max);  // Y-coordinate of the center of row 0
-  row_1_y = TICTACTOEDISPLAY_ONE_HALF(y_max);   // Y-coordinate of the center of row 1
-  row_2_y = TICTACTOEDISPLAY_FIVE_SIXTH(y_max); // Y-coordinate of the center of row 2
-
-  ticTacToeDisplay_drawBoardLines();
+  ticTacToeDisplay_drawBoardLines();  // Draw the board lines
 }
 
 void ticTacToeDisplay_drawX(uint8_t row, uint8_t column) {
@@ -263,11 +235,11 @@ void ticTacToeDisplay_runTest() {
   buttonValue = buttons_read(); // Do an initial read of button values
 
   // While BTN 1 isn't pressed, poll buttons, touchscreen, and switches
-  while(!(buttonValue & BTN1_MASK)) {  // While button 1 isn't pressed
+  while(!(buttonValue & BUTTONS_BTN1_MASK)) {  // While button 1 isn't pressed
     buttonValue = buttons_read();
 
     // If BTN0 is pressed, clear the screen
-    if (buttonValue & BTN0_MASK) {
+    if (buttonValue & BUTTONS_BTN0_MASK) {
       ticTacToeDisplay_clearScreen();
     }
 
@@ -280,7 +252,7 @@ void ticTacToeDisplay_runTest() {
 
       // Read switches to determine whether to draw 'O' or 'X'
       switchValue = switches_read();
-      if (switchValue & SW0_MASK) { // If SW0 is HIGH, draw 'O'
+      if (switchValue & SWITCHES_SW0_MASK) { // If SW0 is HIGH, draw 'O'
         ticTacToeDisplay_drawO(row, column);
       }
       else {  // If SW0 is LOW, draw 'X'
@@ -294,6 +266,15 @@ void ticTacToeDisplay_runTest() {
 }
 
 void ticTacToeDisplay_drawBoardLines() {
+
+  // Calculate the coordinates of the lines to draw
+  uint16_t x_max = display_width();
+  uint16_t y_max = display_height();
+  uint16_t x_one_third = TICTACTOEDISPLAY_ONE_THIRD(x_max);
+  uint16_t x_two_third = TICTACTOEDISPLAY_TWO_THIRD(x_max);
+  uint16_t y_one_third = TICTACTOEDISPLAY_ONE_THIRD(y_max);
+  uint16_t y_two_third = TICTACTOEDISPLAY_TWO_THIRD(y_max);
+
   // Draw the two VERTICAL lines
   display_drawLine (x_one_third,    // x0
                     0,              // y0

@@ -15,17 +15,17 @@
 #define SWITCHES_INIT_STATUS_FAIL 0
 
 // Constants for working with GPIO Tristate
-#define VALUE_OFFSET 0
-#define TRISTATE_OFFSET 4
-#define TRISTATE_SET_AS_INPUT 0xF  // value to turn tristate to input
+#define SWITCHES_VALUE_OFFSET 0
+#define SWITCHES_TRISTATE_OFFSET 4
+#define SWITCHES_TRISTATE_SET_AS_INPUT 0xF  // value to turn tristate to input
 
 // Mask Values for Switches
-#define SW0_MASK      0x1
-#define SW1_MASK      0x2
-#define SW2_MASK      0x4
-#define SW3_MASK      0x8
-#define ALL_SW_ON     0xF
-#define BOTTOM_4_BITS 0xF
+#define SWITCHES_SW0_MASK      0x1
+#define SWITCHES_SW1_MASK      0x2
+#define SWITCHES_SW2_MASK      0x4
+#define SWITCHES_SW3_MASK      0x8
+#define SWITCHES_ALL_SW_ON     0xF
+#define SWITCHES_BOTTOM_4_BITS 0xF
 
 // Initializes the SWITCHES driver software and hardware.
 // Returns one of the defined status values:
