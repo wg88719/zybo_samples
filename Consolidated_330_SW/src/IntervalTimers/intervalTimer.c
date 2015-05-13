@@ -20,18 +20,18 @@ uint32_t intervalTimer_readTimerRegister(uint32_t timerNumber, uint8_t offset) {
 
   // Determine which base address to use based on the timerNumber
   switch (timerNumber) {
-    case TIMER0:  // Read from TIMER0
+    case INTERVALTIMER_TIMER0:  // Read from TIMER0
       regValue = Xil_In32(XPAR_AXI_TIMER_0_BASEADDR + offset);
       break;
-    case TIMER1:  // Read from TIMER1
+    case INTERVALTIMER_TIMER1:  // Read from TIMER1
       regValue = Xil_In32(XPAR_AXI_TIMER_1_BASEADDR + offset);
       break;
-    case TIMER2:  // Read from TIMER2
+    case INTERVALTIMER_TIMER2:  // Read from TIMER2
       regValue = Xil_In32(XPAR_AXI_TIMER_2_BASEADDR + offset);
       break;
     default:  // invalid timer number
       printf("\nERROR: Not a valid timer number.\n\n");
-      regValue = TIMER_ERROR; // Flag the transaction as unsuccessful
+      regValue = INTERVALTIMER_TIMER_ERROR; // Flag the transaction as invalid
       break;
   }
   // cast regValue value to an uint32_t and return value. Return TIMER_ERROR if
@@ -54,13 +54,13 @@ uint32_t intervalTimer_writeTimerRegister(uint32_t timerNumber,
 
   // Determine which baseaddress to use based on timerNumber
   switch (timerNumber) {
-    case TIMER0:  // Write to Timer 0
+    case INTERVALTIMER_TIMER0:  // Write to Timer 0
       Xil_Out32(XPAR_AXI_TIMER_0_BASEADDR + offset, value);
       break;
-    case TIMER1:  // Write to Timer 1
+    case INTERVALTIMER_TIMER1:  // Write to Timer 1
       Xil_Out32(XPAR_AXI_TIMER_1_BASEADDR + offset, value);
       break;
-    case TIMER2:  // Write to Timer 2
+    case INTERVALTIMER_TIMER2:  // Write to Timer 2
       Xil_Out32(XPAR_AXI_TIMER_2_BASEADDR + offset, value);
       break;
     default:  // invalid timer number
@@ -79,16 +79,15 @@ uint32_t intervalTimer_writeTimerRegister(uint32_t timerNumber,
  */
 uint32_t intervalTimer_getTimerFrequency(uint32_t timerNumber) {
   switch (timerNumber) {
-    case TIMER0:  // Get TIMER 0 frequency
+    case INTERVALTIMER_TIMER0:  // Get TIMER 0 frequency
       return XPAR_AXI_TIMER_0_CLOCK_FREQ_HZ;
-      break;
-    case TIMER1:  // Get TIMER 1 frequency
+    case INTERVALTIMER_TIMER1:  // Get TIMER 1 frequency
       return XPAR_AXI_TIMER_1_CLOCK_FREQ_HZ;
-    case TIMER2:  // Get TIMER 2 frequency
+    case INTERVALTIMER_TIMER2:  // Get TIMER 2 frequency
       return XPAR_AXI_TIMER_2_CLOCK_FREQ_HZ;
     default:  // invalid timer number
       printf("\nERROR: Not a valid timer number.\n\n");
-      return TIMER_ERROR;  // Flag the transaction as unsuccessful
+      return INTERVALTIMER_TIMER_ERROR; // Flag the transaction as unsuccessful
   }
 }
 
@@ -98,7 +97,7 @@ uint32_t intervalTimer_getTimerFrequency(uint32_t timerNumber) {
  * @return          The original value with ENT0 bit set
  */
 uint32_t intervalTimer_enableENT0(uint32_t original) {
-  return (original | ENABLE_ENT0_MASK); // Set the ENT0 bit to 1
+  return (original | INTERVALTIMER_ENABLE_ENT0_MASK); // Set the ENT0 bit to 1
 }
 
 /**
@@ -107,7 +106,7 @@ uint32_t intervalTimer_enableENT0(uint32_t original) {
  * @return          The original value with ENT0 cleared
  */
 uint32_t intervalTimer_clearENT0(uint32_t original) {
-  return (original & CLEAR_ENT0_MASK);  // Set the ENT0 bit to 0
+  return (original & INTERVALTIMER_CLEAR_ENT0_MASK);  // Set the ENT0 bit to 0
 }
 
 /**
@@ -116,7 +115,7 @@ uint32_t intervalTimer_clearENT0(uint32_t original) {
  * @return          The original value with the CASC bit set
  */
 uint32_t intervalTimer_enableCASC(uint32_t original) {
-  return (original | ENABLE_CASC_MASK); // Set the CASC bit to 1
+  return (original | INTERVALTIMER_ENABLE_CASC_MASK); // Set the CASC bit to 1
 }
 
 /**
@@ -125,7 +124,7 @@ uint32_t intervalTimer_enableCASC(uint32_t original) {
  * @return          The original value with the LOAD0 bit set
  */
 uint32_t intervalTimer_enableLOAD0(uint32_t original) {
-  return (original | ENABLE_LOAD0_MASK);  // Set the LOAD0 bit to 1
+  return (original | INTERVALTIMER_ENABLE_LOAD0_MASK);  // Set the LOAD0  to 1
 }
 
 /**
@@ -136,25 +135,29 @@ uint32_t intervalTimer_enableLOAD0(uint32_t original) {
 uint64_t intervalTimer_read64bitCounter(uint32_t timerNumber) {
 
     // variables for reading the 32-bit upper and lower registers
-    uint32_t lower_bits, upper_bits, upper_bits_check;
+    uint32_t lower_bits, upper_bits, upper_bits_2;
 
     // Read upper 32-bits of counter
-    upper_bits = intervalTimer_readTimerRegister(timerNumber, TCR1_OFFSET);
+    upper_bits = intervalTimer_readTimerRegister( timerNumber,
+                                                  INTERVALTIMER_TCR1_OFFSET);
     // Read lower 32-bits of counter
-    lower_bits = intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET);
+    lower_bits = intervalTimer_readTimerRegister( timerNumber,
+                                                  INTERVALTIMER_TCR0_OFFSET);
 
     // Read upper bits again
-    upper_bits_check = intervalTimer_readTimerRegister(timerNumber, TCR1_OFFSET);
+    upper_bits_2 = intervalTimer_readTimerRegister( timerNumber,
+                                                    INTERVALTIMER_TCR1_OFFSET);
 
     // if they differ, read lower bits again
-    if (upper_bits_check != upper_bits) {
-      lower_bits = intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET);
-      upper_bits = upper_bits_check;
+    if (upper_bits_2 != upper_bits) {
+      lower_bits = intervalTimer_readTimerRegister( timerNumber,
+                                                    INTERVALTIMER_TCR0_OFFSET);
+      upper_bits = upper_bits_2;
     }
 
     // Form the 64-bit cascaded value
     uint64_t counterValue = upper_bits; // store 32-bits in the upper register
-    counterValue <<= REGISTER_WIDTH;
+    counterValue <<= INTERVALTIMER_REGISTER_WIDTH;
     counterValue |= lower_bits; // add on the lower 32-bits
 
     return counterValue;
@@ -164,18 +167,19 @@ uint32_t intervalTimer_start(uint32_t timerNumber) {
   uint32_t csrValue;  // variable to store the original CSR value
 
   // Check for invalid timer numbers
-  if (timerNumber > TIMER2) {
+  if (timerNumber > INTERVALTIMER_TIMER2) {
     // Invalid timerNumber was passed in!
     printf("\nERROR: Not a valid timer number.\n\n");
-    return TIMER_ERROR;
+    return INTERVALTIMER_TIMER_ERROR;
   }
 
   // Get the current value of control/status register
-  csrValue = intervalTimer_readTimerRegister(timerNumber, TCSR0_OFFSET);
-  printf("CSR Value: 0x%08X\n", csrValue);
+  csrValue = intervalTimer_readTimerRegister( timerNumber,
+                                              INTERVALTIMER_TCSR0_OFFSET);
+
   // Write value back w/ ENT0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    TCSR0_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR0_OFFSET, // reg offset
                                     intervalTimer_enableENT0(csrValue));
 
   return 0;  // return 0 for success, or TIMER_ERROR
@@ -185,18 +189,19 @@ uint32_t intervalTimer_stop(uint32_t timerNumber) {
   uint32_t csrValue;  // variable to store the original CSR value
 
   // Check for invalid timer numbers
-  if (timerNumber > TIMER2) {
+  if (timerNumber > INTERVALTIMER_TIMER2) {
     // Invalid timerNumber was passed in!
     printf("\nERROR: Not a valid timer number.\n\n");
-    return TIMER_ERROR;
+    return INTERVALTIMER_TIMER_ERROR;
   }
 
   // Get the current value of control/status register
-  csrValue = intervalTimer_readTimerRegister(timerNumber, TCSR0_OFFSET);
+  csrValue = intervalTimer_readTimerRegister( timerNumber,
+                                              INTERVALTIMER_TCSR0_OFFSET);
 
   // Write value back w/ ENT0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    TCSR0_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR0_OFFSET, // reg offset
                                     intervalTimer_clearENT0(csrValue));
 
   return 0;  // return 0 for success, or TIMER_ERROR
@@ -206,32 +211,34 @@ uint32_t intervalTimer_reset(uint32_t timerNumber) {
   uint32_t csrValue;  // variable to store the original CSR value
 
   // Check for invalid timer numbers
-  if (timerNumber > TIMER2) {
+  if (timerNumber > INTERVALTIMER_TIMER2) {
     // Invalid timerNumber was passed in!
     printf("\nERROR: Not a valid timer number.\n\n");
-    return TIMER_ERROR;
+    return INTERVALTIMER_TIMER_ERROR;
   }
 
   // Store 0 in TLR0
-  intervalTimer_writeTimerRegister(timerNumber, TLR0_OFFSET, 0x0000);
+  intervalTimer_writeTimerRegister(timerNumber, INTERVALTIMER_TLR0_OFFSET, 0);
 
   // Get the current value of control/status register
-  csrValue = intervalTimer_readTimerRegister(timerNumber, TCSR0_OFFSET);
+  csrValue = intervalTimer_readTimerRegister( timerNumber,
+                                              INTERVALTIMER_TCSR0_OFFSET);
 
   // Write value back w/ LOAD0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    TCSR0_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR0_OFFSET, // reg offset
                                     intervalTimer_enableLOAD0(csrValue));
 
   // Store 0 in TLR1
-  intervalTimer_writeTimerRegister(timerNumber, TLR1_OFFSET, 0x0000);
+  intervalTimer_writeTimerRegister(timerNumber, INTERVALTIMER_TLR1_OFFSET, 0);
 
   // Get the current value of control/status register
-  csrValue = intervalTimer_readTimerRegister(timerNumber, TCSR1_OFFSET);
+  csrValue = intervalTimer_readTimerRegister( timerNumber,
+                                              INTERVALTIMER_TCSR1_OFFSET);
 
   // Write value back w/ LOAD0 enabled
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    TCSR1_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR1_OFFSET, // reg offset
                                     intervalTimer_enableLOAD0(csrValue));
 
   intervalTimer_init(timerNumber);
@@ -242,26 +249,26 @@ uint32_t intervalTimer_reset(uint32_t timerNumber) {
 uint32_t intervalTimer_init(uint32_t timerNumber) {
 
   // Check for invalid timer numbers
-  if (timerNumber > TIMER2) {
+  if (timerNumber > INTERVALTIMER_TIMER2) {
     // Invalid timerNumber was passed in!
     printf("\nERROR: Not a valid timer number.\n\n");
-    return TIMER_ERROR;
+    return INTERVALTIMER_TIMER_ERROR;
   }
 
   // Write 0 to TCSR0
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    TCSR0_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR0_OFFSET, // reg offset
                                     0x0000);
 
   // Write 0 to TCSR1
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    TCSR1_OFFSET, // register offset
+                                    INTERVALTIMER_TCSR1_OFFSET, // reg offset
                                     0x0000);
 
   // Set cascade bit. Note that since TCSR was set to zero, timer counts up
   intervalTimer_writeTimerRegister( timerNumber, // timer number
-                                    TCSR0_OFFSET, // register offset
-                                    intervalTimer_enableCASC(0x0000));
+                                    INTERVALTIMER_TCSR0_OFFSET, // reg offset
+                                    intervalTimer_enableCASC(0));
 
 
   return 0;  // return 0 for success, or TIMER_ERROR
@@ -272,7 +279,7 @@ uint32_t intervalTimer_initAll() {
 
   // Iterate over all of the timers and initialize them
   int i;
-  for (i = 0; i <= TIMER2; i++) {
+  for (i = 0; i <= INTERVALTIMER_TIMER2; i++) {
     status = intervalTimer_init(i);
 
     // If an error occurred, break and return TIMER_ERROR
@@ -289,7 +296,7 @@ uint32_t intervalTimer_resetAll() {
 
   // Iterate over all of the timers and reset them
   int i;
-  for (i = 0; i <= TIMER2; i++) {
+  for (i = 0; i <= INTERVALTIMER_TIMER2; i++) {
     status = intervalTimer_reset(i);
 
     // If an error occurred, break and return TIMER_ERROR
@@ -306,7 +313,7 @@ uint32_t intervalTimer_testAll() {
 
   // Iterate over all of the timers and test them
   int i;
-  for (i = 0; i <= TIMER2; i++) {
+  for (i = 0; i <= INTERVALTIMER_TIMER2; i++) {
     status = intervalTimer_runTest(i);
 
     // If an error occurred, break and return TIMER_ERROR
@@ -324,10 +331,10 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
   double seconds = 0;
 
   // Check for invalid timer numbers
-  if (timerNumber > TIMER2) {
+  if (timerNumber > INTERVALTIMER_TIMER2) {
     // Invalid timerNumber was passed in!
     printf("\nERROR: Not a valid timer number.\n\n");
-    return TIMER_ERROR;
+    return INTERVALTIMER_TIMER_ERROR;
   }
 
   intervalTimer_init(timerNumber);  // Initialize the timer
@@ -338,7 +345,9 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
 
   // Check that timer is reset
   printf("Counter value should be ZERO:\n\t");
-  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds); // keep track of status
+
+  // keep track of status
+  status = intervalTimer_getTotalDurationInSeconds(timerNumber, &seconds);
   printf("Timer %d: Counter Value = %f\n", (int) timerNumber, seconds);
 
   // Start the Timer and show that it is running
@@ -347,10 +356,10 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
 
   printf("Timer value should be changing:\n\t");
   // Read the timer register several times to verify different values are seen
-  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
-  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
-  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
-  printf("TCR0:%ld\n", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCR0_OFFSET));
+  printf("TCR0:%ld\n", intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCR0_OFFSET));
 
   // Stop the timer
   printf("Stopping the timer...\n");
@@ -358,10 +367,10 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
 
   printf("Timer value should NOT be changing:\n\t");
   // Read the timer register several times to verify that values don't change
-  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
-  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
-  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
-  printf("TCR0:%ld\n", intervalTimer_readTimerRegister(timerNumber, TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCR0_OFFSET));
+  printf("TCR0:%ld\n\t", intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCR0_OFFSET));
+  printf("TCR0:%ld\n", intervalTimer_readTimerRegister(timerNumber, INTERVALTIMER_TCR0_OFFSET));
 
   // If an error occured in any of the steps in the test, print an ERROR msg
   if (status != 0) {
@@ -370,7 +379,8 @@ uint32_t intervalTimer_runTest(uint32_t timerNumber) {
   return status;  // return 0 for success, or TIMER_ERROR
 }
 
-uint32_t intervalTimer_getTotalDurationInSeconds(uint32_t timerNumber, double *seconds) {
+uint32_t intervalTimer_getTotalDurationInSeconds( uint32_t timerNumber,
+                                                  double *seconds) {
   double clockCycles = intervalTimer_read64bitCounter(timerNumber);
   double frequency = intervalTimer_getTimerFrequency(timerNumber);
 

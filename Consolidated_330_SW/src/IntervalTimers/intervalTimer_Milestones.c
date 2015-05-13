@@ -75,7 +75,8 @@ void milestone2() {
 }
 
 int main() {
-  milestone1();
-  //milestone2();
+
+  //milestone1();
+  milestone2();
   //testAll();
 }

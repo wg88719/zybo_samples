@@ -13,21 +13,23 @@
 // Status Values
 #define BUTTONS_INIT_STATUS_OK 1
 #define BUTTONS_INIT_STATUS_FAIL 0
-#define SET 1
-#define NOT_SET 0
+#define BUTTONS_SET 1
+#define BUTTONS_NOT_SET 0
 
 // Values for working with GPIO Tristate
-#define VALUE_OFFSET 0
-#define TRISTATE_OFFSET 4
-#define TRISTATE_SET_AS_INPUT 0xF
+#define BUTTONS_VALUE_OFFSET 0
+#define BUTTONS_TRISTATE_OFFSET 4
+#define BUTTONS_TRISTATE_SET_AS_INPUT 0xF
 
 // Button Mask Values
-#define BTN0_MASK       0x1
-#define BTN1_MASK       0x2
-#define BTN2_MASK       0x4
-#define BTN3_MASK       0x8
-#define ALL_BTNS_ON     0xF
-#define BOTTOM_4_BITS   0xF
+#define BUTTONS_BTN0_MASK       0x1
+#define BUTTONS_BTN1_MASK       0x2
+#define BUTTONS_BTN2_MASK       0x4
+#define BUTTONS_BTN3_MASK       0x8
+#define BUTTONS_ALL_BTNS_ON     0xF
+#define BUTTONS_BOTTOM_4_BITS   0xF
+
+#define BUTTONS_TEXT_SIZE 2 // Set text size to 2
 
 // Initializes the button driver software and hardware.
 // Returns one of the defined status values:
