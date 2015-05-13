@@ -11,7 +11,6 @@
 #include "xparameters.h"
 #include "supportFiles/display.h"
 #include "supportFiles/utils.h"
-#include "intervalTimer.h"
 
 /////////////////////////////////////////////////////////////////////////
 // Global variables for tracking time                                  //
@@ -188,10 +187,10 @@ void clockDisplay_drawLines() {
   display_drawLine(col[8], row[0], col[8], row[3], DISPLAY_RED);
 
   // Draw Horizontal Lines of each row in the drawing grid
-  display_drawLine(col[0], row[0], col[8], row[0], DISPALY_RED);
-  display_drawLine(col[0], row[1], col[8], row[1], DISPALY_RED);
-  display_drawLine(col[0], row[2], col[8], row[2], DISPALY_RED);
-  display_drawLine(col[0], row[3], col[8], row[3], DISPALY_RED);
+  display_drawLine(col[0], row[0], col[8], row[0], DISPLAY_RED);
+  display_drawLine(col[0], row[1], col[8], row[1], DISPLAY_RED);
+  display_drawLine(col[0], row[2], col[8], row[2], DISPLAY_RED);
+  display_drawLine(col[0], row[3], col[8], row[3], DISPLAY_RED);
 }
 
 

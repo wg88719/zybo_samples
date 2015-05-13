@@ -8,7 +8,6 @@
 #include "clockControl.h"
 #include "clockDisplay.h"
 #include "supportFiles/display.h"
-#include "intervalTimer.h"
 
 // States for the controller state machine.
 enum clockControl_st {

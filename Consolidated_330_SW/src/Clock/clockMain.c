@@ -14,8 +14,6 @@
 #include "clockControl.h"
 #include "clockDisplay.h"
 #include "supportFiles/display.h"
-#include "intervalTimer.h"
-
 #include "xparameters.h"
 
 #define TOTAL_SECONDS 60
