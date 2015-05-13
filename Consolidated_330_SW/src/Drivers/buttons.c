@@ -17,10 +17,10 @@
 #define TEXT_SIZE 2 // Set text size to 2
 
 // Globals to track button statuses
-uint8_t btn0_status = NOT_SET;  // Initialize as NOT_SET
-uint8_t btn1_status = NOT_SET;  // Initialize as NOT_SET
-uint8_t btn2_status = NOT_SET;  // Initialize as NOT_SET
-uint8_t btn3_status = NOT_SET;  // Initialize as NOT_SET
+uint8_t btn0_status = BUTTONS_NOT_SET;  // Initialize as NOT_SET
+uint8_t btn1_status = BUTTONS_NOT_SET;  // Initialize as NOT_SET
+uint8_t btn2_status = BUTTONS_NOT_SET;  // Initialize as NOT_SET
+uint8_t btn3_status = BUTTONS_NOT_SET;  // Initialize as NOT_SET
 
 // Global Screen size values
 uint16_t x_max;   // Store the maximum x-value of the screen
