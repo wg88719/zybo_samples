@@ -65,7 +65,7 @@ uint32_t intervalTimer_writeTimerRegister(uint32_t timerNumber,
       break;
     default:  // invalid timer number
       printf("\nERROR: Not a valid timer number.\n\n");
-      status = TIMER_ERROR; // Flag the transaction as unsuccessful
+      status = INTERVALTIMER_TIMER_ERROR; // Flag the transaction as unsuccessful
       break;
   }
   // return 0 for success, TIMER_ERROR for invalid timer number

@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include "minimax.h"
+#include "intervalTimer.h"
 
 static int32_t depth = 0; // global variable to track the depth of our recursion
 
@@ -95,13 +96,13 @@ minimax_score_t minimax(minimax_board_t* board, bool player) {
   }
 
   // Print out Score Matrix at Top Level
-  if (depth == 0) {
-    printf("Scores:\n\r");
-    int count;
-    for (count = 0; count < index; count++) {
-      printf("Move (%d, %d) Score: %d\n", moves[count].row, moves[count].column, scores[count]);
-    }
-  }
+//  if (depth == 0) {
+//    printf("Scores:\n\r");
+//    int count;
+//    for (count = 0; count < index; count++) {
+//      printf("Move (%d, %d) Score: %d\n", moves[count].row, moves[count].column, scores[count]);
+//    }
+//  }
 
   // Once here, we have iterated over empty squares at this level.
   // All of the scores and moves have been computed at this level.
@@ -111,7 +112,7 @@ minimax_score_t minimax(minimax_board_t* board, bool player) {
   int i;
   if (player) {
     // If we are the player, we want to find the MAX score
-    int16_t highScore = MINIMAX_LOW_SCORE;  // Initialize to a LOW score.
+    int16_t highScore = scores[0];  // Initialize to the first score.
     // Iterate over all of the move/score pairs in the table
     for (i = 0; i < index; i++) {
       if (scores[i] > highScore) {
@@ -125,7 +126,7 @@ minimax_score_t minimax(minimax_board_t* board, bool player) {
   }
   else {
     // If we are the opponent, we want to find the MIN score
-    int16_t lowScore = MINIMAX_HIGH_SCORE;  // Initialize to a HIGH score.
+    int16_t lowScore = scores[0];  // Initialize to the first score.
     // Iterate over all of the move/score pairs in the table
     for (i = 0; i < index; i++) {
       if (scores[i] < lowScore) {
@@ -156,7 +157,20 @@ void minimax_computeNextMove( minimax_board_t* board,
     printf("Player is placing 'O'");
   }
   printBoard(board);  // Print the current board to the console for debugging
-  minimax(board, player);
+
+  // If the board if empty, just choose the middle
+  bool notEmpty = false;
+  int i, j;
+  for (i = 0; i < MINIMAX_BOARD_ROWS; i++) {  // For each row
+    for (j = 0; j < MINIMAX_BOARD_ROWS; j++) {  // For each column
+      if ((*board).squares[i][j] != MINIMAX_EMPTY_SQUARE) {
+        notEmpty = true;
+      }
+    }
+  }
+  if (notEmpty) {
+    minimax(board, player);
+  }
   *row = choice.row;  // assign the final row choice
   *column = choice.column;  // assign the final column choice
   //printf("adding player @ (%d, %d)\n\r", *row, *column);
@@ -173,7 +187,6 @@ bool minimax_isGameOver(minimax_score_t score) {
 }
 
 int16_t minimax_computeBoardScore(minimax_board_t* board, bool player) {
-  int16_t boardScore = 0; // variable to return w/ board's score
   bool emptySquaresExist = false; // flag to track whether there are empties
   // Variables to track the count of symbols in each of the possible
   // ways to win. I will +1 for player's symbols, and -1 for opponents.
@@ -201,7 +214,7 @@ int16_t minimax_computeBoardScore(minimax_board_t* board, bool player) {
         if (row == col) { // if square is on topleft to bottomright diag
           diag_topleft_bottomright++;
         }
-        else if (col == (MINIMAX_BOARD_ROWS - row - 1)) {  // if on opposite diag
+        if (col == (MINIMAX_BOARD_ROWS - row - 1)) {  // if on opposite diag
           diag_topright_bottomleft++;
         }
       }
@@ -212,7 +225,7 @@ int16_t minimax_computeBoardScore(minimax_board_t* board, bool player) {
         if (row == col) { // if square is on topleft to bottomright diag
           diag_topleft_bottomright--;
         }
-        else if (col == (MINIMAX_BOARD_ROWS - row - 1)) {  // if on opposite diag
+        if (col == (MINIMAX_BOARD_ROWS - row - 1)) {  // if on opposite diag
           diag_topright_bottomleft--;
         }
       }
@@ -222,30 +235,28 @@ int16_t minimax_computeBoardScore(minimax_board_t* board, bool player) {
     }
   }
 
-  // If we reached here, the board is full. Now, we can simply check all of the
+  // If we reached here, we've checked the whole board Now check all of the
   // count values. If any of them equal +3, PLAYER wins. If -3, OPPONENT wins.
 
   // Check row counts
   for (row = 0; row < MINIMAX_BOARD_ROWS; row++) {
-    // If the player won...
+    // If the 'X' won...
     if (rowCount[row] == MINIMAX_BOARD_ROWS) {
-
       return MINIMAX_PLAYER_WINNING_SCORE - depth;
     }
-    // If opponent won...
+    // If 'O' won...
     else if (rowCount[row] == (-MINIMAX_BOARD_ROWS)) {
       return MINIMAX_OPPONENT_WINNING_SCORE + depth;
     }
-
   }
 
   // Check column counts
   for (col = 0; col < MINIMAX_BOARD_COLUMNS; col++) {
-    // If the player won...
+    // If the 'X' won...
     if (colCount[col] == MINIMAX_BOARD_COLUMNS) {
       return MINIMAX_PLAYER_WINNING_SCORE - depth;
     }
-    // If opponent won...
+    // If 'O' won...
     else if (colCount[col] == (-MINIMAX_BOARD_COLUMNS)) {
       return MINIMAX_OPPONENT_WINNING_SCORE + depth;
     }
@@ -253,11 +264,12 @@ int16_t minimax_computeBoardScore(minimax_board_t* board, bool player) {
 
   // Check Diagonal counts
   // Note that this makes the assumption that #ROWS = #COLUMNS
+  // if 'X' won
   if (diag_topleft_bottomright == MINIMAX_BOARD_COLUMNS ||
       diag_topright_bottomleft == MINIMAX_BOARD_COLUMNS) {
     return MINIMAX_PLAYER_WINNING_SCORE - depth;
   }
-  // If opponent won...
+  // If 'O' won...
   else if ( diag_topleft_bottomright == (-MINIMAX_BOARD_COLUMNS) ||
             diag_topright_bottomleft == (-MINIMAX_BOARD_COLUMNS)) {
     return MINIMAX_OPPONENT_WINNING_SCORE + depth;

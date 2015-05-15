@@ -27,8 +27,6 @@
 #define MINIMAX_OPPONENT_WINNING_SCORE  -10
 #define MINIMAX_DRAW_SCORE              0
 #define MINIMAX_NOT_ENDGAME             -1 // Not an end-game.
-#define MINIMAX_LOW_SCORE               -80 // initial low # used to find max
-#define MINIMAX_HIGH_SCORE              80 // initial low # used to find max
 
 // Boards contain just an array of squares. I used a struct to provide additional abstraction
 // in case I wanted to add something to the board type.
@@ -68,7 +66,7 @@ bool minimax_isGameOver(minimax_score_t score);
  * Returns the score of the board, based upon the player.
  * @param  board  Representation of the current board.
  * @param  player TRUE is the 'X' player, FALSE is the 'O' player.
- * @return        The score of the given player.
+ * @return        The score of board.
  */
 int16_t minimax_computeBoardScore(minimax_board_t* board, bool player);
 

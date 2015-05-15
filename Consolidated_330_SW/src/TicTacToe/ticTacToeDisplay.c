@@ -52,7 +52,6 @@ void ticTacToeDisplay_drawOAtPoint(uint16_t center_x, uint16_t center_y) {
  * @return     The y-coordinate of the center of the row.
  */
 uint16_t ticTacToeDisplay_findCenterOfRow(uint8_t row) {
-  uint16_t x_max = display_width();
   uint16_t y_max = display_height();
   uint16_t row_0_y = TICTACTOEDISPLAY_ONE_SIXTH(y_max);  // Y-coordinate of the center of row 0
   uint16_t row_1_y = TICTACTOEDISPLAY_ONE_HALF(y_max);   // Y-coordinate of the center of row 1
@@ -79,7 +78,6 @@ uint16_t ticTacToeDisplay_findCenterOfRow(uint8_t row) {
  */
 uint16_t ticTacToeDisplay_findCenterOfColumn(uint8_t column) {
   uint16_t x_max = display_width();
-  uint16_t y_max = display_height();
   uint16_t col_0_x = TICTACTOEDISPLAY_ONE_SIXTH(x_max);  // X-coordinate of the center of column 0
   uint16_t col_1_x = TICTACTOEDISPLAY_ONE_HALF(x_max);   // X-coordinate of the center of column 1
   uint16_t col_2_x = TICTACTOEDISPLAY_FIVE_SIXTH(x_max); // X-coordinate of the center of column 2
@@ -122,7 +120,6 @@ void ticTacToeDisplay_getInputRegion(int16_t x, int16_t y, uint8_t* row, uint8_t
 
   // Error condition for values off the screen
   if (x < 0 || y < 0 || x > x_max || y > y_max) {
-  printf("Error, invalid touch data!!\n\r");
     return;  // Invalid touch data
   }
 
