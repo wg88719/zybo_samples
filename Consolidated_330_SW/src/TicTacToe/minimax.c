@@ -159,6 +159,8 @@ void minimax_computeNextMove( minimax_board_t* board,
   printBoard(board);  // Print the current board to the console for debugging
 
   // If the board if empty, just choose the middle
+  // This reduced the worst-case tick function execution time from 367ms
+  // to 180ms.
   bool notEmpty = false;
   int i, j;
   for (i = 0; i < MINIMAX_BOARD_ROWS; i++) {  // For each row

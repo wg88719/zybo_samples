@@ -20,8 +20,8 @@
 
 #define TOTAL_SECONDS 60
 // This period was chosen because the tick function function takes
-// 367ms to run when running on an empty board
-#define TIMER_PERIOD .2  // 100ms period
+// 180ms to run in the worst case.
+#define TIMER_PERIOD .2  // 200ms period
 #define TIMER_CLOCK_FREQUENCY ((XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ) / 2)
 #define TIMER_LOAD_VALUE (((TIMER_PERIOD) * (TIMER_CLOCK_FREQUENCY)) - 1.0)
 
