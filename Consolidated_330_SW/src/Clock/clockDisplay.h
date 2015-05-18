@@ -84,7 +84,7 @@
 // Time macros used in runTest() in units of milliseconds
 #define CLOCKDISPLAY_TENTH_SECOND            100
 #define CLOCKDISPLAY_HALF_SECOND             500
-#define CLOCKDISPLAY_TENTHS_IN_TEN_SECONDS   100 // # 10ms in 10 seconds
+#define CLOCKDISPLAY_TENTHS_IN_TEN_SECONDS   100 // # of 100ms in 10 seconds
 
 /**
  * Initializes the clock display. Should only be called once.

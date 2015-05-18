@@ -29,8 +29,6 @@ static uint32_t autoTimer = 0; // Time before auto-updating when user holds butt
 static uint32_t rateTimer = 0; // Time between auto inc/dec calls
 static uint32_t msCounter = 0; // Time between normal second updates
 
-static double duration_max = 0.0;
-
 /**
  * This is a debug state print routine. It will print names of the states each
  * time tick() is called. It only prints states if they are different than the
@@ -117,7 +115,7 @@ void clockControl_tick() {
       // Add one second
       clockDisplay_advanceTimeOneSecond();
       break;
-     default:
+     default: // Should never hit this point.
       printf("clockControl_tick state action: hit default\n\r");
       break;
   }
@@ -216,7 +214,7 @@ void clockControl_tick() {
       // Go back to waiting
       currentState = waiting_for_touch_st;
       break;
-    default:  // Shouldn't ever hit this state
+    default:  // Shouldn't ever hit this point
       printf("clockControl_tick state update: hit default\n\r");
       break;
   }
