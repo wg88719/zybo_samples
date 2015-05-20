@@ -3,6 +3,8 @@
 // 13 May 2015
 // Interface of the minimax algorithm for the AI player in TicTacToe.
 //*****************************************************************************
+#ifndef MINIMAX_H_
+#define MINIMAX_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -75,3 +77,5 @@ int16_t minimax_computeBoardScore(minimax_board_t* board, bool player);
  * @param board The address of the board to initialize.
  */
 void minimax_initBoard(minimax_board_t* board);
+
+#endif /* MINIMAX_H_ */

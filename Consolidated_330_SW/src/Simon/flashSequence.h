@@ -1,0 +1,6 @@
+
+#ifndef FLASHSEQUENCE_H_
+#define FLASHSEQUENCE_H_
+
+
+#endif /* FLASHSEQUENCE_H_ */
