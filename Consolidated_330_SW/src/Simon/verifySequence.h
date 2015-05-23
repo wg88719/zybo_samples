@@ -8,10 +8,15 @@
 #ifndef VERIFYSEQUENCE_H_
 #define VERIFYSEQUENCE_H_
 
-// State machine will run when enabled.
+/**
+ * Enables this state machine.
+ */
 void verifySequence_enable();
 
-// This is part of the interlock. You disable the state-machine and then enable it again.
+/**
+ * Disables the state machine. This is used as part of the interlock. This SM
+ * can be disabled and then reenabled.
+ */
 void verifySequence_disable();
 
 /**
@@ -32,10 +37,14 @@ bool verifySequence_isUserInputError();
  */
 bool verifySequence_isComplete();
 
-// Standard tick function.
+/**
+ * Tick function that verifies the sequence.
+ */
 void verifySequence_tick();
 
-// Standard runTest function.
+/**
+ * Test function that verifies the correctness of the verifySequence SM.
+ */
 void verifySequence_runTest();
 
 #endif /* VERIFYSEQUENCE_H_ */
