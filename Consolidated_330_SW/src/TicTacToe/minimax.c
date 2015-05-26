@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 #include "minimax.h"
-#include "intervalTimer.h"
+//#include "intervalTimer.h"
 
 static int32_t depth = 0; // global variable to track the depth of our recursion
 

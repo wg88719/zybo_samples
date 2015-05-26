@@ -4,6 +4,14 @@
 // Implementation of the Simon display.
 //*****************************************************************************
 
+#include <stdio.h>
+#include "globals.h"
+#include "simonDisplay.h"
+#include "buttons.h"
+#include "switches.h"
+#include "supportFiles/display.h"
+#include "supportFiles/utils.h"
+
 int8_t simonDisplay_computeRegionNumber(int16_t x, int16_t y) {
   // Set the values of the sub box dimensions
   uint16_t x_max = display_width();
@@ -23,19 +31,19 @@ int8_t simonDisplay_computeRegionNumber(int16_t x, int16_t y) {
       return SIMON_DISPLAY_REGION_0;
     }
     // Check Region 1
-    else if {
+    else {
       return SIMON_DISPLAY_REGION_1;
     }
   }
 
   // Parse through bottom row
-  else if (y < y_max) {
+  else {
     // Check Region 2
     if (x < box_width) {
       return SIMON_DISPLAY_REGION_2;
     }
     // Check Region 3
-    else if {
+    else {
       return SIMON_DISPLAY_REGION_3;
     }
   }
@@ -58,7 +66,7 @@ void simonDisplay_drawButton(uint8_t regionNumber) {
   uint16_t origin_x, origin_y;
 
   // The dimensions of the button is define by the header file
-  select (regionNumber) {
+  switch (regionNumber) {
     case SIMON_DISPLAY_REGION_0:
       // Compute the origin point of the box
       origin_x = GLOBALS_ONE_HALF(box_width) - button_half_width;
@@ -68,8 +76,8 @@ void simonDisplay_drawButton(uint8_t regionNumber) {
       display_fillRect( origin_x,                           // x0
                         origin_y,                           // y0
                         SIMON_DISPLAY_BUTTON_WIDTH,         // width
-                        SIMON_DISPLAY_BUTTON_HEIGHT         // height
-                        DISPLAY_RED;                        // color
+                        SIMON_DISPLAY_BUTTON_HEIGHT,        // height
+                        DISPLAY_RED                         // color
                       );
       break;
     case SIMON_DISPLAY_REGION_1:
@@ -83,11 +91,11 @@ void simonDisplay_drawButton(uint8_t regionNumber) {
       display_fillRect( origin_x,                           // x0
                         origin_y,                           // y0
                         SIMON_DISPLAY_BUTTON_WIDTH,         // width
-                        SIMON_DISPLAY_BUTTON_HEIGHT         // height
-                        DISPLAY_YELLOW;                     // color
+                        SIMON_DISPLAY_BUTTON_HEIGHT,        // height
+                        DISPLAY_YELLOW                      // color
                       );
       break;
-    case SIMON_DISPLAY_REGION_2;
+    case SIMON_DISPLAY_REGION_2:
       // Compute the origin point of the box
       origin_x = 0;
       origin_y = box_height;
@@ -98,11 +106,11 @@ void simonDisplay_drawButton(uint8_t regionNumber) {
       display_fillRect( origin_x,                           // x0
                         origin_y,                           // y0
                         SIMON_DISPLAY_BUTTON_WIDTH,         // width
-                        SIMON_DISPLAY_BUTTON_HEIGHT         // height
-                        DISPLAY_BLUE;                       // color
+                        SIMON_DISPLAY_BUTTON_HEIGHT,        // height
+                        DISPLAY_BLUE                        // color
                       );
       break;
-    case SIMON_DISPLAY_REGION_3;
+    case SIMON_DISPLAY_REGION_3:
       // Compute the origin point of the box
       origin_x = box_width;
       origin_y = box_height;
@@ -113,11 +121,11 @@ void simonDisplay_drawButton(uint8_t regionNumber) {
       display_fillRect( origin_x,                           // x0
                         origin_y,                           // y0
                         SIMON_DISPLAY_BUTTON_WIDTH,         // width
-                        SIMON_DISPLAY_BUTTON_HEIGHT         // height
-                        DISPLAY_GREEN;                      // color
+                        SIMON_DISPLAY_BUTTON_HEIGHT,        // height
+                        DISPLAY_GREEN                       // color
                       );
         break;
-    case default:
+    default:
       printf("Draw button default case hit\n"); // shouldn't hit this
       break;
   }
@@ -126,7 +134,7 @@ void simonDisplay_drawButton(uint8_t regionNumber) {
 void simonDisplay_drawAllButtons() {
   // Iterate over all 4 regions and draw the buttons.
   int i;
-  for (i = 0; i <= SIMON_DISPLAY_REGION_3, i++) {
+  for (i = 0; i <= SIMON_DISPLAY_REGION_3; i++) {
     simonDisplay_drawButton(i);
   }
 }
@@ -144,7 +152,7 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
   uint16_t origin_x, origin_y;
 
   // The dimensions of the button is define by the header file
-  select (regionNumber) {
+  switch (regionNo) {
     case SIMON_DISPLAY_REGION_0:
       // Compute the origin point of the box
       origin_x = 0;
@@ -155,8 +163,8 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
         display_fillRect( origin_x,          // x0
                           origin_y,          // y0
                           box_width,         // width
-                          box_height         // height
-                          DISPLAY_BLACK;       // color
+                          box_height,        // height
+                          DISPLAY_BLACK      // color
                         );
       }
       else {
@@ -164,8 +172,8 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
         display_fillRect( origin_x,          // x0
                           origin_y,          // y0
                           box_width,         // width
-                          box_height         // height
-                          DISPLAY_RED;       // color
+                          box_height,        // height
+                          DISPLAY_RED        // color
                         );
       }
       break;
@@ -179,8 +187,8 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
         display_fillRect( origin_x,          // x0
                           origin_y,          // y0
                           box_width,         // width
-                          box_height         // height
-                          DISPLAY_BLACK;       // color
+                          box_height,        // height
+                          DISPLAY_BLACK      // color
                         );
       }
       else {
@@ -188,12 +196,12 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
         display_fillRect( origin_x,          // x0
                           origin_y,          // y0
                           box_width,         // width
-                          box_height         // height
-                          DISPLAY_YELLOW;       // color
+                          box_height,        // height
+                          DISPLAY_YELLOW     // color
                         );
       }
       break;
-    case SIMON_DISPLAY_REGION_2;
+    case SIMON_DISPLAY_REGION_2:
       // Compute the origin point of the box
       origin_x = 0;
       origin_y = box_height;
@@ -203,8 +211,8 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
         display_fillRect( origin_x,          // x0
                           origin_y,          // y0
                           box_width,         // width
-                          box_height         // height
-                          DISPLAY_BLACK;       // color
+                          box_height,        // height
+                          DISPLAY_BLACK      // color
                         );
       }
       else {
@@ -212,12 +220,12 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
         display_fillRect( origin_x,          // x0
                           origin_y,          // y0
                           box_width,         // width
-                          box_height         // height
-                          DISPLAY_BLUE;       // color
+                          box_height,        // height
+                          DISPLAY_BLUE       // color
                         );
       }
       break;
-    case SIMON_DISPLAY_REGION_3;
+    case SIMON_DISPLAY_REGION_3:
       // Compute the origin point of the box
       origin_x = box_width;
       origin_y = box_height;
@@ -227,8 +235,8 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
         display_fillRect( origin_x,          // x0
                           origin_y,          // y0
                           box_width,         // width
-                          box_height         // height
-                          DISPLAY_BLACK;       // color
+                          box_height,        // height
+                          DISPLAY_BLACK      // color
                         );
       }
       else {
@@ -236,12 +244,12 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
         display_fillRect( origin_x,          // x0
                           origin_y,          // y0
                           box_width,         // width
-                          box_height         // height
-                          DISPLAY_GREEN;       // color
+                          box_height,        // height
+                          DISPLAY_GREEN      // color
                         );
       }
       break;
-    case default:
+    default:
       printf("Draw square default case hit\n"); // shouldn't hit this
       break;
   }
@@ -282,6 +290,7 @@ void simonDisplay_runTest(uint16_t touchCount) {
       utils_msDelay(TOUCH_PANEL_ANALOG_PROCESSING_DELAY_IN_MS);
       display_getTouchedPoint(&x, &y, &z);                  // After the wait, get the touched point.
       regionNumber = simonDisplay_computeRegionNumber(x, y);// Compute the region number.
+      printf("Region #: %d\n", regionNumber);
       simonDisplay_drawSquare(regionNumber, false);	    // Draw the square (erase = false).
     }
   }

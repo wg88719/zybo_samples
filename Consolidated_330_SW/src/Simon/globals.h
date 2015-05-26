@@ -7,6 +7,9 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
+#include <stdbool.h>
+#include <stdint.h>
+
 // large so it could be used for a splash screen.
 #define GLOBALS_MAX_FLASH_SEQUENCE 1000
 

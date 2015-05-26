@@ -204,6 +204,7 @@ void ticTacToeControl_tick() {
     case game_over_st: // wait for user to push BTN 0 to reset
       if (buttons_read() & BUTTONS_BTN0_MASK) { // if btn0 is pressed
         currentState = first_move_st;
+        firstMoveTimer = 0; // Reset first move timer
         ticTacToeDisplay_init();  // Initialize the board
       }
       else {

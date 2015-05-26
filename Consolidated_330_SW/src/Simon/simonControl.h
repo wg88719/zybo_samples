@@ -7,5 +7,9 @@
 #ifndef SIMONCONTROL_H_
 #define SIMONCONTROL_H_
 
+/**
+ * Tick function for the high-level control of the Simon game.
+ */
+void simonControl_tick();
 
 #endif /* SIMONCONTROL_H_ */

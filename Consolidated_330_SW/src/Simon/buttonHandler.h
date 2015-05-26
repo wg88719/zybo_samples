@@ -7,6 +7,16 @@
 #ifndef BUTTONHANDLER_H_
 #define BUTTONHANDLER_H_
 
+#include <stdbool.h>
+#include <stdint.h>
+
+// Defines for outputting runTest() information
+#define RUN_TEST_TERMINATION_MESSAGE1 "buttonHandler_runTest()"
+#define RUN_TEST_TERMINATION_MESSAGE2 "terminated."
+#define RUN_TEST_TEXT_SIZE 2
+
+#define ADC_WAIT 50
+
 /**
  * Get the simon region numbers.
  * See the source code for the region numbering scheme.
@@ -24,7 +34,6 @@ void buttonHandler_enable();
  */
 void buttonHandler_disable();
 
-// Other state machines can call this function to see if the user has stopped touching the pad.
 /**
  * Other state machines can call this function to see if the user has stopped
  * touching the pad.
@@ -43,8 +52,8 @@ void buttonHandler_tick();
  * button was pushed by drawing a large square while the button is pressed
  * and then erasing the large square and redrawing the button when the
  * user releases their touch.
- * @param touchCount The number of touches before exiting runTest
+ * @param touchCountArg The number of touches before exiting runTest
  */
-void buttonHandler_runTest(int16_t touchCount);
+void buttonHandler_runTest(int16_t touchCountArg);
 
 #endif /* BUTTONHANDLER_H_ */

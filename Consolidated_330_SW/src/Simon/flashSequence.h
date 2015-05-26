@@ -7,6 +7,17 @@
 #ifndef FLASHSEQUENCE_H_
 #define FLASHSEQUENCE_H_
 
+#include <stdbool.h>
+#include <stdint.h>
+
+#define TEST_SEQUENCE_LENGTH 8  // Just use a short test sequence.
+
+#define INCREMENTING_SEQUENCE_MESSAGE1 "Incrementing Sequence"  // Info message.
+#define RUN_TEST_COMPLETE_MESSAGE "Runtest() Complete"      // Info message.
+#define MESSAGE_TEXT_SIZE 2                                   // Make the text easy to see.
+
+#define FLASH_WAIT 500 // ticks to display each sequence value
+
 /**
  * Turns on the state machine. Part of the interlock.
  */
