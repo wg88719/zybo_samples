@@ -16,7 +16,7 @@
 #define TICTACTOEDISPLAY_COL_1 1
 #define TICTACTOEDISPLAY_COL_2 2
 
-// Screen Position Macros
+// Math Macros used in calculating screen positions
 #define TICTACTOEDISPLAY_ONE_THIRD(X)   ((X) / 3)  // Divide the given number by 4
 #define TICTACTOEDISPLAY_TWO_THIRD(X)   ((X * 2) / 3) // Multiply by 2, then divide by 3 to reduce rounding err.
 #define TICTACTOEDISPLAY_ONE_SIXTH(X)  	((X) / 6)    // Divide the given number by 6

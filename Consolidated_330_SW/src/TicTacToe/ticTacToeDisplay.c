@@ -99,13 +99,13 @@ uint16_t ticTacToeDisplay_findCenterOfColumn(uint8_t column) {
  * Helper function that clears all the Xs and Os from the board.
  */
 void ticTacToeDisplay_clearScreen() {
-  // TODO May need to iterate and just draw black 'X' and 'O' rather than blanking the screen.
   display_fillScreen(DISPLAY_BLACK);  // blank the screen
   ticTacToeDisplay_drawBoardLines();  // redraw the lines
 }
 
  /**
-  * Helper function that takes an x and y coordinate and returns the respective row/column
+  * Helper function that takes an x and y coordinate and returns the
+  * respective row/column.
   * @param x      x-coordinate of the touched point
   * @param y      y-coordinate of the touched point
   * @param row    Address to the row variable to store computed value in
@@ -177,8 +177,7 @@ void ticTacToeDisplay_getInputRegion(int16_t x, int16_t y, uint8_t* row, uint8_t
 
 void ticTacToeDisplay_init() {
   display_init();  // Initialize display, which sets Rotation = 1 by default
-  display_fillScreen(DISPLAY_BLACK); // blank the screen
-  ticTacToeDisplay_drawBoardLines();  // Draw the board lines
+  ticTacToeDisplay_clearScreen(); // clear the display and draw lines
 }
 
 void ticTacToeDisplay_drawX(uint8_t row, uint8_t column) {
@@ -258,7 +257,7 @@ void ticTacToeDisplay_runTest() {
     }
   }
   // Give the user indication that the test is completed.
-  printf("\n\Ending Tic Tac Toe Display Test...\n");
+  printf("\nEnding Tic Tac Toe Display Test...\n");
   display_fillScreen(DISPLAY_WHITE);
 }
 

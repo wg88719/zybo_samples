@@ -102,18 +102,20 @@ void ticTacToeControl_tick() {
     case init_st:
       break;
     case show_instructions_st:
+      // Initialize the display and print the instructions to the screen
       display_init();
       display_fillScreen(DISPLAY_BLACK);
       display_setTextSize(2);
       display_println("\n\nTouch a square to play 'X'\n\r\n\r    -or-\n\r\n\rwait for the computer and play 'O'");
+
       instructionTimer = 0; // reset instruction timer
       break;
     case instruction_wait_st:
-      firstMoveTimer = 0;
-      instructionTimer++;
+      firstMoveTimer = 0; // reset timer before AI makes a move.
+      instructionTimer++; // increment counter to display instructions.
       break;
     case first_move_st:
-      // Reset the internal board variable
+      // Reset the internal board variable to ALL EMPTY.
       board.squares[0][0] = MINIMAX_EMPTY_SQUARE;
       board.squares[0][1] = MINIMAX_EMPTY_SQUARE;
       board.squares[0][2] = MINIMAX_EMPTY_SQUARE;
@@ -124,11 +126,16 @@ void ticTacToeControl_tick() {
       board.squares[2][1] = MINIMAX_EMPTY_SQUARE;
       board.squares[2][2] = MINIMAX_EMPTY_SQUARE;
 
+      // Initialize the row/column variables to 0.
       row = 0;
       column = 0;
+
+      // Initialize the player_first to be false.
       player_first = false;
 
       instructionTimer = 0; // Reset instructionTimer
+
+      // Increment counter to wait for player to make a move.
       firstMoveTimer++;
       break;
     case ad_timer_running_st: // increment adTimer
@@ -153,15 +160,15 @@ void ticTacToeControl_tick() {
   ////////////////////////////////
   switch(currentState) {
     case init_st:
-      currentState = show_instructions_st;
+      currentState = show_instructions_st;  // First, show instructions
       break;
     case show_instructions_st:
-      currentState = instruction_wait_st;
+      currentState = instruction_wait_st; // Display instructions for a time.
       break;
     case instruction_wait_st:
       // Wait for instructions to be shown for a period of time
       if (instructionTimer >= TICTACTOECONTROL_INSTRUCTIONTIME) {
-        currentState = first_move_st;
+        currentState = first_move_st; // Move to waiting for the first move
         ticTacToeDisplay_init();  // Initialize the board
         firstMoveTimer = 0; // Reset first move timer
       }
@@ -171,7 +178,7 @@ void ticTacToeControl_tick() {
       break;
     case first_move_st:  // wait to determine player or AI first
       // If the display is touched, move on to let ADC settle
-      if (display_isTouched()) {
+      if (display_isTouched()) {  // player wants to move first
         ticTacToeDisplay_touchScreenComputeBoardRowColumn(&row, &column);
         currentState = ad_timer_running_st;
         player_first = true;  // player will be playing X
@@ -188,10 +195,13 @@ void ticTacToeControl_tick() {
     case ad_timer_running_st: // increment adTimer
       // if the display must be let go after ADC settles before action is taken
       if (!display_isTouched() && adTimer >= TICTACTOECONTROL_ADC_WAIT) {
+        // Register the touch and update the board.
         ticTacToeControl_updateBoard(&board, row, column, player_first);
+        // If that was the final move, go to gameover.
         if (minimax_isGameOver(minimax_computeBoardScore(&board, player_first))) {
           currentState = game_over_st;
         }
+        // Otherwise, let the computer have its turn.
         else {
           currentState = computer_turn_st;
         }
@@ -203,7 +213,7 @@ void ticTacToeControl_tick() {
       break;
     case game_over_st: // wait for user to push BTN 0 to reset
       if (buttons_read() & BUTTONS_BTN0_MASK) { // if btn0 is pressed
-        currentState = first_move_st;
+        currentState = first_move_st; // wait for the first move again.
         firstMoveTimer = 0; // Reset first move timer
         ticTacToeDisplay_init();  // Initialize the board
       }
@@ -242,4 +252,3 @@ void ticTacToeControl_tick() {
 
   }
 }
-

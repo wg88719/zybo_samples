@@ -9,6 +9,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+// Uncomment this line to enable DEBUG output
+// #define DEBUG
+
 // Defines the boundaries of the tic-tac-toe board.
 #define MINIMAX_BOARD_ROWS    3
 #define MINIMAX_BOARD_COLUMNS 3
@@ -65,12 +68,11 @@ void minimax_computeNextMove(minimax_board_t* board, bool player, uint8_t* row, 
 bool minimax_isGameOver(minimax_score_t score);
 
 /**
- * Returns the score of the board, based upon the player.
+ * Returns the score of the board.
  * @param  board  Representation of the current board.
- * @param  player TRUE is the 'X' player, FALSE is the 'O' player.
  * @return        The score of board.
  */
-int16_t minimax_computeBoardScore(minimax_board_t* board, bool player);
+int16_t minimax_computeBoardScore(minimax_board_t* board);
 
 /**
  * Initialize the board as all empty squares.
