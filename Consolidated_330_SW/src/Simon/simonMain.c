@@ -17,9 +17,9 @@
 
 #define TOTAL_SECONDS 60
 
-#define TIMER_PERIOD .120 // 120 milliseconds
-#define TIMER_CLOCK_FREQUENCY (XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ / 2)
-#define TIMER_LOAD_VALUE ((TIMER_PERIOD * TIMER_CLOCK_FREQUENCY) - 1.0)
+#define TIMER_PERIOD .05  // 50ms period
+#define TIMER_CLOCK_FREQUENCY ((XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ) / 2)
+#define TIMER_LOAD_VALUE (((TIMER_PERIOD) * (TIMER_CLOCK_FREQUENCY)) - 1.0)
 
 void runGame() {
   //make sure all state machines are disabled
