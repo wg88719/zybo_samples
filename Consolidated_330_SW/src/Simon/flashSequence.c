@@ -20,18 +20,6 @@ enum flashSequence_states {
   complete_st       // signals that the sequence has been shown
 } flashSequence_state = init_st;
 
-// This will set the sequence to a simple sequential pattern.
-// It starts by flashing the first color, and then increments the index and flashes the first
-// two colors and so forth. Along the way it prints info messages to the LCD screen.
-uint8_t flashSequence_testSequence[TEST_SEQUENCE_LENGTH] = {SIMON_DISPLAY_REGION_0,
-                                                            SIMON_DISPLAY_REGION_1,
-                                                            SIMON_DISPLAY_REGION_2,
-                                                            SIMON_DISPLAY_REGION_3,
-                                                            SIMON_DISPLAY_REGION_3,
-                                                            SIMON_DISPLAY_REGION_2,
-                                                            SIMON_DISPLAY_REGION_1,
-                                                            SIMON_DISPLAY_REGION_0};
-
 void flashSequence_enable() {
   enabled = true;
 }

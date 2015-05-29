@@ -46,6 +46,12 @@ uint16_t globals_getSequenceLength();
 void globals_setSequenceIterationLength(uint16_t length);
 
 /**
+ * Sets the length of the sequence of the total sequence
+ * @param length The value to set the length to.
+ */
+void globals_setTotalSequenceLength(uint16_t length);
+
+/**
  * Length of the sequence that you are currently working on.
  * @return [description]
  */

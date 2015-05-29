@@ -49,4 +49,9 @@ void verifySequence_tick();
  */
 void verifySequence_runTest();
 
+/**
+ * Just clears the screen and draws the four SIMON buttons.
+ */
+void verifySequence_drawButtons();
+
 #endif /* VERIFYSEQUENCE_H_ */

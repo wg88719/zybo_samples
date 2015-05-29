@@ -11,8 +11,8 @@ static uint8_t globals_sequenceLength = 0;
 static uint8_t globals_currentSequenceLength = 0;
 
 void globals_setSequence(const uint8_t sequence[], uint16_t length) {
-  for (int i = 0; i < length; i++)
-  {
+  int i;
+  for (i = 0; i < length; i++) {
     globals_sequence[i] = sequence[i];
   }
   globals_sequenceLength = length;
@@ -37,4 +37,8 @@ void globals_setSequenceIterationLength(uint16_t length) {
 
 uint16_t globals_getSequenceIterationLength() {
   return globals_currentSequenceLength;
+}
+
+void globals_setTotalSequenceLength(uint16_t length) {
+  globals_sequenceLength = length;
 }
