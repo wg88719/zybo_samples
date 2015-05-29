@@ -21,11 +21,6 @@
 #define SIMON_DISPLAY_REGION_3  3
 #define SIMON_DISPLAY_ERROR     -1
 
-// Constants used in the runTest()
-#define TOUCH_PANEL_ANALOG_PROCESSING_DELAY_IN_MS 60 // in ms
-#define MAX_STR 255
-#define TEXT_SIZE 2
-
 /**
  * Given coordinates from the touch pad, computes the region number.
  * The entire touch-screen is divided into 4 rectangular regions, numbered 0-3.

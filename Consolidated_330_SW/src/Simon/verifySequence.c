@@ -154,6 +154,10 @@ void verifySequence_tick() {
   }
 }
 
+#define MESSAGE_X 0
+#define MESSAGE_Y (display_width()/4)
+#define MESSAGE_TEXT_SIZE 2
+#define MESSAGE_STARTING_OVER
 // Prints the instructions that the user should follow when
 // testing the verifySequence state machine.
 // Takes an argument that specifies the length of the sequence so that
@@ -161,11 +165,11 @@ void verifySequence_tick() {
 // This assumes a simple incrementing pattern so that it is simple to
 // instruct the user.
 void verifySequence_printInstructions(uint8_t length, bool startingOver) {
-  display_fillScreen(DISPLAY_BLACK);      // Clear the screen.
+  display_fillScreen(DISPLAY_BLACK);	    // Clear the screen.
   display_setTextSize(MESSAGE_TEXT_SIZE);   // Make it readable.
   display_setCursor(MESSAGE_X, MESSAGE_Y);  // Rough center.
-  if (startingOver) {                     // Print a message if you start over.
-    display_fillScreen(DISPLAY_BLACK);      // Clear the screen if starting over.
+  if (startingOver) {	                    // Print a message if you start over.
+    display_fillScreen(DISPLAY_BLACK);	    // Clear the screen if starting over.
     display_setTextColor(DISPLAY_WHITE);    // Print whit text.
     display_println("Starting Over. ");
   }
@@ -194,9 +198,14 @@ void verifySequence_printInstructions(uint8_t length, bool startingOver) {
 
 // Just clears the screen and draws the four buttons used in Simon.
 void verifySequence_drawButtons() {
-  display_fillScreen(DISPLAY_BLACK);
-  simonDisplay_drawAllButtons();  // Draw the four buttons.
+	display_fillScreen(DISPLAY_BLACK);
+	simonDisplay_drawAllButtons();  // Draw the four buttons.
 }
+
+// This will set the sequence to a simple sequential pattern.
+#define MAX_TEST_SEQUENCE_LENGTH 4  // the maximum length of the pattern
+uint8_t verifySequence_testSequence[MAX_TEST_SEQUENCE_LENGTH] = {0, 1, 2, 3};  // A simple pattern.
+#define MESSAGE_WAIT_MS 4000  // Display messages for this long.
 
 // Increment the sequence length making sure to skip over 0.
 // Used to change the sequence length during the test.
@@ -245,7 +254,7 @@ void verifySequence_printInfoMessage(verifySequence_infoMessage_t messageType) {
   }
 }
 
-
+#define BTN0 1
 // Tests the verifySequence state machine.
 // It prints instructions to the touch-screen. The user responds by tapping the
 // correct colors to match the sequence.

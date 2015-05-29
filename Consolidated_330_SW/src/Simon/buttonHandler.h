@@ -10,11 +10,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-// Defines for outputting runTest() information
-#define RUN_TEST_TERMINATION_MESSAGE1 "buttonHandler_runTest()"
-#define RUN_TEST_TERMINATION_MESSAGE2 "terminated."
-#define RUN_TEST_TEXT_SIZE 2
-
 #define ADC_WAIT 50
 
 /**

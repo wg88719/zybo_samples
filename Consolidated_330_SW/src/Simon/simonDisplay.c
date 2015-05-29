@@ -255,6 +255,16 @@ void simonDisplay_drawSquare(uint8_t regionNo, bool erase) {
   }
 }
 
+#define TOUCH_PANEL_ANALOG_PROCESSING_DELAY_IN_MS 60 // in ms
+#define MAX_STR 255
+#define TEXT_SIZE 2
+// Runs a brief demonstration of how buttons can be pressed and squares lit up to implement the user
+// interface of the Simon game. The routine will continue to run until the touchCount has been reached, e.g.,
+// the user has touched the pad touchCount times.
+
+// I used a busy-wait delay (utils_msDelay) that uses a for-loop and just blocks until the time has passed.
+// When you implement the game, you CANNOT use this function as we discussed in class. Implement the delay
+// using the non-blocking state-machine approach discussed in class.
 void simonDisplay_runTest(uint16_t touchCount) {
   display_init();  // Always initialize the display.
   char str[MAX_STR];   // Enough for some simple printing.
@@ -290,7 +300,6 @@ void simonDisplay_runTest(uint16_t touchCount) {
       utils_msDelay(TOUCH_PANEL_ANALOG_PROCESSING_DELAY_IN_MS);
       display_getTouchedPoint(&x, &y, &z);                  // After the wait, get the touched point.
       regionNumber = simonDisplay_computeRegionNumber(x, y);// Compute the region number.
-      printf("Region #: %d\n", regionNumber);
       simonDisplay_drawSquare(regionNumber, false);	    // Draw the square (erase = false).
     }
   }

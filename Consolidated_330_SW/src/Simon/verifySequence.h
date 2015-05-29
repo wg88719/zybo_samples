@@ -8,15 +8,6 @@
 #ifndef VERIFYSEQUENCE_H_
 #define VERIFYSEQUENCE_H_
 
-#define BTN0 1
-// This will set the sequence to a simple sequential pattern.
-#define MAX_TEST_SEQUENCE_LENGTH 4  // the maximum length of the pattern
-#define MESSAGE_WAIT_MS 4000  // Display messages for this long.
-#define MESSAGE_X 0
-#define MESSAGE_Y (display_width()/4)
-#define MESSAGE_TEXT_SIZE 2
-#define MESSAGE_STARTING_OVER
-
 #define WAIT_TIMEOUT 3000 // ticks to wait before signaling a TIMEOUT
 
 /**
