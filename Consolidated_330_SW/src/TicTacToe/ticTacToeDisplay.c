@@ -65,7 +65,7 @@ uint16_t ticTacToeDisplay_findCenterOfRow(uint8_t row) {
     case TICTACTOEDISPLAY_ROW_2:
       return row_2_y;
     default:
-    printf("Error, invalid row number!!\n\r");
+	  printf("Error, invalid row number!!\n\r");
       return 0;
   }
 }
@@ -90,7 +90,7 @@ uint16_t ticTacToeDisplay_findCenterOfColumn(uint8_t column) {
     case TICTACTOEDISPLAY_COL_2:
       return col_2_x;
     default:
-    printf("Error, invalid column number!!\n\r");
+      printf("Error, invalid column number!!\n\r");
       return 0;
   }
 }
@@ -115,6 +115,8 @@ void ticTacToeDisplay_getInputRegion(int16_t x, int16_t y, uint8_t* row, uint8_t
   // Set the values of the sub box dimensions
   uint16_t x_max = display_width();
   uint16_t y_max = display_height();
+  
+  // Calculate dimensions of sub boxes
   uint16_t box_width = TICTACTOEDISPLAY_ONE_THIRD(x_max);
   uint16_t box_height = TICTACTOEDISPLAY_ONE_THIRD(y_max);
 
