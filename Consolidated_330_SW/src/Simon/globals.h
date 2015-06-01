@@ -15,6 +15,7 @@
 
 
 // Screen Position Macros
+#define GLOBALS_ONE_FOURTH(X)   ((X) / 4)  // Divide the given number by 4
 #define GLOBALS_ONE_THIRD(X)    ((X) / 3)  // Divide the given number by 4
 #define GLOBALS_ONE_HALF(X)     ((X) / 2)  // Divide the given number by 2
 

@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define ADC_WAIT 50
+#define ADC_WAIT 6
 
 /**
  * Get the simon region numbers.

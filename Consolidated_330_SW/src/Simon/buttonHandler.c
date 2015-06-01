@@ -138,10 +138,8 @@ void buttonHandler_tick() {
       break;
     case debounce_st:
       // Wait for the time for the ADC to settle
-      if (adcTimer >= ADC_WAIT) {
-        if (display_isTouched()) {  // if display is still touched, draw
-          buttonHandler_state = draw_square_st;
-        }
+      if (adcTimer >= ADC_WAIT && display_isTouched()) {
+        buttonHandler_state = draw_square_st;
       }
       else if (!display_isTouched()) {
         buttonHandler_state = wait_for_touch_st;

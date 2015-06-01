@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <stdint.h>                         
 
-#define FLASH_WAIT 500 // ticks to display each sequence value
+#define FLASH_WAIT 80 // ticks to display each sequence value
 
 /**
  * Turns on the state machine. Part of the interlock.

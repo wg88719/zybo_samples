@@ -14,8 +14,6 @@
 #include "supportFiles/display.h"
 #include "supportFiles/utils.h"
 
-static uint8_t verifySequence_testSequence[MAX_TEST_SEQUENCE_LENGTH] = {0, 1, 2, 3};  // A simple pattern.
-
 enum verifySequence_states {
   init_st,              // wait for verifySequence_enable()
   wait_for_timeout_st,  // wait here until user touches, or there is a timeout
@@ -98,7 +96,7 @@ void verifySequence_tick() {
         verifySequence_state = wait_for_release_st;
       }
       // If the use waits too long before doing anything
-      else if (timeOutTimer > WAIT_TIMEOUT)
+      else if (timeOutTimer >= WAIT_TIMEOUT)
       {
         //printf("userTouchTimer: %d", userTouchTimer);
         isTimeOutError = true;

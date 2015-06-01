@@ -8,7 +8,6 @@
 #include "globals.h"
 #include "simonDisplay.h"
 #include "buttons.h"
-#include "switches.h"
 #include "supportFiles/display.h"
 #include "supportFiles/utils.h"
 

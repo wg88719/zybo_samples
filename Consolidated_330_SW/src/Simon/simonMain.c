@@ -14,10 +14,11 @@
 #include "supportFiles/globalTimer.h"
 #include "supportFiles/interrupts.h"
 #include "supportFiles/leds.h"
+#include "supportFiles/display.h"
 
-#define TOTAL_SECONDS 60
+#define TOTAL_SECONDS 604800  // 1 week of play time
 
-#define TIMER_PERIOD .05  // 50ms period
+#define TIMER_PERIOD .01  // 100ms period
 #define TIMER_CLOCK_FREQUENCY ((XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ) / 2)
 #define TIMER_LOAD_VALUE (((TIMER_PERIOD) * (TIMER_CLOCK_FREQUENCY)) - 1.0)
 
@@ -38,8 +39,7 @@ void runGame() {
   printf("private timer ticks per second: %ld\n\r", privateTimerTicksPerSecond);
   // Allow the timer to generate interrupts.
   interrupts_enableTimerGlobalInts();
-  // Initialization of the clock display is not time-dependent, do it outside of the state machine.
-  clockDisplay_init();
+  display_init();
   // Keep track of your personal interrupt count. Want to make sure that you don't miss any interrupts.
   int32_t personalInterruptCount = 0;
   // Start the private ARM timer running.
@@ -57,6 +57,7 @@ void runGame() {
       buttonHandler_tick();
       verifySequence_tick();
       flashSequence_tick();
+
       interrupts_isrFlagGlobal = 0;
     }
   }
@@ -71,6 +72,6 @@ int main()
   //buttonHandler_runTest(10);
   //flashSequence_runTest();
   //verifySequence_runTest();
-  runGame()
+  runGame();
 	return 0;
 }

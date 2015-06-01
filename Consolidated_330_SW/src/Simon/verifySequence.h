@@ -8,7 +8,7 @@
 #ifndef VERIFYSEQUENCE_H_
 #define VERIFYSEQUENCE_H_
 
-#define WAIT_TIMEOUT 3000 // ticks to wait before signaling a TIMEOUT
+#define WAIT_TIMEOUT 200 // ticks to wait before signaling a TIMEOUT
 
 /**
  * Enables this state machine.
