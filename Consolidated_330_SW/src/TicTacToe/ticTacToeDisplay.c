@@ -65,7 +65,7 @@ uint16_t ticTacToeDisplay_findCenterOfRow(uint8_t row) {
     case TICTACTOEDISPLAY_ROW_2:
       return row_2_y;
     default:
-    printf("Error, invalid row number!!\n\r");
+	  printf("Error, invalid row number!!\n\r");
       return 0;
   }
 }
@@ -90,7 +90,7 @@ uint16_t ticTacToeDisplay_findCenterOfColumn(uint8_t column) {
     case TICTACTOEDISPLAY_COL_2:
       return col_2_x;
     default:
-    printf("Error, invalid column number!!\n\r");
+      printf("Error, invalid column number!!\n\r");
       return 0;
   }
 }
@@ -99,13 +99,13 @@ uint16_t ticTacToeDisplay_findCenterOfColumn(uint8_t column) {
  * Helper function that clears all the Xs and Os from the board.
  */
 void ticTacToeDisplay_clearScreen() {
-  // TODO May need to iterate and just draw black 'X' and 'O' rather than blanking the screen.
   display_fillScreen(DISPLAY_BLACK);  // blank the screen
   ticTacToeDisplay_drawBoardLines();  // redraw the lines
 }
 
  /**
-  * Helper function that takes an x and y coordinate and returns the respective row/column
+  * Helper function that takes an x and y coordinate and returns the
+  * respective row/column.
   * @param x      x-coordinate of the touched point
   * @param y      y-coordinate of the touched point
   * @param row    Address to the row variable to store computed value in
@@ -115,6 +115,8 @@ void ticTacToeDisplay_getInputRegion(int16_t x, int16_t y, uint8_t* row, uint8_t
   // Set the values of the sub box dimensions
   uint16_t x_max = display_width();
   uint16_t y_max = display_height();
+  
+  // Calculate dimensions of sub boxes
   uint16_t box_width = TICTACTOEDISPLAY_ONE_THIRD(x_max);
   uint16_t box_height = TICTACTOEDISPLAY_ONE_THIRD(y_max);
 
@@ -177,8 +179,7 @@ void ticTacToeDisplay_getInputRegion(int16_t x, int16_t y, uint8_t* row, uint8_t
 
 void ticTacToeDisplay_init() {
   display_init();  // Initialize display, which sets Rotation = 1 by default
-  display_fillScreen(DISPLAY_BLACK); // blank the screen
-  ticTacToeDisplay_drawBoardLines();  // Draw the board lines
+  ticTacToeDisplay_clearScreen(); // clear the display and draw lines
 }
 
 void ticTacToeDisplay_drawX(uint8_t row, uint8_t column) {
@@ -206,7 +207,7 @@ void ticTacToeDisplay_drawO(uint8_t row, uint8_t column) {
 }
 
 void ticTacToeDisplay_touchScreenComputeBoardRowColumn(uint8_t* row, uint8_t* column) {
-  display_clearOldTouchData();  // clear old data to read current coordinates
+  // old touch data was cleared previously in ticTacToeControl
 
   int16_t x, y;   // x and y coordinate of the touched point
   uint8_t pressure; // relative touch pressure, variable will be ignored
@@ -258,7 +259,7 @@ void ticTacToeDisplay_runTest() {
     }
   }
   // Give the user indication that the test is completed.
-  printf("\n\Ending Tic Tac Toe Display Test...\n");
+  printf("\nEnding Tic Tac Toe Display Test...\n");
   display_fillScreen(DISPLAY_WHITE);
 }
 
@@ -267,6 +268,8 @@ void ticTacToeDisplay_drawBoardLines() {
   // Calculate the coordinates of the lines to draw
   uint16_t x_max = display_width();
   uint16_t y_max = display_height();
+
+  // Put each line on the 1/3 and 2/3 spots of the screen.
   uint16_t x_one_third = TICTACTOEDISPLAY_ONE_THIRD(x_max);
   uint16_t x_two_third = TICTACTOEDISPLAY_TWO_THIRD(x_max);
   uint16_t y_one_third = TICTACTOEDISPLAY_ONE_THIRD(y_max);

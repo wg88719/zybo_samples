@@ -3,11 +3,18 @@
 // 13 May 2015
 // Interface of the minimax algorithm for the AI player in TicTacToe.
 //*****************************************************************************
+#ifndef MINIMAX_H_
+#define MINIMAX_H_
 
 #include <stdbool.h>
 #include <stdint.h>
 
+// Uncomment this line to enable DEBUG output
+// #define MINIMAX_DEBUG
+
 // Defines the boundaries of the tic-tac-toe board.
+// Note that for the algorithm to properly check diagonals, The dimension of
+// rows and columns should be the same.
 #define MINIMAX_BOARD_ROWS    3
 #define MINIMAX_BOARD_COLUMNS 3
 
@@ -17,16 +24,16 @@
                                   // start of the minimax calls
 
 // These are the values in the board to represent who is occupying what square.
-#define MINIMAX_USED_SQUARE     3       // Used when creating new board states.
-#define MINIMAX_PLAYER_SQUARE   2
-#define MINIMAX_OPPONENT_SQUARE 1
+#define MINIMAX_USED_SQUARE     3  // Not currently used.
+#define MINIMAX_PLAYER_SQUARE   2  // Represents an X
+#define MINIMAX_OPPONENT_SQUARE 1  // Represents an O
 #define MINIMAX_EMPTY_SQUARE    0
 
 // Scoring for minimax.
-#define MINIMAX_PLAYER_WINNING_SCORE    10
-#define MINIMAX_OPPONENT_WINNING_SCORE  -10
-#define MINIMAX_DRAW_SCORE              0
-#define MINIMAX_NOT_ENDGAME             -1 // Not an end-game.
+#define MINIMAX_PLAYER_WINNING_SCORE    10    // represents that X won
+#define MINIMAX_OPPONENT_WINNING_SCORE  -10   // represents that O won
+#define MINIMAX_DRAW_SCORE              0     // Draw game
+#define MINIMAX_NOT_ENDGAME             -1    // Not an end-game.
 
 // Boards contain just an array of squares. I used a struct to provide additional abstraction
 // in case I wanted to add something to the board type.
@@ -63,15 +70,16 @@ void minimax_computeNextMove(minimax_board_t* board, bool player, uint8_t* row, 
 bool minimax_isGameOver(minimax_score_t score);
 
 /**
- * Returns the score of the board, based upon the player.
+ * Returns the score of the board.
  * @param  board  Representation of the current board.
- * @param  player TRUE is the 'X' player, FALSE is the 'O' player.
  * @return        The score of board.
  */
-int16_t minimax_computeBoardScore(minimax_board_t* board, bool player);
+int16_t minimax_computeBoardScore(minimax_board_t* board);
 
 /**
  * Initialize the board as all empty squares.
  * @param board The address of the board to initialize.
  */
 void minimax_initBoard(minimax_board_t* board);
+
+#endif /* MINIMAX_H_ */
