@@ -266,6 +266,8 @@ void ticTacToeDisplay_drawBoardLines() {
   // Calculate the coordinates of the lines to draw
   uint16_t x_max = display_width();
   uint16_t y_max = display_height();
+
+  // Put each line on the 1/3 and 2/3 spots of the screen.
   uint16_t x_one_third = TICTACTOEDISPLAY_ONE_THIRD(x_max);
   uint16_t x_two_third = TICTACTOEDISPLAY_TWO_THIRD(x_max);
   uint16_t y_one_third = TICTACTOEDISPLAY_ONE_THIRD(y_max);
