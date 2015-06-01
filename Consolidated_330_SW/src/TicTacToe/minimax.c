@@ -9,7 +9,7 @@
 
 static int32_t depth = 0; // global variable to track the depth of our recursion
 
-// global variable used to track the choice of next move of the AI
+// global variable used to track the next move choice of the AI
 static minimax_move_t choice;
 
 /**
@@ -18,20 +18,24 @@ static minimax_move_t choice;
  * @param board A pointer to the variable representing the state of the board.
  */
 void printBoard(minimax_board_t* board) {
-  printf("\r\n")
-  int i, j;
-  for (i = 0; i < MINIMAX_BOARD_ROWS; i++) //every row
-  {
-    for (j = 0; j < MINIMAX_BOARD_COLUMNS; j++) //every column
-    {
-      if (board->squares[i][j] == MINIMAX_PLAYER_SQUARE)
+  printf("\r\n"); // Start on a new line
+  int i, j; // variables used in iteration
+  for (i = 0; i < MINIMAX_BOARD_ROWS; i++) { // every row
+    for (j = 0; j < MINIMAX_BOARD_COLUMNS; j++) { // every column
+      if (board->squares[i][j] == MINIMAX_PLAYER_SQUARE) {
         printf("X ");
-      else if (board->squares[i][j] == MINIMAX_OPPONENT_SQUARE)
+      }
+      else if (board->squares[i][j] == MINIMAX_OPPONENT_SQUARE) {
         printf("O ");
-      else if (board->squares[i][j] == MINIMAX_EMPTY_SQUARE)
+      }
+      else if (board->squares[i][j] == MINIMAX_EMPTY_SQUARE) {
         printf("- ");
-      else //error case, should never be hit
+      }
+      else { //error case, should never be hit
+        // If this case is hit, print out whatever erroneous value
+        // happened to be in the square.
         printf("%d ", board->squares[i][j]);
+      }
     }
     printf("\r\n");
   }
@@ -39,7 +43,7 @@ void printBoard(minimax_board_t* board) {
 
 /**
  * Recursive MiniMax algorithm that computes the best move at the current call's
- * move depth.
+ * move depth, based on the player.
  * @param  board  A pointer to a representation of the board to compute scores
  *                on. Note that this may be different than the actual current
  *                board.
@@ -50,8 +54,8 @@ minimax_score_t minimax(minimax_board_t* board, bool player) {
   // Increment depth at the beginning of this function call
   depth++;
 
-  // Create 2 arrays (indexed the same) to score moves and their score
-  // on at this level of recursion.
+  // Create 2 arrays (indexed the same) to save moves and their score
+  // at this level of recursion.
   minimax_move_t moves[MINIMAX_TOTALSQUARES];
   minimax_score_t scores[MINIMAX_TOTALSQUARES];
 
@@ -81,6 +85,7 @@ minimax_score_t minimax(minimax_board_t* board, bool player) {
         // Make the recursive call that determines the MIN or MAX score
         // based on the player to save to the table.
         minimax_score_t score = minimax(board, !player);
+
         scores[index] = score;  // Add score to the score table
         moves[index].row = row; // Add move row to the move table
         moves[index].column = col;  // Add move column to the move table
@@ -94,7 +99,7 @@ minimax_score_t minimax(minimax_board_t* board, bool player) {
     }
   }
 
-#ifdef DEBUG
+#ifdef MINIMAX_DEBUG
   // Print out Score Matrix at Top Level if DEBUG mode is enabled.
   // This is useful in visually checking that the score table is correct
   // after all of the recursive calls have been made.
@@ -125,7 +130,7 @@ minimax_score_t minimax(minimax_board_t* board, bool player) {
       }
     }
     choice = moves[tempIndex];  // Get the choice with the MAX score
-    score = scores[tempIndex];   // Return the highest score in the table.
+    score = scores[tempIndex];  // Return the highest score in the table.
   }
   else {
     // If we are looking at 'O', we want to find the MIN score
@@ -139,7 +144,7 @@ minimax_score_t minimax(minimax_board_t* board, bool player) {
       }
     }
     choice = moves[tempIndex];  // Get the choice with the MIN score
-    score = scores[tempIndex];   // Return the lowest score in the table.
+    score = scores[tempIndex];  // Return the lowest score in the table.
   }
 
   // Done with the recursive call, decrement depth as we return
@@ -154,7 +159,7 @@ void minimax_computeNextMove( minimax_board_t* board,
   // Initialize the depth
   depth = MINIMAX_INIT_DEPTH;
 
-#ifdef DEBUG
+#ifdef MINIMAX_DEBUG
   // If DEBUG mode is enabled, print out board and player information
   if (player) {
     printf("Player is placing 'X'");
@@ -167,7 +172,7 @@ void minimax_computeNextMove( minimax_board_t* board,
 
   // If the board if empty, just choose any square.
   // This reduced the worst-case tick function execution time from 367ms
-  // to 180ms.
+  // to ~180ms.
   bool notEmpty = false;
   int i, j;
   for (i = 0; i < MINIMAX_BOARD_ROWS; i++) {  // For each row

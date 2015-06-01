@@ -21,7 +21,7 @@
 #define TOTAL_SECONDS 300
 // This period was chosen because the tick function function takes
 // 180ms to run in the worst case.
-#define TIMER_PERIOD .05  // 200ms period
+#define TIMER_PERIOD .2  // 200ms period
 #define TIMER_CLOCK_FREQUENCY ((XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ) / 2)
 #define TIMER_LOAD_VALUE (((TIMER_PERIOD) * (TIMER_CLOCK_FREQUENCY)) - 1.0)
 
@@ -63,9 +63,13 @@ void test_Full() {
 
       ticTacToeControl_tick();
 
-      intervalTimer_stop(INTERVALTIMER_TIMER0);   // Note that the transition for 12:59:59 took the longest time when
-      double duration;   // measured with the intervalTimer, totalling 27ms to complete this tick
-      intervalTimer_getTotalDurationInSeconds(INTERVALTIMER_TIMER0, &duration);    // function due to having to redraw all 6 characters.
+      intervalTimer_stop(INTERVALTIMER_TIMER0);
+
+      // print out the longest tick execution time for user reference.
+      double duration;   // measured with the intervalTimer
+      intervalTimer_getTotalDurationInSeconds(INTERVALTIMER_TIMER0, &duration);
+      // If this duration was larger than the previous max, update the values
+      // and print it out.
       if (duration_max < duration) {
         duration_max = duration;
         printf("Duration:%lf\n", duration);

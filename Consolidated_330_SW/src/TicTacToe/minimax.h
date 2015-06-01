@@ -10,9 +10,11 @@
 #include <stdint.h>
 
 // Uncomment this line to enable DEBUG output
-// #define DEBUG
+// #define MINIMAX_DEBUG
 
 // Defines the boundaries of the tic-tac-toe board.
+// Note that for the algorithm to properly check diagonals, The dimension of
+// rows and columns should be the same.
 #define MINIMAX_BOARD_ROWS    3
 #define MINIMAX_BOARD_COLUMNS 3
 
@@ -22,16 +24,16 @@
                                   // start of the minimax calls
 
 // These are the values in the board to represent who is occupying what square.
-#define MINIMAX_USED_SQUARE     3       // Used when creating new board states.
-#define MINIMAX_PLAYER_SQUARE   2
-#define MINIMAX_OPPONENT_SQUARE 1
+#define MINIMAX_USED_SQUARE     3  // Not currently used.
+#define MINIMAX_PLAYER_SQUARE   2  // Represents an X
+#define MINIMAX_OPPONENT_SQUARE 1  // Represents an O
 #define MINIMAX_EMPTY_SQUARE    0
 
 // Scoring for minimax.
-#define MINIMAX_PLAYER_WINNING_SCORE    10
-#define MINIMAX_OPPONENT_WINNING_SCORE  -10
-#define MINIMAX_DRAW_SCORE              0
-#define MINIMAX_NOT_ENDGAME             -1 // Not an end-game.
+#define MINIMAX_PLAYER_WINNING_SCORE    10    // represents that X won
+#define MINIMAX_OPPONENT_WINNING_SCORE  -10   // represents that O won
+#define MINIMAX_DRAW_SCORE              0     // Draw game
+#define MINIMAX_NOT_ENDGAME             -1    // Not an end-game.
 
 // Boards contain just an array of squares. I used a struct to provide additional abstraction
 // in case I wanted to add something to the board type.

@@ -4,6 +4,9 @@
 // Interface for drawing Tic Tac Toe
 //*****************************************************************************
 
+#ifndef TICTACTOEDISPLAY_H_
+#define TICTACTOEDISPLAY_H_
+
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -23,7 +26,8 @@
 #define TICTACTOEDISPLAY_ONE_HALF(X)   	((X) / 2)    // Divide the given number by 2
 #define TICTACTOEDISPLAY_FIVE_SIXTH(X)  ((X * 5) / 6) // Multiply by 5 then divide by 6 to reduce rounding err.
 
-//Used as the radius of 'O' and the distance from a side to the center of 'X'
+// Used as the radius of 'O' and
+// the distance from a side of the encapsulating square to the center of 'X'
 #define TICTACTOEDISPLAY_SYMBOL_SIZE 25
 
 /**
@@ -68,3 +72,5 @@ void ticTacToeDisplay_runTest();
  * Draws the four board lines.
  */
 void ticTacToeDisplay_drawBoardLines();
+
+#endif // TICTACTOEDISPLAY_H_

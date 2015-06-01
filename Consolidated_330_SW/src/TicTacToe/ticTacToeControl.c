@@ -23,7 +23,7 @@ enum ticTacToeControl_st {
   ad_timer_running_st,  // Wait for touch ADC to settle
   game_over_st,         // Wait for a restart
   player_turn_st,       // Wait for touch
-  computer_turn_st         // Have AI make their move
+  computer_turn_st      // Have AI make their move
 } currentState = init_st; // Initialize to init_st
 
 /**
@@ -72,18 +72,31 @@ void ticTacToeControl_debugStatePrint() {
   }
 }
 
+/**
+ * Helper function that updates the internal variable representing the board
+ * and draws the corresponding value to the screen.
+ * @param board  Pointer to the curent board.
+ * @param row    Row value to update
+ * @param column Column value to update
+ * @param player Representation of which player is placing a move.
+ */
 void ticTacToeControl_updateBoard(minimax_board_t* board, uint8_t row, uint8_t column, bool player) {
   if (player) {
+    // Update the internal variable.
     (*board).squares[row][column] = MINIMAX_PLAYER_SQUARE;
+    // Draw the X to the screen.
     ticTacToeDisplay_drawX(row, column);
   }
   else {
+    // Update the internal variable.
     (*board).squares[row][column] = MINIMAX_OPPONENT_SQUARE;
+    // Draw the O to the screen.
     ticTacToeDisplay_drawO(row, column);
   }
 }
 
 void ticTacToeControl_tick() {
+  // Uncomment the line below to visually see state transitions in console.
   //ticTacToeControl_debugStatePrint();
 
   // Variables representing the timers that will be used
@@ -105,7 +118,7 @@ void ticTacToeControl_tick() {
       // Initialize the display and print the instructions to the screen
       display_init();
       display_fillScreen(DISPLAY_BLACK);
-      display_setTextSize(2);
+      display_setTextSize(TICTACTOECONTROL_INSTR_TEXTSIZE);
       display_println("\n\nTouch a square to play 'X'\n\r\n\r    -or-\n\r\n\rwait for the computer and play 'O'");
 
       instructionTimer = 0; // reset instruction timer
@@ -116,15 +129,7 @@ void ticTacToeControl_tick() {
       break;
     case first_move_st:
       // Reset the internal board variable to ALL EMPTY.
-      board.squares[0][0] = MINIMAX_EMPTY_SQUARE;
-      board.squares[0][1] = MINIMAX_EMPTY_SQUARE;
-      board.squares[0][2] = MINIMAX_EMPTY_SQUARE;
-      board.squares[1][0] = MINIMAX_EMPTY_SQUARE;
-      board.squares[1][1] = MINIMAX_EMPTY_SQUARE;
-      board.squares[1][2] = MINIMAX_EMPTY_SQUARE;
-      board.squares[2][0] = MINIMAX_EMPTY_SQUARE;
-      board.squares[2][1] = MINIMAX_EMPTY_SQUARE;
-      board.squares[2][2] = MINIMAX_EMPTY_SQUARE;
+      minimax_initBoard(&board);
 
       // Initialize the row/column variables to 0.
       row = 0;
@@ -145,13 +150,15 @@ void ticTacToeControl_tick() {
       firstMoveTimer = 0;
       break;
     case player_turn_st:
-
+      // Do nothing
       break;
     case computer_turn_st: // set rateTimer to 0
+      // Have the AI make it's move
       minimax_computeNextMove(&board, !player_first, &row, &column);  // compute move
+      // Update the screen and variables with the AI's move.
       ticTacToeControl_updateBoard(&board, row, column, !player_first); // record move
       break;
-     default:
+     default: // Shouldn't hit this state ever.
       printf("ticTacToeControl_tick state action: hit default\n\r");
       break;
   }
@@ -179,7 +186,7 @@ void ticTacToeControl_tick() {
     case first_move_st:  // wait to determine player or AI first
       // If the display is touched, move on to let ADC settle
       if (display_isTouched()) {  // player wants to move first
-        ticTacToeDisplay_touchScreenComputeBoardRowColumn(&row, &column);
+        display_clearOldTouchData();  // clear old data to read current coordinates
         currentState = ad_timer_running_st;
         player_first = true;  // player will be playing X
       }
@@ -193,8 +200,10 @@ void ticTacToeControl_tick() {
       }
       break;
     case ad_timer_running_st: // increment adTimer
-      // if the display must be let go after ADC settles before action is taken
+      // The display must be let go after ADC settles before action is taken
       if (!display_isTouched() && adTimer >= TICTACTOECONTROL_ADC_WAIT) {
+        // Get the touched point after waiting
+        ticTacToeDisplay_touchScreenComputeBoardRowColumn(&row, &column);
         // Register the touch and update the board.
         ticTacToeControl_updateBoard(&board, row, column, player_first);
         // If that was the final move, go to gameover.
@@ -228,9 +237,11 @@ void ticTacToeControl_tick() {
         currentState = first_move_st;
         ticTacToeDisplay_init();  // Initialize the board
       }
+      // Or, the the game is over, go to game_over_st
       else if (minimax_isGameOver(minimax_computeBoardScore(&board, player_first))) {
         currentState = game_over_st;
       }
+      // Otherwise, allow the player to make his/her move.
       else if (display_isTouched()) {
         ticTacToeDisplay_touchScreenComputeBoardRowColumn(&row, &column);
         // Only update the board if it was an empty spot
@@ -241,12 +252,15 @@ void ticTacToeControl_tick() {
       else {
         currentState = player_turn_st;  // wait for user to make a move
       }
-
       break;
     case computer_turn_st: // set rateTimer to 0
-      currentState = player_turn_st;  // actions are performed, then move to player
+      // Moore action is performed to determine the AI's move, so we can
+      // directly move on to the player's turn. Note that the player_turn_st
+      // takes care of checking whether the AI's move puts the board in a
+      // game over state.
+      currentState = player_turn_st;
       break;
-     default:
+     default: // should never hit this case.
       printf("ticTacToeControl_tick state update: hit default\n\r");
       break;
 

@@ -205,7 +205,7 @@ void ticTacToeDisplay_drawO(uint8_t row, uint8_t column) {
 }
 
 void ticTacToeDisplay_touchScreenComputeBoardRowColumn(uint8_t* row, uint8_t* column) {
-  display_clearOldTouchData();  // clear old data to read current coordinates
+  // old touch data was cleared previously in ticTacToeControl
 
   int16_t x, y;   // x and y coordinate of the touched point
   uint8_t pressure; // relative touch pressure, variable will be ignored
